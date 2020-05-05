@@ -29,7 +29,7 @@ module.exports = {
   ],
   plugins: ['import', 'prettier'],
   rules: {
-    "prettier/prettier": "error",
+    "prettier/prettier": WARN,
     'class-methods-use-this': OFF,
     'comma-dangle': [ERROR, 'never'],
     'comma-spacing': [ERROR, { 'before': false, 'after': true }],

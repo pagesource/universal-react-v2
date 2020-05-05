@@ -13,7 +13,7 @@ To create a new app, run the command
 
   
 ### Todos
- - Write MORE Tests
+ - 
  
 ### License
 
