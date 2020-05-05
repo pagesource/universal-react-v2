@@ -1,28 +1,46 @@
+#!/usr/bin/env node
 'use strict';
 
 const fs = require('fs');
 const inquirer = require('inquirer');
 const copydir = require('copy-dir');
+const cwd = process.cwd();
+const templatesPath = `${__dirname}/src/templates`;
 
-//const files = require('./files');
-let dir = '';
+const run = (appType, appName) => {
+  const projectDir = `${cwd}/${appName}`;
+  createPorjectdir(projectDir);
 
-const run = (appType) => {
+  let sourcePath = `${templatesPath}/base`;
+  copyTemplateApp(sourcePath, projectDir, 'base template copied successfully');
+
+  sourcePath = `${templatesPath}/${appType}`;
+  copyTemplateApp(sourcePath, projectDir, `${appType} template copied successfully`);
+};
+
+const createPorjectdir = (projectDir) => {
   try {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir);
-      copyTemplateApp(appType);
+    if (!fs.existsSync(projectDir)) {
+      fs.mkdirSync(projectDir);
+    } else {
+      console.error('directory name already exists.');
+      return;
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    console.error('error creating project directory. App will exit.');
+    console.log(e);
+    return;
   }
 };
 
-const copyTemplateApp = (appType) => {
-  const appPath = `${__dirname}/src/templates/${appType}`;
+const copyTemplateApp = (
+  sourcePath,
+  destPath,
+  successMessage = 'template copied successfully'
+) => {
   copydir(
-    appPath,
-    dir,
+    sourcePath,
+    destPath,
     {
       utimes: true, // keep add time and modify time
       mode: true, // keep file mode
@@ -32,7 +50,7 @@ const copyTemplateApp = (appType) => {
       if (err) {
         throw err;
       }
-      console.log('done');
+      console.log(successMessage);
     }
   );
 };
@@ -70,6 +88,5 @@ const questions = [
 
 inquirer.prompt(questions).then((answers) => {
   console.log(JSON.stringify(answers, null, '  '));
-  dir = `${process.cwd()}/${answers.appName}`
-  run(JSON.parse(JSON.stringify(answers.appType)));
+  run(answers.appType, answers.appName);
 });
