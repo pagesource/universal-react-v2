@@ -1,15 +1,20 @@
-# Create Universal React App
+# Universal React App Generator v2
 
-## Installation
+### Installation
 
-Install it once, globally
-```
-npm install -g universal-react-v2
+  - npm install
+  - npm link
+   
+ This will install the module globally on your system. You can then simply type the name of the application from shell/command-prompt from any working directory and the app will execute.
 
+### Running
+To create a new app, run the command
+  - universal-react-v2
 
-## Creating a new app
+  
+### Todos
+ - Write MORE Tests
+ 
+### License
 
-To create a new app, run
-```
-universal-react-v2 my-app-name
-```
+MIT

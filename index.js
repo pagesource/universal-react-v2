@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 
 const fs = require('fs');
@@ -70,6 +71,6 @@ const questions = [
 
 inquirer.prompt(questions).then((answers) => {
   console.log(JSON.stringify(answers, null, '  '));
-  dir = `${process.cwd()}/${answers.appName}`
+  dir = `${process.cwd()}/${answers.appName}`;
   run(JSON.parse(JSON.stringify(answers.appType)));
 });
