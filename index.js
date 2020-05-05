@@ -19,7 +19,7 @@ const run = (appType) => {
 };
 
 const copyTemplateApp = (appType) => {
-  const appPath = `${__dirname}/src/templates/base/${appType}`;
+  const appPath = `${__dirname}/src/templates/${appType}`;
   copydir(
     appPath,
     dir,
