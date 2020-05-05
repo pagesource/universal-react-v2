@@ -1,0 +1,25 @@
+/**
+ *
+ * {{ properCase name }}
+ *
+ */
+// @flow
+
+// Node_Module Imports
+import React from 'react';
+import type { Node } from 'react';
+import styled from 'styled-components';
+
+// Relative imports
+import type { Props } from './types';
+import styles from './{{ properCase name }}.style';
+
+const {{ properCase name }} = ({ className, children }: Props): Node => <div className={className}>{children}</div>;
+
+{{ properCase name }}.defaultProps = {};
+
+export default styled({{ properCase name }})`
+  ${styles}
+`;
+
+export { {{ properCase name }} };

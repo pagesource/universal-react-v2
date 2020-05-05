@@ -5,11 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "generate": "plop --plopfile generators/index.js"
   },
   "dependencies": {
     "next": "9.3.6",
     "react": "16.13.1",
     "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "plop": "^2.6.0"
   }
 }
