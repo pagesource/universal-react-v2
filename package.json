@@ -1,11 +1,11 @@
 {
-  "name": "universal-react-app",
+  "name": "universal-react-v2",
   "version": "2.0.0",
   "description": "Universal React App Generator",
   "license": "MIT",
   "main": "index.js",
   "bin": {
-    "universal-react-app": "index.js"
+    "universal-react-v2": "index.js"
   },
   "repository": "/universal-react/",
   "author": {
