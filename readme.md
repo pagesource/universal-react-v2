@@ -4,12 +4,12 @@
 
 Install it once, globally
 ```
-npm install -g create-universal-react-app
+npm install -g universal-react-v2
 
 
 ## Creating a new app
 
 To create a new app, run
 ```
-create-universal-react-app my-app-name
+universal-react-v2 my-app-name
 ```
