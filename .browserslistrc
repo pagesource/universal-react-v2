@@ -1,0 +1,6 @@
+# Browsers that we support
+> 0.25%
+not ie <= 11
+not edge < 15
+not op_mini all
+not dead
