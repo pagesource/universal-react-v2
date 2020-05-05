@@ -12,6 +12,9 @@ const run = (appType) => {
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
       copyTemplateApp(appType);
+    } else {
+      console.warning('Directory already exits.');
+      return;
     }
   } catch (err) {
     console.error(err);
@@ -19,7 +22,7 @@ const run = (appType) => {
 };
 
 const copyTemplateApp = (appType) => {
-  const appPath = `${__dirname}/src/templates/base/${appType}`;
+  const appPath = `${__dirname}/src/templates/${appType}`;
   copydir(
     appPath,
     dir,
