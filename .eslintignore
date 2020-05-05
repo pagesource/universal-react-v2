@@ -1,0 +1,2 @@
+# Don't lint the following
+src/templates**
