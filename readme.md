@@ -1,21 +1,25 @@
-# Create Universal React App
+# Universal React App Generator v2
 
-## Installation
+### Installation
 
-Install it once, globally
+- npm install
+- npm link
 
-```
-npm install -g universal-react-v2
+This will install the module globally on your system. You can then simply type the name of the application from shell/command-prompt from any working directory and the app will execute.
 
+### Running
 
-## Creating a new app
+To create a new app, run the command
 
-To create a new app, run
-```
+- universal-react-v2
 
-universal-react-v2 my-app-name
+### Todos
 
-```
+-
+
+### License
+
+MIT
 
 # Semantic Commit Messages
 
@@ -33,6 +37,7 @@ feat: add hat wobble
 +-------> Type: chore, docs, feat, fix, refactor, style, or test.
 
 ```
+
 More Examples:
 
 - `feat`: (new feature for the user, not a new feature for build script)
@@ -42,4 +47,7 @@ More Examples:
 - `refactor`: (refactoring production code, eg. renaming a variable)
 - `test`: (adding missing tests, refactoring tests; no production code change)
 - `chore`: (updating grunt tasks etc; no production code change)
+
+```
+
 ```
