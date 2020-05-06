@@ -4,18 +4,31 @@
 const fs = require('fs');
 const inquirer = require('inquirer');
 const copydir = require('copy-dir');
+const npm = require('npm');
+const { createNpmDependenciesArray } = require('./util/helper');
+
 const cwd = process.cwd();
 const templatesPath = `${__dirname}/src/templates`;
+let projectDir = '';
 
 const run = (appType, appName) => {
-  const projectDir = `${cwd}/${appName}`;
+  console.log('creating project');
+
+  projectDir = `${cwd}${appName}`;
   createPorjectdir(projectDir);
 
   let sourcePath = `${templatesPath}/base`;
-  copyTemplateApp(sourcePath, projectDir, 'base template copied successfully');
+  copyTemplateApp(sourcePath, projectDir);
 
   sourcePath = `${templatesPath}/${appType}`;
-  copyTemplateApp(sourcePath, projectDir, `${appType} template copied successfully`);
+  copyTemplateApp(sourcePath, projectDir);
+
+  console.log('project created successfully');
+
+  console.log('installing packages');
+  const depArr = createNpmDependenciesArray(`${projectDir}\\package.json`);
+  installPackages(projectDir, depArr);
+  console.log('installed packages successfully');
 };
 
 const createPorjectdir = (projectDir) => {
@@ -33,12 +46,8 @@ const createPorjectdir = (projectDir) => {
   }
 };
 
-const copyTemplateApp = (
-  sourcePath,
-  destPath,
-  successMessage = 'template copied successfully'
-) => {
-  copydir(
+const copyTemplateApp = (sourcePath, destPath) => {
+  copydir.sync(
     sourcePath,
     destPath,
     {
@@ -50,9 +59,14 @@ const copyTemplateApp = (
       if (err) {
         throw err;
       }
-      console.log(successMessage);
     }
   );
+};
+
+const installPackages = (installPath, depArr) => {
+  npm.load(() => {
+    npm.commands.install(installPath, depArr);
+  });
 };
 
 const questions = [
