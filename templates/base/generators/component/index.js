@@ -7,6 +7,7 @@
 'use strict';
 
 const componentExists = require('../utils/componentExists');
+const config = require('../constants');
 
 module.exports = {
   description: 'Add an unconnected component (atoms, molecules, organisms, templates)',
@@ -58,40 +59,40 @@ module.exports = {
     const actions = [
       {
         type: 'add',
-        path: '../components/{{ folder }}/{{properCase name}}/index.js',
+        path: `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/index.js`,
         templateFile: './component/index.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: '../components/{{ folder }}/{{properCase name}}/{{properCase name}}.js',
+        path: `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/{{properCase name}}.js`,
         templateFile: componentTemplate,
         abortOnFail: true
       },
       {
         type: 'add',
         path:
-          '../components/{{ folder }}/{{properCase name}}/tests/{{properCase name}}.test.js',
+          `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/tests/{{properCase name}}.test.js`,
         templateFile: './component/test.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
         path:
-          '../components/{{ folder }}/{{properCase name}}/{{properCase name}}.story.js',
+          `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/{{properCase name}}.story.js`,
         templateFile: './component/story.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
         path:
-          '../components/{{ folder }}/{{properCase name}}/{{properCase name}}.style.js',
+          `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/{{properCase name}}.style.js`,
         templateFile: './component/style.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: '../components/{{ folder }}/{{properCase name}}/types/index.js',
+        path: `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/types/index.js`,
         templateFile: './component/types.js.hbs',
         abortOnFail: true
       }

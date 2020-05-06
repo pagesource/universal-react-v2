@@ -6,16 +6,17 @@
 
 const fs = require('fs');
 const path = require('path');
+const config = require('../constants');
 
-const atomComponents = fs.readdirSync(path.join(__dirname, '../../components/atoms'));
+const atomComponents = fs.readdirSync(path.join(__dirname, `../../${config.COMPONENT_PATH}atoms`));
 const moleculeComponents = fs.readdirSync(
-  path.join(__dirname, '../../components/molecules')
+  path.join(__dirname, `../../${config.COMPONENT_PATH}molecules`)
 );
 const organismComponents = fs.readdirSync(
-  path.join(__dirname, '../../components/organisms')
+  path.join(__dirname, `../../${config.COMPONENT_PATH}organisms`)
 );
 const templateComponents = fs.readdirSync(
-  path.join(__dirname, '../../components/templates')
+  path.join(__dirname, `../../${config.COMPONENT_PATH}templates`)
 );
 const components = atomComponents
   .concat(moleculeComponents)
