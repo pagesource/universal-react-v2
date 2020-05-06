@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next src",
-    "build": "next build src",
-    "start": "next start src"
+    "dev": "next dev",
+    "build": "next build dev",
+    "start": "next start dev"
   },
   "dependencies": {
     "next": "9.3.6",
