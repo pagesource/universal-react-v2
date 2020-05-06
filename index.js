@@ -8,8 +8,8 @@ const npm = require('npm');
 const { createNpmDependenciesArray } = require('./util/helper');
 
 const cwd = process.cwd();
-const templatesPath = `${__dirname}/src/templates`;
 let projectDir = '';
+const templatesPath = `${__dirname}/templates`;
 
 const run = (appType, appName) => {
   console.log('creating project');
