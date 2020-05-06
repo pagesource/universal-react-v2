@@ -5,7 +5,7 @@ const fs = require('fs');
 const inquirer = require('inquirer');
 const copydir = require('copy-dir');
 const cwd = process.cwd();
-const templatesPath = `${__dirname}/src/templates`;
+const templatesPath = `${__dirname}/templates`;
 
 const run = (appType, appName) => {
   const projectDir = `${cwd}/${appName}`;
