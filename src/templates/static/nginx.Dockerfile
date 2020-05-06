@@ -8,7 +8,8 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build:static
+RUN npm run build
+RUN npm run export
 
 FROM nginx
 
