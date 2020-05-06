@@ -3,6 +3,14 @@ const WARN = 1;
 const ERROR = 2;
 
 module.exports = {
+  parserOptions: {
+    sourceType: 'module',
+    ecmaVersion: 6,
+    ecmaFeatures: {
+      jsx: true,
+      modules: true
+    }
+  },
   env: {
     browser: true,
     es6: true,
@@ -29,26 +37,23 @@ module.exports = {
   ],
   plugins: ['import', 'prettier'],
   rules: {
-    "prettier/prettier": WARN,
+    'prettier/prettier': WARN,
     'class-methods-use-this': OFF,
     'comma-dangle': [ERROR, 'never'],
-    'comma-spacing': [ERROR, { 'before': false, 'after': true }],
+    'comma-spacing': [ERROR, { before: false, after: true }],
     'consistent-return': OFF,
-    'curly': ERROR,
+    curly: ERROR,
     'eol-last': [ERROR, 'always'],
     'import/extensions': [ERROR, 'always', { js: 'never' }],
     'import/no-dynamic-require': OFF,
     'import/no-unresolved': ERROR,
-    'import/order': [ERROR, {
-      groups: [
-        'builtin',
-        'external',
-        'internal',
-        ['parent', 'sibling'],
-        'index'
-      ],
-      'newlines-between': 'never'
-    }],
+    'import/order': [
+      ERROR,
+      {
+        groups: ['builtin', 'external', 'internal', ['parent', 'sibling'], 'index'],
+        'newlines-between': 'never'
+      }
+    ],
     'jest/expect-expect': OFF, // assertions via 'yeoman-assert'
     'linebreak-style': OFF,
     'no-console': WARN,
@@ -59,7 +64,7 @@ module.exports = {
     'no-var': ERROR,
     'prefer-const': ERROR,
     'prefer-template': ERROR,
-    'quotes': [ERROR, 'single', { avoidEscape: true }],
+    quotes: [ERROR, 'single', { avoidEscape: true }],
     'require-await': ERROR
   }
 };
