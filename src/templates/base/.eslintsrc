@@ -1,0 +1,74 @@
+{
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "legacyDecorators": true
+    }
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "globals": {
+    "document": true,
+    "window": true
+  },
+  "plugins": ["jest", "flowtype", "prettier", "extra-rules", "compat"],
+  "extends": ["airbnb", "plugin:flowtype/recommended", "prettier"],
+  "rules": {
+    "max-params": ["error", { "max": 7 }],
+    "max-statements": ["error", { "max": 100 }],
+    "max-lines": ["error", { "max": 1000 }],
+    "max-len": 0,
+    "complexity": ["error", { "max": 10 }],
+    "object-shorthand": ["warn", "properties"],
+    "array-callback-return": "error",
+    "no-undef": "error",
+    "extra-rules/no-commented-out-code": "error",
+    "class-methods-use-this": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/button-has-type": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-filename-extension": [
+      "error",
+      {
+        "extensions": [".js"]
+      }
+    ],
+    "prettier/prettier": "error",
+    "compat/compat": "error",
+    "linebreak-style": "off"
+  },
+  "overrides": [
+    {
+      "files": [
+        "**/*.story.js",
+        "**/*.mock.js",
+        "**/*.config.js",
+        "**/*.setup.js",
+        "**/*.test.js",
+        "**/*.spec.js"
+      ],
+      "rules": {
+        "import/no-extraneous-dependencies": "off",
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["**/*.test.js", "**/*.spec.js"],
+      "env": {
+        "jest/globals": true
+      },
+      "rules": {
+        "flowtype/no-types-missing-file-annotation": "off"
+      }
+    }
+  ],
+  "settings": {
+    "polyfills": ["promises"]
+  }
+}

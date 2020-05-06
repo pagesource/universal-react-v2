@@ -2,7 +2,7 @@
 
 // for api call execution
 
-// export default function mockApi(req, res) {
-//   res.statusCode = 200
-//   res.json({ name: 'John Doe' })
-// }
+export default function mockApi(req, res) {
+  res.statusCode = 200;
+  res.json({ name: 'John Doe' });
+}
