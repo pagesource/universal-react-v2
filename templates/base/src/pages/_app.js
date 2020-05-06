@@ -1,6 +1,5 @@
 
 function MyApp({ Component, pageProps }) {
-  console.log('testing purpose=====>>>>')
   return <Component {...pageProps} />
 }
 
