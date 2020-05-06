@@ -3,6 +3,14 @@ const WARN = 1;
 const ERROR = 2;
 
 module.exports = {
+  parserOptions: {
+    sourceType: "module",
+    ecmaVersion: 6,
+    ecmaFeatures: {
+      jsx: true,
+      modules: true
+    }
+  },
   env: {
     browser: true,
     es6: true,
