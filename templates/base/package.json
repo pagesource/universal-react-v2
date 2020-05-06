@@ -1,0 +1,16 @@
+{
+  "name": "base",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build dev",
+    "start": "next start dev",
+    "export": "next export dev"
+  },
+  "dependencies": {
+    "next": "9.3.6",
+    "react": "16.13.1",
+    "react-dom": "16.13.1"
+  }
+}
