@@ -17,7 +17,7 @@
     "document": true,
     "window": true
   },
-  "plugins": ["jest", "flowtype", "prettier", "extra-rules", "compat"],
+  "plugins": ["jest", "flowtype", "prettier", "extra-rules", "compat", "react-hooks"],
   "extends": ["airbnb", "plugin:flowtype/recommended", "prettier"],
   "rules": {
     "max-params": ["error", { "max": 7 }],
@@ -39,6 +39,7 @@
         "extensions": [".js"]
       }
     ],
+    "jsx-a11y/alt-text": ["error"],
     "prettier/prettier": "error",
     "compat/compat": "error",
     "linebreak-style": "off"
