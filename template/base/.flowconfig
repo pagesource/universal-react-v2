@@ -1,0 +1,20 @@
+[ignore]
+#no point including this as the lib folder is our main one
+.*/node_modules/.*
+.*/node_modules/styled-components/lib/.*
+.*/node_modules/@storybook/react/.*
+.*/dist/*
+.*/.storybook/*
+.*/__.next__/*
+.*/.history/*
+.*/*.config.js/.*
+yup
+[include]
+[libs]
+flow-typed
+node_modules/styled-components/flow-typed/danger_v0.x.x.js
+node_modules/styled-components/flow-typed/react-native.js
+flow-typed/
+[options]
+
+[strict]
