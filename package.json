@@ -20,7 +20,7 @@
     "lint": "node scripts/eslint",
     "lint:fix": "npm run lint -- --fix",
     "prepublishOnly": "npm run lint && npm test",
-    "test": "jest -c jest.config.js --watch"
+    "test": "jest -c template/base/jest.config.js --watch"
   },
   "files": [
     "src"
