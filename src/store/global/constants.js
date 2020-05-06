@@ -1,0 +1,1 @@
+export const DUMMY_CONST = 'DUMMY CONSTANT';
