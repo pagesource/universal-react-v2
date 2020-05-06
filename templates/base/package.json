@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build dev",
-    "start": "next start dev"
+    "start": "next start dev",
+    "storybook:run": "cd storybook && yarn install && yarn storybook",
+    "storybook:build": "cd storybook && yarn install && yarn build-storybook"
   },
   "dependencies": {
     "next": "9.3.6",
