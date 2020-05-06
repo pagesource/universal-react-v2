@@ -1,0 +1,74 @@
+/**
+ * @tokens Colors
+ * @presenter Color
+ */
+
+:root {
+  --grey: grey;
+  --red: red;
+  --black: #000000;
+  --white: #ffffff;
+
+  --error: #da1e28;
+  --success: #2e993a;
+
+  --brand-primary: #fe414d;
+  --brand-primary-active: #db2631;
+
+  --brand-secondary: #00e6c3;
+  --brand-secondary-active: #00c3a5;
+
+  --brand-tertiary: var(--black);
+  --brand-tertiary-active: var(--black);
+
+  --brand-transparent: transparent;
+
+  --brand-disabled: #e7e7e7;
+  --outline: #999;
+
+  --bg-primary: var(--white);
+  --bg-secondary: #ffd6d9;
+  --bg-cta-primary: var(--brand-primary);
+  --bg-cta-primary-active: var(--brand-primary-active);
+  --bg-cta-secondary: var(--brand-secondary);
+  --bg-cta-secondary-active: var(--brand-secondary-active);
+  --bg-cta-tertiary: var(--white);
+  --bg-cta-tertiary-active: var(--brand-tertiary-active);
+  --bg-cta-transparent: var(--brand-transparent);
+  --bg-cta-info: #31708f;
+  --bg-cta-warning: #d8ca00;
+  --bg-cta-success: #36b37e;
+  --bg-cta-error: #a94442;
+  --bg-cta-default: #fe414d;
+
+  --border-primary: #979797;
+  --border-secondary: #171717;
+  --border-error: var(--error);
+  --border-disabled: var(--brand-disabled);
+
+  --text-primary: var(--black);
+  --text-secondary: #262626;
+  --text-alternate: #404040;
+  --text-light: #dfdfdf;
+  --text-inverse: var(--white);
+  --text-link: var(--brand-primary);
+  --text-cta-primary: var(--white);
+  --text-cta-secondary: var(--white);
+  --text-cta-tertiary: var(--text-primary);
+  --text-cta-disabled: #b1b1b1;
+  --text-field-disabled: var(--text-cta-disabled);
+  --text-cta-info: #d9edf7;
+  --text-cta-warning: #fcf8e3;
+  --text-cta-success: #dff0d8;
+  --text-cta-error: #f2dede;
+  --text-cta-default: #f3e3e3;
+
+  --field-border-primary: var(--border-primary);
+  --field-border-secondary: var(--border-secondary);
+  --field-border-active: var(--brand-secondary-active);
+
+  --stroke: var(--border-primary);
+  --stroke-active: var(--brand-primary);
+
+  --container-shadow-primary: 'rgba(0,0,0,.2)';
+}

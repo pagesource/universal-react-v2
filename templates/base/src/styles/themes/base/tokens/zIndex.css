@@ -1,0 +1,12 @@
+/**
+ * @tokens Z-Index
+ */
+
+:root {
+  --z-index-native-tick-select-icon: 500;
+  --z-index-sticky: 600;
+  --z-index-fly-out: 700;
+  --z-index-modal: 800;
+  --z-index-overlay: 900;
+  --z-index-loader: 1000;
+}

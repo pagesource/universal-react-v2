@@ -12,6 +12,9 @@
 .next
 /out/
 
+# storybook output folder
+out
+
 # production
 /build
 
