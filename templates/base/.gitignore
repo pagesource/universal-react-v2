@@ -9,7 +9,7 @@
 /coverage
 
 # next.js
-.next
+/.next
 /out/
 
 # storybook output folder
@@ -35,3 +35,4 @@ yarn-error.log*
 #lock files
 yarn.lock
 package-lock.json
+

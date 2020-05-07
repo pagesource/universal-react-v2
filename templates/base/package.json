@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build dev",
+    "build": "next build",
     "start": "next start dev",
+    "export": "next export",
     "storybook:run": "cd storybook && yarn install && yarn storybook",
     "storybook:build": "cd storybook && yarn install && yarn build-storybook"
   },
