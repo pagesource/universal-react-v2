@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start dev",
     "export": "next export",
-    "storybook:install": "cd storybook && yarn install",
+    "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
     "storybook:build": "cd storybook && yarn build-storybook"
   },
