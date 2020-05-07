@@ -19,8 +19,7 @@
   "scripts": {
     "lint": "node scripts/eslint",
     "lint:fix": "npm run lint -- --fix",
-    "prepublishOnly": "npm run lint && npm test",
-    "test": "jest -c template/base/jest.config.js --watch"
+    "prepublishOnly": "npm run lint && npm test"
   },
   "files": [
     "src"
@@ -40,14 +39,11 @@
     "eslint-plugin-jest": "23.8.2",
     "eslint-plugin-prettier": "3.1.2",
     "husky": "4.2.3",
-    "jest": "25.2.7",
     "lint-staged": "10.1.2",
     "prettier": "2.0.4",
     "ora": "4.0.3"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.5.0",
-    "@testing-library/react": "^10.0.4",
     "mocha": "*"
   },
   "husky": {
