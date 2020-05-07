@@ -9,7 +9,7 @@
 /coverage
 
 # next.js
-.next
+/.next
 /out/
 
 # production
@@ -32,3 +32,4 @@ yarn-error.log*
 #lock files
 yarn.lock
 package-lock.json
+
