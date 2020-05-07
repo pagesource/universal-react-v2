@@ -18,7 +18,6 @@
     "@storybook/react": "^5.3.18",
     "babel-loader": "^8.1.0",
     "css-loader": "^3.5.3",
-    "storybook-addon-designs": "^5.2.1",
     "storybook-design-token": "^0.7.2",
     "styled-components": "^5.1.0"
   }
