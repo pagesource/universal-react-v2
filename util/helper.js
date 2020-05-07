@@ -1,3 +1,5 @@
+const deepmerge = require('deepmerge');
+
 function createNpmDependenciesArray(packageFilePath) {
   const p = require(packageFilePath);
   if (!p.dependencies) {
@@ -16,6 +18,12 @@ function createNpmDependenciesArray(packageFilePath) {
   return deps;
 }
 
+function mergeJsons(masterJson, slaveJson) {
+  const json = deepmerge(Object.assign({}, masterJson), slaveJson);
+  return json;
+}
+
 module.exports = {
-  createNpmDependenciesArray
+  createNpmDependenciesArray,
+  mergeJsons
 };

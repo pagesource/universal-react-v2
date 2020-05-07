@@ -1,34 +1,39 @@
 #!/usr/bin/env node
 'use strict';
 
+const path = require('path');
 const fs = require('fs');
+const os = require('os');
 const inquirer = require('inquirer');
 const copydir = require('copy-dir');
 const npm = require('npm');
-const { createNpmDependenciesArray } = require('./util/helper');
+const { createNpmDependenciesArray, mergeJsons } = require('./util/helper');
+const { appTemplateFileExclusions } = require('./util/constants');
 
 const cwd = process.cwd();
 let projectDir = '';
-const templatesPath = `${__dirname}/templates`;
+const templatesPath = path.join(__dirname, 'templates');
 
 const run = (appType, appName) => {
-  console.log('creating project');
-
-  projectDir = `${cwd}${appName}`;
+  projectDir = path.join(cwd, appName);
   createPorjectdir(projectDir);
 
-  let sourcePath = `${templatesPath}/base`;
+  let sourcePath = path.join(templatesPath, 'base');
   copyTemplateApp(sourcePath, projectDir);
 
-  sourcePath = `${templatesPath}/${appType}`;
+  sourcePath = path.join(templatesPath, appType);
   copyTemplateApp(sourcePath, projectDir);
 
-  console.log('project created successfully');
+  console.info('project created successfully');
 
-  console.log('installing packages');
-  const depArr = createNpmDependenciesArray(`${projectDir}\\package.json`);
+  const basePackage = require(path.join(projectDir, 'package.json'));
+  const appPackage = require(path.join(templatesPath, appType, 'package.json'));
+  const packageFile = mergeJsons(basePackage, appPackage);
+  writeJsonFile(path.join(projectDir, 'package.json'), packageFile);
+
+  console.info('installing packages');
+  const depArr = createNpmDependenciesArray(path.join(projectDir, 'package.json'));
   installPackages(projectDir, depArr);
-  console.log('installed packages successfully');
 };
 
 const createPorjectdir = (projectDir) => {
@@ -41,7 +46,7 @@ const createPorjectdir = (projectDir) => {
     }
   } catch (e) {
     console.error('error creating project directory. App will exit.');
-    console.log(e);
+    console.info(e);
     return;
   }
 };
@@ -53,7 +58,20 @@ const copyTemplateApp = (sourcePath, destPath) => {
     {
       utimes: true, // keep add time and modify time
       mode: true, // keep file mode
-      cover: true // cover file when exists, default is true
+      cover: true, // cover file when exists, default is true
+
+      filter: function (stat, filename, dir) {
+        const file = path.parse(filename).base;
+
+        // exlude all files in appTemplateFileExclusions array, when they are being copied from ssr or static folder
+        if (stat === 'file' && appTemplateFileExclusions.includes(file)) {
+          if (path.join(templatesPath, 'base') === dir) {
+            return true;
+          }
+          return false;
+        }
+        return true;
+      }
     },
     function (err) {
       if (err) {
@@ -63,9 +81,20 @@ const copyTemplateApp = (sourcePath, destPath) => {
   );
 };
 
+const writeJsonFile = (jsonFilePath, json) => {
+  try {
+    fs.writeFileSync(jsonFilePath, JSON.stringify(json, null, 2) + os.EOL);
+  } catch (e) {
+    console.error('error merging package.json files');
+  }
+};
+
 const installPackages = (installPath, depArr) => {
   npm.load(() => {
-    npm.commands.install(installPath, depArr);
+    npm.commands.install(installPath, depArr, function (err) {
+      console.error('failed to install packages, please install them manually');
+      throw err;
+    });
   });
 };
 
@@ -73,7 +102,7 @@ const questions = [
   {
     type: 'list',
     name: 'appType',
-    message: 'What type of app you needed?',
+    message: 'What type of app you need?',
     choices: ['Static', 'SSR'],
     filter: function (val) {
       return val.toLowerCase();
@@ -100,7 +129,9 @@ const questions = [
   }
 ];
 
+// run('static', 'test-static');
+
 inquirer.prompt(questions).then((answers) => {
-  console.log(JSON.stringify(answers, null, '  '));
+  console.info(JSON.stringify(answers, null, '  '));
   run(answers.appType, answers.appName);
 });

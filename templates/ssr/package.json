@@ -1,0 +1,7 @@
+{
+    "name": "my-base-project",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "command to run ssr app"
+    }
+}
