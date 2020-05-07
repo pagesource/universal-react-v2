@@ -1,4 +1,4 @@
-# Universal React App Generator v2
+# Universal React App Generator
 
 ### Installation
 
