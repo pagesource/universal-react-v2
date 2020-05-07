@@ -2,12 +2,10 @@ import React from 'react';
 import { configure, addDecorator, addParameters } from '@storybook/react';
 import { DocsPage, DocsContainer } from '@storybook/addon-docs/blocks';
 import { withKnobs } from '@storybook/addon-knobs';
-import { withDesign } from 'storybook-addon-designs';
 import { withA11y } from '@storybook/addon-a11y';
 
 addDecorator(withKnobs);
 addDecorator(withA11y);
-addDecorator(withDesign);
 
 addDecorator((storyFn, context) => (
   <React.Fragment>
