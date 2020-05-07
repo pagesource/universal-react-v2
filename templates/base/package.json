@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start dev",
     "export": "next export",
-    "test": "jest -c jest.config.js --watch"
+    "test:watch": "yarn test --watch"
+    "test": "jest -c jest.config.js"
   },
   "dependencies": {
     "next": "9.3.6",
