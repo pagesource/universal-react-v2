@@ -39,12 +39,21 @@ module.exports = {
       name: 'folder',
       message: 'Where do you want to keep this component?',
       default: 'atoms',
-      choices: () => ['atoms', 'molecules', 'organisms', 'templates']
+      choices: () => ['atoms', 'molecules', 'organisms', 'templates', 'custom']
+    },
+    {
+      when: data =>  data.folder === 'custom',
+      type: 'input',
+      name: 'customFolder',
+      message: 'Give the custom path for the component:',
+      default: 'src/components/atoms'
     }
+
   ],
   actions: (data) => {
     // Generate index.js and index.test.js
     let componentTemplate;
+    let folderPath = data.folder ? `../${config.COMPONENT_PATH}${data.folder}` : `../${config.COMPONENT_PATH}atoms`;
 
     switch (data.type) {
       case 'Stateless Function': {
@@ -56,43 +65,44 @@ module.exports = {
       }
     }
 
+    if (data.folder === 'custom') {
+      folderPath = `../${data.customFolder}`;
+    }
+
     const actions = [
       {
         type: 'add',
-        path: `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/index.js`,
+        path: `${folderPath}/{{properCase name}}/index.js`,
         templateFile: './component/index.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/{{properCase name}}.js`,
+        path: `${folderPath}/{{properCase name}}/{{properCase name}}.js`,
         templateFile: componentTemplate,
         abortOnFail: true
       },
       {
         type: 'add',
-        path:
-          `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/tests/{{properCase name}}.test.js`,
+        path: `${folderPath}/{{properCase name}}/tests/{{properCase name}}.test.js`,
         templateFile: './component/test.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path:
-          `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/{{properCase name}}.story.js`,
+        path: `${folderPath}/{{properCase name}}/{{properCase name}}.story.js`,
         templateFile: './component/story.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path:
-          `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/{{properCase name}}.style.js`,
+        path: `${folderPath}/{{properCase name}}/{{properCase name}}.style.js`,
         templateFile: './component/style.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: `../${config.COMPONENT_PATH}{{ folder }}/{{properCase name}}/types/index.js`,
+        path: `${folderPath}/{{properCase name}}/types/index.js`,
         templateFile: './component/types.js.hbs',
         abortOnFail: true
       }
