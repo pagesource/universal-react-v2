@@ -1,0 +1,9 @@
+version: '3'
+services:
+  web:
+    stdin_open: true
+    build:
+      context: .
+      dockerfile: nginx.Dockerfile
+    ports:
+      - '80:80'
