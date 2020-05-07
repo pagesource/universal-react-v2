@@ -6,7 +6,7 @@
 // @flow
 
 // Node_Module Imports
-import React from 'react';
+import React, { ComponentType } from 'react';
 import type { Node } from 'react';
 import styled from 'styled-components';
 
@@ -18,8 +18,10 @@ const {{ properCase name }} = ({ className, children }: Props): Node => <div cla
 
 {{ properCase name }}.defaultProps = {};
 
-export default styled({{ properCase name }})`
-  ${styles}
+const Styled{{ properCase name }}: ComponentType<Props> = styled({{ properCase name }})`
+  ${styles};
 `;
+
+export default Styled{{ properCase name }};
 
 export { {{ properCase name }} };
