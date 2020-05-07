@@ -1,5 +1,5 @@
 import { ApolloProvider } from '@apollo/react-hooks';
-import GraphQLClient from '../../../graphQl/ApolloClient'
+import GraphQLClient from '../../graphQl/ApolloClient'
 
 function MyApp({ Component, pageProps }) {
   return (
