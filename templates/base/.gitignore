@@ -13,7 +13,7 @@
 /out/
 
 # storybook output folder
-out
+storybook-output
 
 # production
 /build
