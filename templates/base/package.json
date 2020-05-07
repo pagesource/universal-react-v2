@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start dev",
     "export": "next export",
-    "storybook:run": "cd storybook && yarn install && yarn storybook",
-    "storybook:build": "cd storybook && yarn install && yarn build-storybook"
+    "storybook:install": "cd storybook && yarn install",
+    "storybook:run": "cd storybook && yarn storybook",
+    "storybook:build": "cd storybook && yarn build-storybook"
   },
   "dependencies": {
     "next": "9.3.6",
