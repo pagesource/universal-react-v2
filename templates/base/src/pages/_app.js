@@ -1,6 +1,12 @@
+import { ApolloProvider } from '@apollo/react-hooks';
+import GraphQLClient from '../../../graphQl/ApolloClient'
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <ApolloProvider client={GraphQLClient}>
+      <Component {...pageProps} />
+    </ApolloProvider>
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for
