@@ -9,11 +9,15 @@
     "export": "next export",
     "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
-    "storybook:build": "cd storybook && yarn build-storybook"
+    "storybook:build": "cd storybook && yarn build-storybook",
+    "generate": "plop --plopfile generators/index.js"
   },
   "dependencies": {
     "next": "9.3.6",
     "react": "16.13.1",
     "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "plop": "^2.6.0"
   }
 }
