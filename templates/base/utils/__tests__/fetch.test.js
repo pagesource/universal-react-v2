@@ -1,6 +1,5 @@
 
 import fetchMock from 'fetch-mock';
-import { waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import executeAPICall from '../fetch';
 
