@@ -8,7 +8,9 @@ const fs = require('fs');
 const path = require('path');
 const config = require('../constants');
 
-const atomComponents = fs.readdirSync(path.join(__dirname, `../../${config.COMPONENT_PATH}atoms`));
+const atomComponents = fs.readdirSync(
+  path.join(__dirname, `../../${config.COMPONENT_PATH}atoms`)
+);
 const moleculeComponents = fs.readdirSync(
   path.join(__dirname, `../../${config.COMPONENT_PATH}molecules`)
 );
@@ -23,8 +25,11 @@ const components = atomComponents
   .concat(organismComponents)
   .concat(templateComponents);
 
+const hooks = fs.readdirSync(path.join(__dirname, `../../${config.COMPONENT_PATH}`));
+
 const componentContainer = {
-  components
+  components,
+  hooks
 };
 
 function componentExists(comp, category) {
