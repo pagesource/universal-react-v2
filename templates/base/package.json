@@ -15,6 +15,7 @@
     "generate": "plop --plopfile generators/index.js"
   },
   "dependencies": {
+    "isomorphic-fetch": "^2.2.1",
     "next": "9.3.6",
     "react": "16.13.1",
     "react-dom": "16.13.1"
@@ -23,6 +24,7 @@
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.4",
     "jest": "25.2.7",
-    "plop": "^2.6.0"
+    "plop": "^2.6.0",
+    "miragejs": "^0.1.38"
   }
 }
