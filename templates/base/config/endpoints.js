@@ -17,10 +17,7 @@ const dataDomain = 'https://jsonplaceholder.typicode.com';
 */
 export const getContentServiceUrl = (key, isMock = false) => {
   const url = endpoints[key];
-  if (isMock) return url;
-  else {
-    return `${contentDomain}url`;
-  }
+  return isMock ? url : `${contentDomain}url`;
 }
 
 /** getDataServiceUrl - generates data service url to be passed to fetch api
@@ -28,9 +25,5 @@ export const getContentServiceUrl = (key, isMock = false) => {
 */
 export const getDataServiceUrl = (key, isMock = false) => {
   const url = endpoints[key];
-  console.log()
-  if (isMock) return `${url}.json`; // mock file can be changed as preference
-  else {
-    return `${dataDomain}${url}`;
-  }
+  return isMock ? `${url}.json` : `${dataDomain}${url}`; // mock file can be changed as preference
 }
