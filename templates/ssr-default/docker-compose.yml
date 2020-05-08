@@ -4,6 +4,6 @@ services:
     stdin_open: true
     build:
       context: .
-      dockerfile: ssr.Dockerfile
+      dockerfile: .Dockerfile
     ports:
       - 3000:3000
