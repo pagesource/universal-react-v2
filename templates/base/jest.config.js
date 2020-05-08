@@ -18,4 +18,7 @@ module.exports = {
         '/node_modules/',
     ],
     coverageReporters: ['lcov', 'json', 'text-summary'],
+    transform: {
+        '\\.(js|jsx)?$': 'babel-jest',
+      },
 };
