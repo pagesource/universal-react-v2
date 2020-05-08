@@ -11,12 +11,7 @@ const globalReducer = (state = initialState, action) => {
         case APP_ERROR:
             return {
                 ...state,
-                error: true
-            }
-        case APP_LOADED:
-            return {
-                ...state,
-                loading: false
+                error: action.payload
             }
     }
     return state;

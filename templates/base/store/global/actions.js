@@ -1,2 +1,5 @@
-export const APP_ERROR = 'APP_ERROR';
-export const APP_LOADED = 'APP_LOADED';
+export const UPDATE_APP_ERROR = 'UPDATE_APP_ERROR';
+
+export const updateAppError = (payload, dispatch) => {
+    return dispatch({ type: APP_ERROR, payload })
+}
