@@ -1,5 +1,5 @@
 {
   "scripts": {
-    "dev": "node server/index"
+    "start": "NODE_ENV=production node server/index"
   }
 }

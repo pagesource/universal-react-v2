@@ -9,4 +9,4 @@ FROM node:alpine
 WORKDIR /app
 COPY --from=builder /app .
 EXPOSE 3000
-CMD ["yarn", "run", "dev"]
+CMD ["yarn", "run", "start"]
