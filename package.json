@@ -19,8 +19,8 @@
   "scripts": {
     "lint": "node scripts/eslint",
     "lint:fix": "npm run lint -- --fix",
-    "prepublishOnly": "npm run lint && npm test",
-    "test": "node scripts/test"
+    "test": "node scripts/test",
+    "prepublishOnly": "npm run lint && npm test"
   },
   "files": [
     "src"
@@ -42,8 +42,6 @@
     "eslint-plugin-prettier": "3.1.2",
     "graphql": "^15.0.0",
     "husky": "4.2.3",
-    "inquirer": "7.1.0",
-    "jest": "25.2.7",
     "lint-staged": "10.1.2",
     "ora": "4.0.3",
     "prettier": "2.0.4"
