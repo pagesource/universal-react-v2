@@ -1,7 +1,0 @@
-{
-    "name": "my-static-project",
-    "version": "1.0.0",
-    "scripts": {
-        "start:new": "command to run static app"
-    }
-}
