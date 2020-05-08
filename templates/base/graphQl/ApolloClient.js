@@ -1,6 +1,5 @@
 import ApolloClient, { HttpLink, InMemoryCache } from 'apollo-boost';
-
-const defaultUri = 'https://48p1r2roz4.sse.codesandbox.io';
+import { graphQLApiUri } from '../config/api';
 
 const cache = new InMemoryCache();
 
@@ -9,7 +8,7 @@ const cache = new InMemoryCache();
  * @param {*} uri [URL of service ]
  * @param {*} headers [headers to be pased to service. like security token]
  */
-const GraphQLClient = (uri = defaultUri, headers = {}) =>
+const GraphQLClient = (uri = graphQLApiUri, headers = {}) =>
   new ApolloClient({
     cache,
     link: new HttpLink({
