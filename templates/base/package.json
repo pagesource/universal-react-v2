@@ -7,13 +7,22 @@
     "build": "next build",
     "start": "next start dev",
     "export": "next export",
+    "test:watch": "yarn test --watch",
+    "test": "jest -c jest.config.js",
     "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
-    "storybook:build": "cd storybook && yarn build-storybook"
+    "storybook:build": "cd storybook && yarn build-storybook",
+    "generate": "plop --plopfile generators/index.js"
   },
   "dependencies": {
     "next": "9.3.6",
     "react": "16.13.1",
     "react-dom": "16.13.1"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.5.0",
+    "@testing-library/react": "^10.0.4",
+    "jest": "25.2.7",
+    "plop": "^2.6.0"
   }
 }
