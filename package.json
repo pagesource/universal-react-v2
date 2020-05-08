@@ -30,8 +30,6 @@
     "react-universal"
   ],
   "dependencies": {
-    "@apollo/react-hooks": "^3.1.5",
-    "apollo-boost": "^0.4.7",
     "chalk": "4.0.0",
     "copy-dir": "^1.2.0",
     "eslint": "6.8.0",
@@ -40,7 +38,6 @@
     "eslint-plugin-import": "2.20.2",
     "eslint-plugin-jest": "23.8.2",
     "eslint-plugin-prettier": "3.1.2",
-    "graphql": "^15.0.0",
     "husky": "4.2.3",
     "lint-staged": "10.1.2",
     "ora": "4.0.3",
