@@ -1,0 +1,21 @@
+/**
+ *
+ * use{{ properCase name }}
+ *
+ */
+
+// Node_Module Imports
+import { useState, useEffect } from 'react';
+
+const use{{ properCase name }} = (initialValue = null) => {
+  const [ value, setValue ] = useState(initialValue);
+
+  useEffect(() => {
+    // write here the after-render effects e.g.
+    document.title = `The value is: ${value}`;
+  });
+
+  return({ value, setValue });
+};
+
+export default use{{ properCase name }};
