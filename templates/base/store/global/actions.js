@@ -1,5 +1,5 @@
-export const UPDATE_APP_ERROR = 'UPDATE_APP_ERROR';
+import { UPDATE_APP_ERROR } from './constants';
 
 export const updateAppError = (payload, dispatch) => {
-    return dispatch({ type: APP_ERROR, payload })
+    return dispatch({ type: UPDATE_APP_ERROR, payload })
 }

@@ -1,1 +1,1 @@
-export const DUMMY_CONSTANT = 'DUMMY_CONSTANT';
+export const UPDATE_APP_ERROR = 'UPDATE_APP_ERROR';
