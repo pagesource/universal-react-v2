@@ -25,7 +25,7 @@ const components = atomComponents
   .concat(organismComponents)
   .concat(templateComponents);
 
-const hooks = fs.readdirSync(path.join(__dirname, `../../${config.COMPONENT_PATH}`));
+const hooks = fs.readdirSync(path.join(__dirname, `../../${config.HOOKS_PATH}`));
 
 const componentContainer = {
   components,
