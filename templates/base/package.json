@@ -9,7 +9,7 @@
     "build:prod": "npm run env-var && npm run build",
     "start": "next start dev",
     "export": "next export",
-    "test:watch": "yarn test --watch",
+    "test:watch": "npm run test -- --watch",
     "test": "jest -c ./config/jest.config.js",
     "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
