@@ -49,6 +49,7 @@ const LogWrapper = () => {
     log: 1,
     warn: 2,
     info: 3,
+    debug: 4,
   }
 
   let loggingObj = {};
