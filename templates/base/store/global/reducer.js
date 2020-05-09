@@ -1,9 +1,9 @@
-import { APP_ERROR, APP_LOADED } from './actions';
+import { APP_ERROR } from './actions';
 
 // @Initial State
-export const initialState = {
-    loading: true,
-    error: false
+const initialState = {
+    errorInfo: {},
+    isError: false
 }
 
 const globalReducer = (state = initialState, action) => {
@@ -11,10 +11,12 @@ const globalReducer = (state = initialState, action) => {
         case APP_ERROR:
             return {
                 ...state,
-                error: action.payload
+                errorInfo: { ...action.payload.errorInfo },
+                isError: action.payload.isError
             }
+        default:
+            return state;
     }
-    return state;
 }
 
 export default globalReducer;

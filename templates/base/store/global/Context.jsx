@@ -3,13 +3,15 @@
  *  the Global Context to other needy components
  *  */
 
-import React from 'react';
+import React, { useReducer } from 'react';
+import reducer from './reducer';
 
 // Creating global context
-export const Context = React.createContext();
+export const Context = React.createContext(reducer());
 
 const GlobalContextProvider = props => {
-    return <Context.Provider value={{}}>{props.children}</Context.Provider>
+    const [state, dispatch] = useReducer(reducer, reducer());
+    return <Context.Provider value={{state, dispatch}}>{props.children}</Context.Provider>
 }
 
 export default GlobalContextProvider;
