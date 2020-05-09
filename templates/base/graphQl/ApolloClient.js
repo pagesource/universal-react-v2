@@ -1,4 +1,5 @@
 import ApolloClient, { HttpLink, InMemoryCache } from 'apollo-boost';
+import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { graphQLApiUri } from '../config/endpoints';
 
