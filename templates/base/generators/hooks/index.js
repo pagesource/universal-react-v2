@@ -35,14 +35,14 @@ module.exports = {
     const actions = [
       {
         type: 'add',
-        path: `${folderPath}/use{{properCase name}}.js`,
-        templateFile: './hooks/hook.js.hbs',
+        path: `${folderPath}/use{{properCase name}}/index.js`,
+        templateFile: './hooks/index.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: `${folderPath}/use{{properCase name}}.test.js`,
-        templateFile: './hooks/hook.test.js.hbs',
+        path: `${folderPath}/use{{properCase name}}/test.js`,
+        templateFile: './hooks/test.js.hbs',
         abortOnFail: true
       }
     ];
