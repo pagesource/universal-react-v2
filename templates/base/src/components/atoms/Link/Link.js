@@ -16,7 +16,7 @@ import type { Props } from './types';
 import styles from './Link.style';
 import { BASE_PATH } from '../../../routes'
 
-const Link: React.FunctionComponent<LinkProps> = ({ ...props, children, className }: Props): Node => ()
+const Link: React.FunctionComponent<LinkProps> = ({ children, className, ...props }: Props): Node => (
   <NextLink
     {...props}
     as={`${BASE_PATH}${props.href}`}
