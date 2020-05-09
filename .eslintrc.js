@@ -59,7 +59,7 @@ module.exports = {
     }],
     'jest/expect-expect': OFF, // assertions via 'yeoman-assert'
     'linebreak-style': OFF,
-    'no-console': WARN,
+    'no-console': ['error', { 'allow': [ 'warn', 'error', 'info' ] }],
     'no-param-reassign': ERROR,
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'no-undef': ERROR,
