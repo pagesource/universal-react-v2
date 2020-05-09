@@ -12,7 +12,8 @@
     "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
     "storybook:build": "cd storybook && yarn build-storybook",
-    "generate": "plop --plopfile generators/index.js"
+    "generate": "plop --plopfile generators/index.js",
+    "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -26,6 +27,8 @@
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.4",
     "jest": "25.2.7",
-    "plop": "^2.6.0"
+    "plop": "^2.6.0",
+    "@next/bundle-analyzer": "^9.3.6",
+    "cross-env": "7.0.2"
   }
 }
