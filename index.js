@@ -1,92 +1,91 @@
 #!/usr/bin/env node
 'use strict';
 
-const fs = require('fs');
+const path = require('path');
+const chalk = require('chalk');
 const inquirer = require('inquirer');
-const copydir = require('copy-dir');
+const { createNpmDependenciesArray, mergeJsons } = require('./utils/jsonHelper');
+const { createAppQuestions } = require('./utils/questions');
+const {
+  appTemplateFileExclusions,
+  universalReactStampData
+} = require('./utils/constants');
+const { createDir, copyDir, writeJsonFile } = require('./utils/fileDirOps');
+const { installPackages } = require('./utils/install');
+
+const templatesPath = path.join(__dirname, 'templates');
+const baseTemplatePath = path.join(templatesPath, 'base');
+let templatePath = '';
+let projectDir = '';
 const cwd = process.cwd();
-const templatesPath = `${__dirname}/templates`;
 
-const run = (appType, appName) => {
-  const projectDir = `${cwd}/${appName}`;
-  createPorjectdir(projectDir);
+const stampFileName = 'universal-react-stamp.json';
 
-  let sourcePath = `${templatesPath}/base`;
-  copyTemplateApp(sourcePath, projectDir, 'base template copied successfully');
-
-  sourcePath = `${templatesPath}/${appType}`;
-  copyTemplateApp(sourcePath, projectDir, `${appType} template copied successfully`);
+const createProjectDirectory = (appName) => {
+  projectDir = path.join(cwd, appName);
+  createDir(projectDir);
 };
 
-const createPorjectdir = (projectDir) => {
+const copyBaseDirectory = () => {
+  copyDir(baseTemplatePath, projectDir, appTemplateFileExclusions);
+};
+
+const copyTemplateDirectory = (appType) => {
+  templatePath = path.join(templatesPath, appType);
+  copyDir(templatePath, projectDir, appTemplateFileExclusions);
+};
+
+const mergeAndCopyPackageFile = (appName) => {
+  const basePackage = require(path.join(baseTemplatePath, 'package.json'));
+  const appPackage = require(path.join(templatePath, 'package.json'));
+  let packageFile = mergeJsons(basePackage, appPackage);
+  packageFile = mergeJsons(packageFile, { name: appName });
+
   try {
-    if (!fs.existsSync(projectDir)) {
-      fs.mkdirSync(projectDir);
-    } else {
-      console.error('directory name already exists.');
-      return;
-    }
+    writeJsonFile(path.join(projectDir, 'package.json'), packageFile);
+    console.info(chalk.green('package.json file copied successfully'));
   } catch (e) {
-    console.error('error creating project directory. App will exit.');
-    console.log(e);
-    return;
+    console.error(chalk.red('error copying package.json file'));
+    throw e;
   }
 };
 
-const copyTemplateApp = (
-  sourcePath,
-  destPath,
-  successMessage = 'template copied successfully'
-) => {
-  copydir(
-    sourcePath,
-    destPath,
-    {
-      utimes: true, // keep add time and modify time
-      mode: true, // keep file mode
-      cover: true // cover file when exists, default is true
-    },
-    function (err) {
-      if (err) {
-        throw err;
-      }
-      console.log(successMessage);
-    }
-  );
+const createStampFile = (appType) => {
+  const universalReactPackageFile = require(path.join(__dirname, 'package.json'));
+  const json = mergeJsons(universalReactStampData, {
+    name: universalReactPackageFile.name,
+    version: universalReactPackageFile.version,
+    type: appType
+  });
+  try {
+    writeJsonFile(path.join(projectDir, stampFileName), json);
+  } catch (e) {
+    console.error('error creating stamp file');
+  }
 };
 
-const questions = [
-  {
-    type: 'list',
-    name: 'appType',
-    message: 'What type of app you needed?',
-    choices: ['Static', 'SSR'],
-    filter: function (val) {
-      return val.toLowerCase();
-    },
-    validate: function (value) {
-      if (value.length) {
-        return true;
-      } else {
-        return 'Please enter valid value';
-      }
-    }
-  },
-  {
-    name: 'appName',
-    type: 'input',
-    message: 'Enter your app name?',
-    validate: function (value) {
-      if (value.length) {
-        return true;
-      } else {
-        return 'Please enter valid app name';
-      }
-    }
-  }
-];
+const installDependencies = () => {
+  console.info(chalk.yellow('installing packages'));
+  const depArr = createNpmDependenciesArray(path.join(projectDir, 'package.json'));
+  installPackages(projectDir, depArr);
+};
 
-inquirer.prompt(questions).then((answers) => {
-  console.log(JSON.stringify(answers, null, '  '));
-  run(answers.appType, answers.appName);
+const initialize = (appType, appName) => {
+  createProjectDirectory(appName);
+  copyBaseDirectory();
+  copyTemplateDirectory(appType);
+  console.info(chalk.green('project created successfully'));
+
+  mergeAndCopyPackageFile(appName);
+  createStampFile(appType);
+
+  installDependencies();
+};
+
+// initialize('ssr-custom', 'appName');
+
+inquirer.prompt(createAppQuestions).then((answers) => {
+  console.info(JSON.stringify(answers, null, '  '));
+
+  initialize(answers.appType, answers.appName);
 });
