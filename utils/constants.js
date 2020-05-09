@@ -6,7 +6,7 @@ const universalReactStampData = {
   type: '',
   optionalFeatures: [],
   description:
-    'This file is needed by universal-react app to determine certain parameters'
+    'This file is needed by universal-react app for future upgrades. Please do not delete this file.'
 };
 
 module.exports = {
