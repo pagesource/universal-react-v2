@@ -2,8 +2,8 @@ import GlobalContextProvider from './../../store/global/Context';
 
 function MyApp({ Component, pageProps }) {
   return (<GlobalContextProvider>
-          <Component {...pageProps} />
-        </GlobalContextProvider>)
+    <Component {...pageProps} />
+  </GlobalContextProvider>)
 }
 
 // Only uncomment this method if you have blocking data requirements for

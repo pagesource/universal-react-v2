@@ -3,8 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "env-var": "cross-env BASE_PATH=/universal-react",
     "dev": "next dev",
     "build": "next build",
+    "build:prod": "npm run env-var && npm run build",
     "start": "next start dev",
     "export": "next export",
     "test:watch": "yarn test --watch",
@@ -16,6 +18,7 @@
     "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
+    "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "fetch-mock": "^9.5.0",
     "isomorphic-unfetch": "^3.0.0",
