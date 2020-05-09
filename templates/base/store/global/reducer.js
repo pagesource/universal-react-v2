@@ -1,4 +1,4 @@
-import { APP_ERROR } from './actions';
+import { UPDATE_APP_ERROR } from './constants';
 
 // @Initial State
 const initialState = {
@@ -8,7 +8,7 @@ const initialState = {
 
 const globalReducer = (state = initialState, action) => {
     switch(action.type) {
-        case APP_ERROR:
+        case UPDATE_APP_ERROR:
             return {
                 ...state,
                 errorInfo: { ...action.payload.errorInfo },
