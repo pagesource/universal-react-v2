@@ -1,0 +1,1 @@
+export const UPDATE_APP_ERROR = 'UPDATE_APP_ERROR';
