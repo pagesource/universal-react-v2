@@ -1,3 +1,9 @@
+---
+id: getting-started
+title: Getting Started
+sidebar_label: Getting Started
+---
+
 # How to ramp-up on this boilerplate?
 
 1. [Development Tools](development-tools.md)

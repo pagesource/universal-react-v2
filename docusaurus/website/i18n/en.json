@@ -6,17 +6,20 @@
     "tagline": "An application boilerplate generator for developing universal applications with Next.js",
     "docs": {
       "development-tools": {
-        "title": "development-tools"
+        "title": "Development Tools",
+        "sidebar_label": "Development Tools"
       },
       "documentation-intro": {
         "title": "About the Documentation",
         "sidebar_label": "About Docs"
       },
       "folder-structure": {
-        "title": "folder-structure"
+        "title": "Folder Structure",
+        "sidebar_label": "Folder Structure"
       },
       "getting-started": {
-        "title": "getting-started"
+        "title": "Getting Started",
+        "sidebar_label": "Getting Started"
       }
     },
     "links": {

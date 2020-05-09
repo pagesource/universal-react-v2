@@ -1,3 +1,9 @@
+---
+id: folder-structure
+title: Folder Structure
+sidebar_label: Folder Structure
+---
+
 # Application Directory Structure
 
 ## Default applications directory structure

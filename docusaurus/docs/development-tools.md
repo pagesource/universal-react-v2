@@ -1,3 +1,9 @@
+---
+id: development-tools
+title: Development Tools
+sidebar_label: Development Tools
+---
+
 # Editor & Plugins (Editor Extensions)
 
 ## VS Code
