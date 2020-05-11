@@ -10,7 +10,7 @@
     "start": "next start dev",
     "export": "next export",
     "test:watch": "npm run test -- --watch",
-    "test": "jest -c ./config/jest.config.js",
+    "test": "jest -c ./config/jest/jest.config.js",
     "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
     "storybook:build": "cd storybook && yarn build-storybook",
