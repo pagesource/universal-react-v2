@@ -17,6 +17,13 @@
     "generate": "plop --plopfile generators/index.js",
     "analyze": "cross-env ANALYZE=true next build"
   },
+  "browserslist": [
+    "> 0.25%",
+    "not ie <= 11",
+    "not edge < 15",
+    "not op_mini all",
+    "not dead"
+  ],
   "dependencies": {
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
@@ -24,7 +31,8 @@
     "isomorphic-unfetch": "^3.0.0",
     "next": "9.3.6",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "helmet": "^3.22.0"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.5.0",
