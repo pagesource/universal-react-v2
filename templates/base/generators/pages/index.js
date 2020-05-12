@@ -14,15 +14,14 @@ module.exports = {
   prompts: [
     {
       type: 'input',
-      name: 'route',
-      message: 'Give the url base of the page:',
-      default: 'browse'
-    },
-    {
-      type: 'input',
       name: 'name',
       message: 'What should be the name of the page?',
       default: 'plp'
+    },
+    {
+      type: 'input',
+      name: 'route',
+      message: 'Give the url base of the page (optional):'
     }
   ],
   actions: (data) => {
@@ -34,13 +33,13 @@ module.exports = {
     const actions = [
       {
         type: 'add',
-        path: `${pagePath}/{{properCase name}}/index.js`,
+        path: `${pagePath}/{{name}}/index.js`,
         templateFile: './pages/index.js.hbs',
         abortOnFail: true
       },
       {
         type: 'modify',
-        path: `../${config.ROUTES_PATH}/index.js`,
+        path: `../${config.ROUTES_PATH}/paths.js`,
         transform: (fileContents, data) => {
           let routeVarName =
             data.route.trim() !== ''

@@ -7,6 +7,3 @@ export const NextRouterWrapper = ({ pathName, as, options = {} }) => {
 };
 
 export const getBasePath = (route) => `${BASE_PATH}${route}`;
-
-export const HOMEPAGE = '/';
-export const ERROR_PAGE = '/error';
