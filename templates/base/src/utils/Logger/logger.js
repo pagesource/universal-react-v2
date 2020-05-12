@@ -9,7 +9,7 @@ import fetch from 'isomorphic-unfetch';
  *    event: {
       name: 'event20', id: 657,
       module: 'modA',
-      type: 'typeB',
+      type: "load|interaction|redirect" ,
       data: { a: "hhhh" },
     },
     error: {
