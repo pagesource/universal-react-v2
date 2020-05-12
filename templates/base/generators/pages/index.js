@@ -21,7 +21,7 @@ module.exports = {
     {
       type: 'input',
       name: 'route',
-      message: 'Give the url base of the page (optional):'
+      message: 'Optional: Where to create this page, pages (default) or custom dir under pages?'
     }
   ],
   actions: (data) => {
@@ -33,7 +33,7 @@ module.exports = {
     const actions = [
       {
         type: 'add',
-        path: `${pagePath}/{{name}}/index.js`,
+        path: `${pagePath}/{{lowerCase name}}/index.js`,
         templateFile: './pages/index.js.hbs',
         abortOnFail: true
       },
