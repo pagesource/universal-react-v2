@@ -42,18 +42,19 @@ module.exports = {
       choices: () => ['atoms', 'molecules', 'organisms', 'templates', 'custom']
     },
     {
-      when: data =>  data.folder === 'custom',
+      when: (data) => data.folder === 'custom',
       type: 'input',
       name: 'customFolder',
       message: 'Give the custom path for the component:',
       default: 'src/components/atoms'
     }
-
   ],
   actions: (data) => {
     // Generate index.js and index.test.js
     let componentTemplate;
-    let folderPath = data.folder ? `../${config.COMPONENT_PATH}${data.folder}` : `../${config.COMPONENT_PATH}atoms`;
+    let folderPath = data.folder
+      ? `../${config.COMPONENT_PATH}${data.folder}`
+      : `../${config.COMPONENT_PATH}atoms`;
 
     switch (data.type) {
       case 'Stateless Function': {
@@ -66,7 +67,8 @@ module.exports = {
     }
 
     if (data.folder === 'custom') {
-      folderPath = `../${data.customFolder}`;
+      folderPath =
+        data.customFolder.trim() === '' ? '../src' : `../src/${data.customFolder.trim()}`;
     }
 
     const actions = [
