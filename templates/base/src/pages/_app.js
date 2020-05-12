@@ -1,10 +1,17 @@
 import React from 'react';
+import { ApolloProvider } from '@apollo/react-hooks';
+
+import GraphQLClient from '../../graphQl/ApolloClient'
 import GlobalContextProvider from './../../store/global/Context';
 
 function MyApp({ Component, pageProps }) {
-  return (<GlobalContextProvider>
-    <Component {...pageProps} />
-  </GlobalContextProvider>)
+  return (
+    <ApolloProvider client={GraphQLClient}>
+      <GlobalContextProvider>
+        <Component {...pageProps} />
+      </GlobalContextProvider>)
+    </ApolloProvider>
+  );
 }
 
 // Only uncomment this method if you have blocking data requirements for
