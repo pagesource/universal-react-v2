@@ -5,23 +5,83 @@ import fetch from 'isomorphic-unfetch';
  * USAGE: ->
  * import Logger from '../utils/Logger';
  *  call as :-
- * Logger.error({ message: 'Here is the error' });
+ * Logger.error({ message: 'Here is the error',
+ *    event: {
+      name: 'event20', id: 657,
+      module: 'modA',
+      type: 'typeB',
+      data: { a: "hhhh" },
+    },
+    error: {
+      code: 'ABC',
+      message: 'message',
+      operationName: 'testing'
+    },
+    service: {
+      name: 'serviceName',
+      path: 'servicePath',
+    } });
  */
 
+/**
+ * @param {object} msg --> msg Object
+ * @param {string}  logLevel --> string (info, log, error)
+ * returns an object with log data to be sent in api
+ */
+const getLogObject = ({ msg, logLevel }) => {
+  if (process.browser) {
+    const { message, event: { name: eventName, id, module, type, data }, service: { name: serviceName, path }, error: { code, message: errMsg, operationName } } = msg || {};
+    let location = '';
+    let host = '';
+    let userAgent = '';
+    if (process.browser && window && window.location) {
+      location = window.location.href;
+      host = window.location.host;
+    }
+    if (process.browser && navigator) {
+      userAgent = navigator.userAgent;
+    }
+    return {
+      appName: "universal-react", //Mandatory
+      logLevel,
+      message,
+      browser: { //Mandatory for browser side,
+        location,
+        host,
+        userAgent
+      },
+      userInfo: { //Optional and to be updated by application
+      },
+      event: { //Optional and to be updated by application through log call
+        name: eventName,
+        id,
+        module,
+        type,
+        data
+      },
+      error: {  //Optional and to be updated by application through log call
+        code,
+        message: errMsg,
+        operationName
+      },
+      service: { //Optional and to be updated by application through log call
+        name: serviceName,
+        path,
+      }
+    }
+  }
+}
 
 /**
  * Will be modified once the post method is configured on server
  */
-const submitLogMsg = (msg) => {
-  const { message } = msg;
+const submitLogMsg = (msg, logLevel) => {
   fetch('/mock/logs.json', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      message
-    })
+    body: JSON.stringify(getLogObject({ msg, logLevel }))
   }).catch((err) => { console.log('log-err=====>>>', err) })
 }
 
@@ -35,7 +95,7 @@ const callLog = ({ logLevels, logLevel, msgObj }) => {
     if (isDev || isServer) {
       console[logLevel](msg);
     } else {
-      submitLogMsg(msg);
+      submitLogMsg({ ...msg, logLevel });
     }
   }
 }

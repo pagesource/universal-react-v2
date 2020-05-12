@@ -14,3 +14,4 @@ export const endpoints = {
  */
 export const contentDomain = 'https://jsonplaceholder.typicode.com/';
 export const apiGeeDomain = 'https://jsonplaceholder.typicode.com/';
+export const graphQLApiUri = 'https://48p1r2roz4.sse.codesandbox.io';

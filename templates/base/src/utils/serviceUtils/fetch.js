@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-unfetch';
+import Logger from '../Logger';
 
 const defaultHeaders = {
   headers: {
@@ -12,12 +13,12 @@ const defaultHeaders = {
  * checks whether the response has a status ok or else returns error
  */
 const checkStatus = (response) => {
-  console.log(response);
+  Logger.log({ message: response });
   if (response.ok) {
     return response;
   } else {
     let error = new Error({ status: response.statusText, errMessage: response.json() });
-    console.log('error=====>>>>', error);
+    Logger.error({ message: error });
     error.response = response;
     return Promise.reject(error);
   }
@@ -53,7 +54,7 @@ async function fetchWrapper(url, fetchOptions) {
     .then(checkStatus)
     .then((res) => res.json())
     .catch((err) => {
-      console.log('err=====>>>>', err);
+      Logger.error({ message: err });
       return err;
     });
 }
