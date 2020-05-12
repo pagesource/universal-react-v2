@@ -10,7 +10,7 @@ const componentExists = require('../utils/componentExists');
 const config = require('../constants');
 
 module.exports = {
-  description: 'Add an hook',
+  description: 'Add a react custom hook',
   prompts: [
     {
       type: 'input',

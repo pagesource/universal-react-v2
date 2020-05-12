@@ -23,8 +23,7 @@ test('Should be able to make API call', async () => {
     userId: 1
   };
   fetchMock.mock(url, response);
-  const contentURL = getContentServiceUrl('test');
-  return await fetchWrapper(contentURL, {}).then((data) =>
+  return await fetchWrapper(url, {}).then((data) =>
     expect(data).toMatchObject(response)
   );
 });
