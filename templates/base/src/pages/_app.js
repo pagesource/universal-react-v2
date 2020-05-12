@@ -1,3 +1,4 @@
+import React from 'react';
 import GlobalContextProvider from './../../store/global/Context';
 
 function MyApp({ Component, pageProps }) {

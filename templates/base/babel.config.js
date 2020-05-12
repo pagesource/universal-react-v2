@@ -1,6 +1,9 @@
 module.exports = {
-  presets: ['@babel/preset-env', '@babel/preset-react'],
-  plugins: [
-    "@babel/plugin-transform-runtime",
-  ]
+  presets: ["next/babel"],
+  plugins: [],
+  env: {
+    test: {
+      "plugins": ["transform-flow-strip-types"]
+    }
+  }
 };

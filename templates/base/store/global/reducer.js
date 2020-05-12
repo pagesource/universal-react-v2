@@ -6,7 +6,7 @@ const initialState = {
     isError: false
 }
 
-const globalReducer = (state = initialState, action) => {
+const globalReducer = (state = initialState, action = {}) => {
     switch(action.type) {
         case UPDATE_APP_ERROR:
             return {
