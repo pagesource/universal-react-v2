@@ -54,7 +54,18 @@ async function fetchWrapper(url, fetchOptions) {
     .then(checkStatus)
     .then((res) => res.json())
     .catch((err) => {
-      Logger.error({ message: err });
+      Logger.error({
+        message: err,
+        error: {
+          code: 'fetch-api',
+          message: err,
+          operationName: 'fetch'
+        },
+        service: {
+          name: 'fetch',
+          path: url,
+        }
+      });
       return err;
     });
 }
