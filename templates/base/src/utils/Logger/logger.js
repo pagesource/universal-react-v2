@@ -3,15 +3,16 @@ import fetch from 'isomorphic-unfetch';
 
 const browserLogObject = ({ logObj, logLevel }) => {
   const { message, userInfo, event, service, error } = logObj || {};
-  
+  const isBrowser = process.browser;
+
   return {
     appName: "universal-react", 
     logLevel,
     message,
     browser: { 
-      location: process.browser && window.location.href,
-      host: process.browser && window.location.host,
-      userAgent: process.browser && navigator.userAgent,
+      location: isBrowser && window.location.href,
+      host: isBrowser && window.location.host,
+      userAgent: isBrowser && navigator.userAgent,
     },
     userInfo,
     event,
@@ -47,11 +48,10 @@ const callLog = ({ logLevel, logObj }) => {
   const isDev = process.env.NODE_ENV !== 'production';
   const isServer = !process.browser;
 
-    if (isDev || isServer) {
-      console[logLevel](serverLogObject({ logLevel, logObj }));
-    } else {
-      postLogs(browserLogObject({ logLevel, logObj }));
-    }
+  if (isDev || isServer) {
+    console[logLevel](serverLogObject({ logLevel, logObj }));
+  } else {
+    postLogs(browserLogObject({ logLevel, logObj }));
   }
 }
 
@@ -62,10 +62,10 @@ const Logger = () => {
     warn: 2,
     log: 3,
     debug: 4,
-  }
+  };
 
   let loggingObj = {};
-
+  const isDev = process.env.NODE_ENV !== 'production';
   const currentLogLevel = process.env.LOG_LEVEL || (isDev ? 'debug' : 'info');
 
   Object.keys(logLevels).forEach(level => {

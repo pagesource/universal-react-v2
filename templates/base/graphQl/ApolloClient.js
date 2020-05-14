@@ -11,7 +11,7 @@ const logObject = ({ message, code = '', errMessage, operationName }) => {
   return {
     message,
     error: {
-      code
+      code,
       errMessage,
       operationName
     },
@@ -29,8 +29,7 @@ const errorLink = onError(({ graphQLErrors, networkError, operationName }) => {
         message: `GraphQL Query Error: ${message}, ${locations}, ${path}`,
         errMessage: message,
         operationName,
-      })
-      )
+      }))
     );
   }
     
