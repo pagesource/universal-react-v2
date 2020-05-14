@@ -1,21 +1,24 @@
-/**
- * USAGE: ->
- * import Logger from '../utils/Logger';
- *  call as :-
- * Logger.error({ message: 'Here is the error',
- *    event: {
-      name: 'event20', id: 657,
-      module: 'modA',
-      type: "load|interaction|redirect" ,
-      data: { a: "hhhh" },
-    },
+
+# Custom Browser and Server Logger 
+
+This logger collect logs based on different levels and structures them
+
+1. Transport logs to an API end-point at browser side 
+2. Writes logs to server console at server side
+
+  ```javascript
+  import Logger from '../utils/Logger';
+
+  Logger.error({ 
+    message: 'No user found',
     error: {
-      code: 'ABC',
-      message: 'message',
-      operationName: 'testing'
+      code: '400',
+      message: 'failed to fetch',
+      operationName: 'getUserInfo'
     },
     service: {
-      name: 'serviceName',
-      path: 'servicePath',
-    } });
- */
+      name: 'getUserInfo',
+      path: '/get-user-info/',
+    },
+  });
+```

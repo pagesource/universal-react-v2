@@ -7,12 +7,12 @@ import Logger from '../src/utils/Logger';
 const cache = new InMemoryCache();
 
 
-const logObject = ({ message, code, errMessage, operationName }) => {
+const logObject = ({ message, code = '', errMessage, operationName }) => {
   return {
     message,
     error: {
-      code: 'graphQLNetworkError',
-      message: errMessage,
+      code
+      errMessage,
       operationName
     },
     service: {
@@ -23,22 +23,24 @@ const logObject = ({ message, code, errMessage, operationName }) => {
 }
 
 const errorLink = onError(({ graphQLErrors, networkError, operationName }) => {
-  if (graphQLErrors)
+  if (graphQLErrors){
     graphQLErrors.forEach(({ message, locations, path }) =>
       Logger.error(logObject({
-        message: `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`,
-        code: 'graphQLError',
+        message: `GraphQL Query Error: ${message}, ${locations}, ${path}`,
         errMessage: message,
         operationName,
       })
       )
     );
-  if (networkError) Logger.error(logObject({
-    message: `[Network error]: ${networkError}`,
-    code: 'graphQLNetworkError',
-    errMessage: networkError,
-    operationName,
-  }));
+  }
+    
+  if (networkError) {
+    Logger.error(logObject({
+      message: `GraphQL Network error: ${networkError}`,
+      errMessage: networkError,
+      operationName,
+    }));
+  }
 });
 
 /**

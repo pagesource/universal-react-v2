@@ -1,86 +1,81 @@
 
 import fetch from 'isomorphic-unfetch';
 
-/**
- * @param {object} msg --> msg Object
- * @param {string}  logLevel --> string (info, log, error)
- * returns an object with log data to be sent in api
- */
-const getLogObject = ({ msg, logLevel }) => {
-  const { message, event, service, error } = msg || {};
-  let location = '';
-  let host = '';
-  let userAgent = '';
-  if (process.browser) {
-    location = window.location.href;
-    host = window.location.host;
-    userAgent = navigator.userAgent;
-  }
+const browserLogObject = ({ logObj, logLevel }) => {
+  const { message, userInfo, event, service, error } = logObj || {};
+  
   return {
-    appName: "universal-react", //Mandatory
+    appName: "universal-react", 
     logLevel,
     message,
-    browser: { //Mandatory for browser side,
-      location,
-      host,
-      userAgent
+    browser: { 
+      location: process.browser && window.location.href,
+      host: process.browser && window.location.host,
+      userAgent: process.browser && navigator.userAgent,
     },
-    userInfo: { //Optional and to be updated by application
-    },
-    ...event, //Optional and to be updated by application through log call
-    ...error,  //Optional and to be updated by application through log call
-    ...service, //Optional and to be updated by application through log call
+    userInfo,
+    event,
+    error,
+    service,
   }
 }
 
-/**
- * Will be modified once the post method is configured on server
- */
-const submitLogMsg = (msg, logLevel) => {
+const serverLogObject = ({ logObj, logLevel }) => {
+ const { message, event, service, error } = logObj || {};
+
+ return {
+   appName: "universal-react", 
+   logLevel,
+   message,
+   event,
+   error,  
+   service, 
+ }
+}
+
+const postLogs = (logObj) => {
   fetch('/mock/logs.json', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(getLogObject({ msg, logLevel }))
+    body: JSON.stringify(logObj)
   }).catch((err) => { console.log('log-err=====>>>', err) })
 }
 
-const callLog = ({ logLevels, logLevel, msgObj }) => {
+const callLog = ({ logLevel, logObj }) => {
   const isDev = process.env.NODE_ENV !== 'production';
   const isServer = !process.browser;
-  const isLogDisabled = !!process.env.LOG_DISABLED;
-  const currentLogLevel = process.env.LOG_LEVEL || (isDev ? 'debug' : 'info');
-  const [msg] = msgObj;
-  if (!isLogDisabled && logLevels[logLevel] <= logLevels[currentLogLevel]) {
+
     if (isDev || isServer) {
-      console[logLevel](msg);
+      console[logLevel](serverLogObject({ logLevel, logObj }));
     } else {
-      submitLogMsg({ ...msg, logLevel });
+      postLogs(browserLogObject({ logLevel, logObj }));
     }
   }
 }
 
-/**
- * Returns different logs -> error, info, log, warn, debug as methods
- */
-const LogWrapper = () => {
+const Logger = () => {
   const logLevels = {
     error: 0,
-    log: 1,
+    info: 1,
     warn: 2,
-    info: 3,
+    log: 3,
     debug: 4,
   }
 
   let loggingObj = {};
 
+  const currentLogLevel = process.env.LOG_LEVEL || (isDev ? 'debug' : 'info');
+
   Object.keys(logLevels).forEach(level => {
     loggingObj[level] = (...args) => {
-      callLog({ logLevels, logLevel: level, msgObj: args })
+      if (logLevels[level] <= logLevels[currentLogLevel]) {
+        callLog({ logLevel: level, logObj: args })
+      }
     }
   })
   return loggingObj;
 }
 
-export default LogWrapper();
+export default Logger();

@@ -13,13 +13,10 @@ const defaultHeaders = {
  * checks whether the response has a status ok or else returns error
  */
 const checkStatus = (response) => {
-  Logger.log({ message: response });
   if (response.ok) {
     return response;
   } else {
-    let error = new Error({ status: response.statusText, errMessage: response.json() });
-    Logger.error({ message: error });
-    error.response = response;
+    let error = new Error({ statusText : response.statusText, response: response.json() });
     return Promise.reject(error);
   }
 };
@@ -55,14 +52,14 @@ async function fetchWrapper(url, fetchOptions) {
     .then((res) => res.json())
     .catch((err) => {
       Logger.error({
-        message: err,
+        message: 'failed to fetch',
         error: {
-          code: 'fetch-api',
-          message: err,
-          operationName: 'fetch'
+          code: err.statusText,
+          errMessage: err.response,
+          operationName: url
         },
         service: {
-          name: 'fetch',
+          name: '',
           path: url,
         }
       });
