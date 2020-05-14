@@ -2,17 +2,44 @@ import ApolloClient, { HttpLink, InMemoryCache } from 'apollo-boost';
 import { ApolloLink } from 'apollo-link';
 import { onError } from 'apollo-link-error';
 import { graphQLApiUri } from '../config/endpoints';
+import Logger from '../src/utils/Logger';
 
 const cache = new InMemoryCache();
 
-const errorLink = onError(({ graphQLErrors, networkError }) => {
-  if (graphQLErrors)
+
+const logObject = ({ message, code = '', errMessage, operationName }) => {
+  return {
+    message,
+    error: {
+      code,
+      errMessage,
+      operationName
+    },
+    service: {
+      name: operationName,
+      path: graphQLApiUri,
+    }
+  }
+}
+
+const errorLink = onError(({ graphQLErrors, networkError, operationName }) => {
+  if (graphQLErrors){
     graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
+      Logger.error(logObject({
+        message: `GraphQL Query Error: ${message}, ${locations}, ${path}`,
+        errMessage: message,
+        operationName,
+      }))
     );
-  if (networkError) console.log(`[Network error]: ${networkError}`);
+  }
+    
+  if (networkError) {
+    Logger.error(logObject({
+      message: `GraphQL Network error: ${networkError}`,
+      errMessage: networkError,
+      operationName,
+    }));
+  }
 });
 
 /**
