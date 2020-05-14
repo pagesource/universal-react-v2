@@ -16,7 +16,7 @@ const logObject = ({ message, code, errMessage, operationName }) => {
       operationName
     },
     service: {
-      name: 'GraphQLClient',
+      name: operationName,
       path: graphQLApiUri,
     }
   }
