@@ -4,8 +4,8 @@ const path = require('path');
 const chalk = require('chalk');
 const copydir = require('copy-dir');
 
-function dirExists(dir) {
-  return fs.existsSync(dir);
+function dirFileExists(path) {
+  return fs.existsSync(path);
 }
 
 function createDir(dir) {
@@ -48,11 +48,16 @@ function writeFile(filePath, data) {
 }
 
 function writeJsonFile(jsonFilePath, json) {
-  writeFile(jsonFilePath, JSON.stringify(json, null, 2) + os.EOL);
+  try {
+    writeFile(jsonFilePath, JSON.stringify(json, null, 2) + os.EOL);
+  } catch (e) {
+    console.error(chalk.red(`error copying file ${jsonFilePath}`));
+    throw e;
+  }
 }
 
 module.exports = {
-  dirExists,
+  dirFileExists,
   createDir,
   copyDir,
   writeJsonFile

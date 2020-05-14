@@ -1,5 +1,4 @@
 const choices = ['ssr-custom', 'ssr-default', 'static-export'];
-
 const createAppQuestions = [
   {
     type: 'list',
@@ -8,13 +7,6 @@ const createAppQuestions = [
     choices: choices,
     filter: function (val) {
       return val.toLowerCase();
-    },
-    validate: function (value) {
-      if (value.length) {
-        return true;
-      } else {
-        return 'Please enter valid value';
-      }
     }
   },
   {
