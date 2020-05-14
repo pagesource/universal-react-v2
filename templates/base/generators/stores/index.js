@@ -16,7 +16,7 @@ module.exports = {
       type: 'input',
       name: 'name',
       message: 'What should it be called?',
-      default: 'ChangeTitle',
+      default: 'Cart',
       validate: (value) => {
         value = `use${value}`;
         if (/.+/.test(value)) {
@@ -34,26 +34,26 @@ module.exports = {
     const actions = [
       {
         type: 'add',
-        path: `${folderPath}/{{properCase name}}/constants.js`,
+        path: `${folderPath}/{{lowerCase name}}/constants.js`,
         templateFile: './stores/constants.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: `${folderPath}/{{properCase name}}/actions.js`,
+        path: `${folderPath}/{{lowerCase name}}/actions.js`,
         templateFile: './stores/actions.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: `${folderPath}/{{properCase name}}/reducer.js`,
+        path: `${folderPath}/{{lowerCase name}}/reducer.js`,
         templateFile: './stores/reducer.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: `${folderPath}/{{properCase name}}/Context.jsx`,
-        templateFile: './stores/Context.jsx.hbs',
+        path: `${folderPath}/{{lowerCase name}}/context.jsx`,
+        templateFile: './stores/context.jsx.hbs',
         abortOnFail: true
       }
     ];
