@@ -26,10 +26,12 @@ const components = atomComponents
   .concat(templateComponents);
 
 const hooks = fs.readdirSync(path.join(__dirname, `../../${config.HOOKS_PATH}`));
+const stores = fs.readdirSync(path.join(__dirname, `../../${config.STORES_PATH}`));
 
 const componentContainer = {
   components,
-  hooks
+  hooks,
+  stores
 };
 
 function componentExists(comp, category) {

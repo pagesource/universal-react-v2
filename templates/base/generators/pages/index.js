@@ -25,7 +25,7 @@ module.exports = {
     }
   ],
   actions: (data) => {
-    // Generate useHookName.js and useHookName.test.js
+    // Generate pagename/index.js and pagename/test.js
     const pagePath =
       data.route.trim() !== ''
         ? `../${config.PAGES_PATH}/${data.route}`
@@ -50,7 +50,7 @@ module.exports = {
           let routeVal = data.route.trim() !== '' ? `/${data.route.trim()}` : '';
           routeVal += `/${data.name.trim().toLowerCase()}`;
 
-          return fileContents + `export const ${routeVarName} = '${routeVal}';` + '\n';
+          return fileContents + '\n' + `export const ${routeVarName} = '${routeVal}';` + '\n';
         },
         abortOnFail: true
       }

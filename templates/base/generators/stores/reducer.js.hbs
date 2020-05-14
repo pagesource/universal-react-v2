@@ -1,0 +1,17 @@
+import { UPDATE_{{constantCase name}} } from './constants';
+
+// @Initial State
+const initialState = {};
+
+const {{camelCase name}}Reducer = (state = initialState, action = {}) => {
+  switch(action.type) {
+    case UPDATE_{{constantCase name}}:
+      return {
+        ...state
+      }
+    default:
+      return state;
+  }
+}
+
+export default {{camelCase name}}Reducer;
