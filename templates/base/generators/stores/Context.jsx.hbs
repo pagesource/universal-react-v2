@@ -1,0 +1,18 @@
+/**
+* @context.jsx
+* This component is a wrapper which will provide
+* the {{constantCase name}} Context to other needy components
+**/
+
+import React, { useReducer } from 'react';
+import reducer from './reducer';
+
+// Creating global context
+export const Context = React.createContext(reducer());
+
+const {{properCase name}}ContextProvider = props => {
+  const [state, dispatch] = useReducer(reducer, reducer());
+  return <Context.Provider value={state, dispatch}>{props.children}</Context.Provider>
+}
+
+export default {{properCase name}}ContextProvider;
