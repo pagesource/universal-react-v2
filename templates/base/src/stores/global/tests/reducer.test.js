@@ -1,4 +1,4 @@
-import reducer from './../reducer';
+import globalReducer from './../reducer';
 import { UPDATE_APP_ERROR } from './../constants';
 
 describe('Testing Global Reducer JS File', () => {
@@ -12,14 +12,14 @@ describe('Testing Global Reducer JS File', () => {
     }
 
     test('Global reducer is defined', () => {
-        expect(reducer).toBeDefined();
+        expect(globalReducer).toBeDefined();
     });
 
     test('Global Reducer returns default state', () => {
-        expect(reducer()).toEqual(initialState);
+        expect(globalReducer()).toEqual(initialState);
     });
 
     test('Global Reducer to return updated state', () => {
-        expect(reducer(undefined, { type: UPDATE_APP_ERROR, payload: { errorInfo: {}, isError: true } })).toEqual(errorState)
+        expect(globalReducer(undefined, { type: UPDATE_APP_ERROR, payload: { errorInfo: {}, isError: true } })).toEqual(errorState)
     });
 });
