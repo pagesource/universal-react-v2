@@ -1,7 +1,7 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
 
-import GraphQLClient from '../../graphQl/ApolloClient'
+import GraphQLClient from '../graphQL/ApolloClient'
 import GlobalContextProvider from '../stores/global/Context';
 
 function MyApp({ Component, pageProps }) {
