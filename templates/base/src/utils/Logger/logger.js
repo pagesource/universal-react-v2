@@ -1,15 +1,13 @@
 
-import fetch from 'isomorphic-unfetch';
-
 const browserLogObject = ({ logObj, logLevel }) => {
   const { message, userInfo, event, service, error } = logObj || {};
   const isBrowser = process.browser;
 
   return {
-    appName: "universal-react", 
+    appName: "universal-react",
     logLevel,
     message,
-    browser: { 
+    browser: {
       location: isBrowser && window.location.href,
       host: isBrowser && window.location.host,
       userAgent: isBrowser && navigator.userAgent,
@@ -22,16 +20,16 @@ const browserLogObject = ({ logObj, logLevel }) => {
 }
 
 const serverLogObject = ({ logObj, logLevel }) => {
- const { message, event, service, error } = logObj || {};
+  const { message, event, service, error } = logObj || {};
 
- return {
-   appName: "universal-react", 
-   logLevel,
-   message,
-   event,
-   error,  
-   service, 
- }
+  return {
+    appName: "universal-react",
+    logLevel,
+    message,
+    event,
+    error,
+    service,
+  }
 }
 
 const postLogs = (logObj) => {

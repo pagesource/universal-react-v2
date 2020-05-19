@@ -1,4 +1,3 @@
-import fetch from 'isomorphic-unfetch';
 import Logger from '../Logger';
 
 const defaultHeaders = {
@@ -16,7 +15,7 @@ const checkStatus = (response) => {
   if (response.ok) {
     return response;
   } else {
-    let error = new Error({ statusText : response.statusText, response: response.json() });
+    let error = new Error({ statusText: response.statusText, response: response.json() });
     return Promise.reject(error);
   }
 };
