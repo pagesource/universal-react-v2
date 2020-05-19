@@ -6,7 +6,6 @@ import GlobalContextProvider from '../stores/global/Context';
 
 // Will be called once for every metric that has to be reported.
 export function reportWebVitals(metric) {
-  console.log('hello');
   // These metrics can be sent to any analytics service
   console.log(metric)
 }
