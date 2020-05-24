@@ -38,3 +38,7 @@ package-lock.json
 
 # Reports
 reports
+
+#PWA
+**/public/workbox-*.js
+**/public/sw.js
