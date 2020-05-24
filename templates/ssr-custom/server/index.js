@@ -16,6 +16,12 @@ const helmetConfig = {
   noSniff: false,
   hidePoweredBy: true
 };
+/**
+ * This method checks if the pathname is a static and next server 
+ * needs to to serve static assets instead of handling the rendering
+ * @param {string} pathname Pathname extracted from req.url
+ */
+const isStaticAsset = pathname => pathname === '/sw.js' || pathname.startsWith('/workbox-');
 
 app.prepare().then(() => {
   const server = express();
@@ -33,7 +39,15 @@ app.prepare().then(() => {
   });
 
   server.all('*', (req, res) => {
-    return handle(req, res);
+    const parsedUrl = parse(req.url, true);
+    const { pathname } = parsedUrl;
+      
+    if (isStaticAsset(pathname)) {
+      const filePath = join(__dirname, 'build', pathname);
+      return app.serveStatic(req, res, filePath);
+    } else {
+      return handle(req, res);
+    }
   });
 
   server.listen(port, (err) => {
