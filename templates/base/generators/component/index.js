@@ -92,8 +92,8 @@ module.exports = {
       },
       {
         type: 'add',
-        path: `${folderPath}/{{properCase name}}/{{properCase name}}.story.mdx`,
-        templateFile: './component/story.js.hbs',
+        path: `${folderPath}/{{properCase name}}/{{properCase name}}.stories.mdx`,
+        templateFile: './component/story.mdx.hbs',
         abortOnFail: true
       },
       {
