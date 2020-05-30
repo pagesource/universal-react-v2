@@ -1,5 +1,5 @@
-require('dotenv').config();
 const withPWA = require('next-pwa');
+const nextPWAConfig = require('../base/config/pwa/next-pwa.config');
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
 });
@@ -14,11 +14,8 @@ const isAssetPrefix = process.env.BASE_PATH || '';
  * Further PWA configuration visit https://www.npmjs.com/package/next-pwa
  */
 const nextConfig = withPWA({
-  pwa: {
-    disable: process.env.PWA_DISABLED === 'true',
-    dest: 'public'
-  }
-})
+  ...nextPWAConfig
+});
 
 module.exports = withBundleAnalyzer({
   distDir: 'build',
