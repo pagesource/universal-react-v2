@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "npm": "^6.14.5"
+    "npm": "^6.14.6"
   },
   "husky": {
     "hooks": {
