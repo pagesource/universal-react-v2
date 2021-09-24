@@ -1,13 +1,12 @@
-const choices = ['ssr-custom', 'ssr-default', 'static-export'];
+const { appTypeMap } = require('./constants');
+const choices = Object.keys(appTypeMap);
+
 const createAppQuestions = [
   {
     type: 'list',
     name: 'appType',
     message: 'What type of app you need?',
-    choices: choices,
-    filter: function (val) {
-      return val.toLowerCase();
-    }
+    choices: choices
   },
   {
     name: 'appName',

@@ -9,7 +9,8 @@ const { arrayUnique, getOptionalFeatures } = require('./utils/helpers');
 const { createAppQuestions } = require('./utils/questions');
 const {
   appTemplateFileExclusions,
-  universalReactStampData
+  universalReactStampData,
+  appTypeMap
 } = require('./utils/constants');
 const {
   createDir,
@@ -148,6 +149,10 @@ if (exists) {
   // create new project
 
   inquirer.prompt(createAppQuestions).then((answers) => {
-    initializeNewProject(answers.appType, answers.appName);
+    if (appTypeMap[answers.appType] === undefined) {
+      console.error('Invalid app type.');
+    } else {
+      initializeNewProject(appTypeMap[answers.appType], answers.appName);
+    }
   });
 }

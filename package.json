@@ -42,7 +42,8 @@
     "inquirer": "7.1.0",
     "lint-staged": "10.1.2",
     "ora": "4.0.3",
-    "prettier": "2.0.4"
+    "prettier": "2.0.4",
+    "deepmerge": "^4.2.2"
   },
   "devDependencies": {
     "mocha": "*",

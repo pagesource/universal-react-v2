@@ -1,5 +1,11 @@
 const appTemplateFileExclusions = ['package.json'];
 
+const appTypeMap = {
+  'SSR(Server-side rendering)': 'ssr',
+  'SSG(Static site generation)': 'ssg',
+  'Micro-Frontend Application': 'microApp'
+};
+
 const universalReactStampData = {
   name: 'universal-react-stamp',
   version: '',
@@ -11,5 +17,6 @@ const universalReactStampData = {
 
 module.exports = {
   appTemplateFileExclusions,
-  universalReactStampData
+  universalReactStampData,
+  appTypeMap
 };
