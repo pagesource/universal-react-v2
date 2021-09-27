@@ -8,6 +8,7 @@ module.exports = {
         'lower-case', // default
         'upper-case', // UPPERCASE
         'camel-case', // camelCase
+        'kebab-case', // kebab-case
         'pascal-case', // PascalCase
         'sentence-case', // Sentence case
         'snake-case', // snake_case
