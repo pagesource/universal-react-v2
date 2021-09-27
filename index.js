@@ -30,10 +30,12 @@ const stampFileName = 'universal-react-stamp.json';
 const createProjectDirectory = (appName) => {
   projectDir = path.join(cwd, appName);
   createDir(projectDir);
+  createDir(path.join(projectDir, '.vscode'));
 };
 
 const copyBaseDirectory = () => {
   copyDir(baseTemplatePath, projectDir, appTemplateFileExclusions);
+  copyDir(path.join(__dirname, '.vscode'), path.join(projectDir, '.vscode'), []);
 };
 
 const copyTemplateDirectory = (appType) => {
