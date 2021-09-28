@@ -14,7 +14,7 @@
     "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
     "storybook:build": "cd storybook && yarn build-storybook",
-    "generate": "plop --plopfile generators/index.js && npx prettier --write src/components/",
+    "generate": "plop --plopfile generators/index.js",
     "bundlesize": "bundlesize --config ./config/bundlesize.json",
     "analyze": "cross-env ANALYZE=true next build",
     "perf": "docker-compose -f ./config/performance/sitespeed-compose.yml run sitespeed.io  --config sitespeed.config.json --budget.configPath sitespeed.budget.config.json --graphite.host=graphite urls.txt"
