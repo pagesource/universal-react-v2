@@ -1,5 +1,5 @@
 
-import { render } from '@testing-library/react'
+import { render, screen} from '@testing-library/react'
 import 'jest-styled-components';
 
 import {{ properCase name }} from '../index';
@@ -11,6 +11,6 @@ describe('<{{ properCase name }} />', () => {
   });
 
   test('should render correctly', () => {
-    expect({{ properCase name }}Component).toMatchSnapshot();
+    expect(screen.getByTestId('AppContainer')).toBe(true);
   });
 });
