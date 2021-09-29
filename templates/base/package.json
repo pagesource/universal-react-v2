@@ -38,7 +38,8 @@
     "next": "9.4.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "helmet": "^3.22.0"
+    "helmet": "^3.22.0",
+    "smart-context": "^2.1.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^9.3.6",
