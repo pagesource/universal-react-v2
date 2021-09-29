@@ -27,29 +27,29 @@
     "not dead"
   ],
   "dependencies": {
-    "@apollo/react-hooks": "*",
-    "apollo-boost": "*",
-    "apollo-link": "*",
-    "apollo-link-error": "*",
-    "express": "*",
-    "graphql": "*",
-    "fetch-mock": "*",
+    "@apollo/react-hooks": "4.0.0",
+    "apollo-boost": "0.4.9",
+    "apollo-link": "1.2.14",
+    "apollo-link-error": "1.1.13",
+    "express": "4.17.1",
+    "graphql": "15.6.0",
+    "fetch-mock": "9.11.0",
     "next": "*",
     "react": "*",
     "react-dom": "*",
-    "helmet": "*",
-    "styled-jsx": "*"
+    "helmet": "4.6.0",
+    "styled-jsx": "4.0.1"
   },
   "devDependencies": {
-    "@next/bundle-analyzer": "*",
-    "@babel/plugin-transform-runtime": "*",
-    "@testing-library/jest-dom": "*",
-    "@testing-library/react": "*",
-    "@testing-library/react-hooks": "*",
-    "bundlesize": "*",
-    "cross-env": "*",
-    "jest": "*",
-    "jest-mock-console": "*",
-    "plop": "*"
+    "@next/bundle-analyzer": "11.1.2",
+    "@babel/plugin-transform-runtime": "7.15.0",
+    "@testing-library/jest-dom": "5.14.1",
+    "@testing-library/react": "12.1.1",
+    "@testing-library/react-hooks": "7.0.2",
+    "bundlesize": "0.18.1",
+    "cross-env": "7.0.3",
+    "jest": "27.2.3",
+    "jest-mock-console": "1.1.0",
+    "plop": "2.7.4"
   }
 }
