@@ -1,1 +1,5 @@
-//This file is to setup env,props e.t.c before tests
+const mockFetchPromise = Promise.resolve({
+    json: () => Promise.resolve({}),
+  });
+  global.fetch = jest.fn(() => mockFetchPromise);
+
