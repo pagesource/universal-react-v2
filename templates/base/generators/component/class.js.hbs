@@ -9,13 +9,13 @@ import React, { PureComponent, ComponentType } from 'react';
 import styled from 'styled-components';
 
 // Relative imports
-import styles from './{{ properCase name}}.style';
+import styles, { AppContainer } from './{{ properCase name}}.style';
 
 class {{ properCase name }} extends PureComponent {
   static defaultProps = {};
   render() {
     const {className} = this.props;
-    return <div className={className} data-testid='AppContainer' />;
+    return <AppContainer className={className} data-testid='AppContainer' />;
   }
 }
 
