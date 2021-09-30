@@ -12,9 +12,9 @@ import styled from 'styled-components';
 
 // Relative imports
 import type { Props } from './types';
-import styles from './{{ properCase name }}.style';
+import styles , { AppContainer }  from './{{ properCase name }}.style';
 
-const {{ properCase name }} = ({ className, children }: Props): Node => <div className={className}>{children}</div>;
+const {{ properCase name }} = ({ className, children }: Props): Node => <AppContainer className={className} data-testid='AppContainer'>{children}</AppContainer>;
 
 {{ properCase name }}.defaultProps = {};
 
