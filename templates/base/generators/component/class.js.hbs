@@ -9,18 +9,17 @@ import React, { PureComponent, ComponentType } from 'react';
 import styled from 'styled-components';
 
 // Relative imports
-import styles , { AppContainer } from './{{ properCase name}}.style';
-import type { Props } from './types';
+import styles from './{{ properCase name}}.style';
 
-class {{ properCase name }} extends PureComponent<Props> {
+class {{ properCase name }} extends PureComponent {
   static defaultProps = {};
   render() {
     const {className} = this.props;
-    return <AppContainer className={className} data-testid='AppContainer' />;
+    return <div className={className} data-testid='AppContainer' />;
   }
 }
 
-const Styled{{ properCase name }}: ComponentType<Props> = styled({{ properCase name }})`
+const Styled{{ properCase name }} = styled({{ properCase name }})`
   ${styles};
 `;
 

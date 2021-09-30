@@ -7,18 +7,16 @@
 
 // Node_Module Imports
 import React, { ComponentType } from 'react';
-import type { Node } from 'react';
 import styled from 'styled-components';
 
 // Relative imports
-import type { Props } from './types';
-import styles , { AppContainer }  from './{{ properCase name }}.style';
+import styles from './{{ properCase name }}.style';
 
-const {{ properCase name }} = ({ className, children }: Props): Node => <AppContainer className={className} data-testid='AppContainer'>{children}</AppContainer>;
+const {{ properCase name }} = ({ className, children }) => <div className={className} data-testid='AppContainer'>{children}</div>;
 
 {{ properCase name }}.defaultProps = {};
 
-const Styled{{ properCase name }}: ComponentType<Props> = styled({{ properCase name }})`
+const Styled{{ properCase name }} = styled({{ properCase name }})`
   ${styles};
 `;
 

@@ -1,6 +1,5 @@
 
 import { render, screen} from '@testing-library/react'
-import 'jest-styled-components';
 
 import {{ properCase name }} from '../index';
 
@@ -11,7 +10,6 @@ describe('<{{ properCase name }} />', () => {
   });
 
   test('should render correctly', () => {
-    render(<{{ properCase name }} />);
-    expect(screen.getByTestId('AppContainer')).toBe(true);
+    expect(screen.getByTestId('AppContainer'));
   });
 });
