@@ -1,4 +1,4 @@
-const appTemplateFileExclusions = ['package.json'];
+const appTemplateFileExclusions = [];
 
 const appTypeMap = {
   'SSR(Server-side rendering)': 'ssr',
