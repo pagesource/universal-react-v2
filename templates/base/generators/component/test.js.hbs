@@ -11,6 +11,6 @@ describe('<{{ properCase name }} />', () => {
   });
 
   test('should render correctly', () => {
-    expect({{ properCase name }}Component).toMatchSnapshot();
+    expect(screen.getByTestId("AppContainer"));
   });
 });
