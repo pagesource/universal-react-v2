@@ -4,10 +4,10 @@ module.exports = {
     "@storybook/addon-a11y",
     "@storybook/addon-actions",
     "@storybook/addon-docs",
-    "@storybook-addon-designs",
+    "storybook-addon-designs",
     "@storybook/addon-knobs",
     "@storybook/addon-links",
-    "@storybook-design-token",
+    "storybook-design-token",
     "@storybook/addon-viewport"
   ],
 };
