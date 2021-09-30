@@ -1,7 +1,8 @@
 import { WithContextProvider } from "smart-context";
-import ContextExample from './contextExample';
 
-const initialState = { steps: 1, counter: 0 };
+const initialState = { 
+  // state variables initialization 
+};
 
 // Two types of action definitions
 const actionsConfig = {
@@ -19,13 +20,11 @@ const config = {
   debug: true,
 };
 
-const {{properCase name}}ContextProvider = (props) => {
+const {{properCase name}}ContextProvider = ({children}) => {
   return (
-    <div>
-      smart-context example
-      <ContextExample />
-      {props.children}
-    </div>
+    <>
+      {children}
+    </>
   )
 }
 

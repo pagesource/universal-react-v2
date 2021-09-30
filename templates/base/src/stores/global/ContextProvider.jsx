@@ -1,12 +1,15 @@
 import { WithContextProvider } from "smart-context";
-import ContextExample from './ContextExample';
 
-const initialState = { steps: 1, counter: 0 };
+const initialState = { 
+  // state variables initialization
+ };
 
-// Two types of action definitions
+
 const actionsConfig = {
-  setSteps: ["steps"],
-  setCounter: (counter) => (state) => ({ ...state, counter }),
+  // Two types of action definitions
+
+  // setSteps: ["steps"],
+  // setCounter: (counter) => (state) => ({ ...state, counter }),
 };
 
 const displayName = "globalContext";
@@ -19,13 +22,11 @@ const config = {
   debug: true,
 };
 
-const GlobalContextProvider = (props) => {
+const GlobalContextProvider = ({children}) => {
   return (
-    <div>
-      smart-context example
-      <ContextExample />
-      {props.children}
-    </div>
+    <>
+      {children}
+    </>
   )
 }
 

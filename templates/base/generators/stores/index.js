@@ -16,7 +16,7 @@ module.exports = {
       type: 'input',
       name: 'name',
       message: 'What should it be called?',
-      default: 'Example',
+      default: 'Cart',
       validate: (value) => {
         value = `use${value}`;
         if (/.+/.test(value)) {
@@ -34,14 +34,14 @@ module.exports = {
     const actions = [
       {
         type: 'add',
-        path: `${folderPath}/{{lowerCase name}}/contextExample.js`,
-        templateFile: './stores/contextExample.js.hbs',
+        path: `${folderPath}/{{lowerCase name}}/contextProvider.js`,
+        templateFile: './stores/contextProvider.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: `${folderPath}/{{lowerCase name}}/contextProvider.js`,
-        templateFile: './stores/contextProvider.js.hbs',
+        path: `${folderPath}/{{lowerCase name}}/index.js`,
+        templateFile: './stores/index.js.hbs',
         abortOnFail: true
       }
     ];
