@@ -52,6 +52,8 @@
     "cross-env": "^7.0.2",
     "jest": "25.2.7",
     "jest-mock-console": "^1.0.0",
-    "plop": "^2.6.0"
+    "plop": "^2.6.0",
+    "prettier": "^2.4.1",
+    "pretty-quick": "^3.1.1"
   }
 }
