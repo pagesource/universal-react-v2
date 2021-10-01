@@ -42,7 +42,9 @@
     "react": "*",
     "react-dom": "*",
     "styled-components": "^5.3.1",
-    "styled-jsx": "4.0.1"
+    "styled-jsx": "4.0.1",
+    "react-query": "^3.5.0",
+    "react-responsive-carousel": "^3.2.10"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "11.1.2",
