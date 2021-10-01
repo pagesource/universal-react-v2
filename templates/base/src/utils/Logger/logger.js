@@ -84,7 +84,7 @@ const callLog = ({ logLevel, logObj, remoteURL }) => {
   const isServer = !process.browser;
   let logged;
 
-  if (!(isDev || isServer)) {
+  if ((isDev || isServer)) {
     logged = logObject({ logLevel, logObj }, true);
     console[logLevel](logged);
   } else {
@@ -92,7 +92,7 @@ const callLog = ({ logLevel, logObj, remoteURL }) => {
     if (remoteURL !== undefined) {
       postLogs(logged, remoteURL);
     }
-    console[logLevel](logged); // comment it out later
+    //console[logLevel](logged); // comment it out later
   }
   return logged;
 }
