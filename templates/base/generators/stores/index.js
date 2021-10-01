@@ -10,7 +10,7 @@ const componentExists = require('../utils/componentExists');
 const config = require('../constants');
 
 module.exports = {
-  description: 'Add a Context API Sore',
+  description: 'Add a smart-context store',
   prompts: [
     {
       type: 'input',
@@ -34,30 +34,17 @@ module.exports = {
     const actions = [
       {
         type: 'add',
-        path: `${folderPath}/{{lowerCase name}}/constants.js`,
-        templateFile: './stores/constants.js.hbs',
+        path: `${folderPath}/{{lowerCase name}}/contextProvider.js`,
+        templateFile: './stores/contextProvider.js.hbs',
         abortOnFail: true
       },
       {
         type: 'add',
-        path: `${folderPath}/{{lowerCase name}}/actions.js`,
-        templateFile: './stores/actions.js.hbs',
-        abortOnFail: true
-      },
-      {
-        type: 'add',
-        path: `${folderPath}/{{lowerCase name}}/reducer.js`,
-        templateFile: './stores/reducer.js.hbs',
-        abortOnFail: true
-      },
-      {
-        type: 'add',
-        path: `${folderPath}/{{lowerCase name}}/context.jsx`,
-        templateFile: './stores/context.jsx.hbs',
+        path: `${folderPath}/{{lowerCase name}}/index.js`,
+        templateFile: './stores/index.js.hbs',
         abortOnFail: true
       }
     ];
-
     return actions;
   }
 };

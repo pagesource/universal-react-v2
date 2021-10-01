@@ -4,7 +4,7 @@ import ReactQuerySample from '../reactQuery';
 import { QueryClientProvider, QueryClient } from 'react-query';
 
 import GraphQLClient from '../graphQL/ApolloClient'
-import GlobalContextProvider from '../stores/global/Context';
+import GlobalContextProvider from '../stores/global/ContextProvider';
 const queryClient = new QueryClient()
 
 // Will be called once for every metric that has to be reported.
