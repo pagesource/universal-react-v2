@@ -1,0 +1,33 @@
+import { WithContextProvider } from "smart-context";
+
+const initialState = { 
+  // state variables initialization 
+};
+
+
+const actionsConfig = {
+  // Two types of action definitions
+
+  // setSteps: ["steps"],
+  // setCounter: (counter) => (state) => ({ ...state, counter }),
+};
+
+const displayName = "{{name}}";
+
+/* Configuration */
+const config = {
+  initialState,
+  actionsConfig,
+  displayName,
+  debug: true,
+};
+
+const {{properCase name}}ContextProvider = ({children}) => {
+  return (
+    <>
+      {children}
+    </>
+  )
+}
+
+export default WithContextProvider({{properCase name}}ContextProvider, [config]);
