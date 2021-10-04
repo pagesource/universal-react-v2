@@ -15,13 +15,17 @@
     "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
     "storybook:build": "cd storybook && yarn build-storybook",
-    "generate": "plop --plopfile generators/index.js",
+    "generate": "plop --plopfile generators/index.js && npm run pretty-quick",
     "bundlesize": "bundlesize --config ./config/bundlesize.json",
     "analyze": "cross-env ANALYZE=true next build",
     "perf": "docker-compose -f ./config/performance/sitespeed-compose.yml run sitespeed.io  --config sitespeed.config.json --budget.configPath sitespeed.budget.config.json --graphite.host=graphite urls.txt",
+<<<<<<< HEAD
     "cm": "npx git-cz",
     "cm:retry": "npx git-cz --retry",
     "postinstall": "npx husky install && npx husky add .husky/commit-msg 'npx --no-install commitlint --edit $1'"
+=======
+    "pretty-quick": "pretty-quick"
+>>>>>>> f817008074f342380e86e5f97d64b422d68981cf
   },
   "browserslist": [
     "> 0.25%",
@@ -60,7 +64,9 @@
     "next": "*",
     "react": "*",
     "react-dom": "*",
+    "styled-jsx": "4.0.1",
     "styled-components": "^5.3.1",
+<<<<<<< HEAD
     "styled-jsx": "4.0.1"
 >>>>>>> ec381ba2f39c649462fea8faafca6d43499eb7f4
   },
@@ -93,5 +99,22 @@
       "defaultBody": "",
       "defaultIssues": ""
     }
+=======
+    "smart-context": "^2.1.0"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "11.1.2",
+    "@babel/plugin-transform-runtime": "7.15.0",
+    "@testing-library/jest-dom": "5.14.1",
+    "@testing-library/react": "12.1.1",
+    "@testing-library/react-hooks": "7.0.2",
+    "bundlesize": "0.18.1",
+    "cross-env": "7.0.3",
+    "jest": "27.2.3",
+    "jest-mock-console": "1.1.0",
+    "plop": "2.7.4",
+    "prettier": "^2.4.1",
+    "pretty-quick": "^3.1.1"
+>>>>>>> f817008074f342380e86e5f97d64b422d68981cf
   }
 }
