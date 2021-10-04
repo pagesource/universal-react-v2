@@ -5,7 +5,7 @@ const ERROR = 2;
 module.exports = {
   parserOptions: {
     sourceType: "module",
-    ecmaVersion: 6,
+    ecmaVersion: 2018,
     ecmaFeatures: {
       jsx: true,
       modules: true
@@ -59,7 +59,7 @@ module.exports = {
     }],
     'jest/expect-expect': OFF, // assertions via 'yeoman-assert'
     'linebreak-style': OFF,
-    'no-console': ['error', { 'allow': [ 'warn', 'error', 'info' ] }],
+    'no-console': ['error', { 'allow': ['warn', 'error', 'info'] }],
     'no-param-reassign': ERROR,
     'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
     'no-undef': ERROR,
