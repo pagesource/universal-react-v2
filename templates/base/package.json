@@ -41,7 +41,6 @@
     "next": "*",
     "react": "*",
     "react-dom": "*",
-    "react-test-renderer": "^17.0.2",
     "styled-jsx": "4.0.1",
     "styled-components": "^5.3.1",
     "smart-context": "^2.1.0"
