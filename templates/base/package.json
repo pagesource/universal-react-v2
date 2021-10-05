@@ -14,10 +14,11 @@
     "storybook:install": "cd storybook && yarn",
     "storybook:run": "cd storybook && yarn storybook",
     "storybook:build": "cd storybook && yarn build-storybook",
-    "generate": "plop --plopfile generators/index.js",
+    "generate": "plop --plopfile generators/index.js && npm run pretty-quick",
     "bundlesize": "bundlesize --config ./config/bundlesize.json",
     "analyze": "cross-env ANALYZE=true next build",
-    "perf": "docker-compose -f ./config/performance/sitespeed-compose.yml run sitespeed.io  --config sitespeed.config.json --budget.configPath sitespeed.budget.config.json --graphite.host=graphite urls.txt"
+    "perf": "docker-compose -f ./config/performance/sitespeed-compose.yml run sitespeed.io  --config sitespeed.config.json --budget.configPath sitespeed.budget.config.json --graphite.host=graphite urls.txt",
+    "pretty-quick": "pretty-quick"
   },
   "browserslist": [
     "> 0.25%",
@@ -57,6 +58,8 @@
     "cross-env": "7.0.3",
     "jest": "27.2.3",
     "jest-mock-console": "1.1.0",
-    "plop": "2.7.4"
+    "plop": "2.7.4",
+    "prettier": "^2.4.1",
+    "pretty-quick": "^3.1.1"
   }
 }
