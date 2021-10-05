@@ -1,11 +1,8 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
-import ReactQuerySample from '../reactQuery';
-import { QueryClientProvider, QueryClient } from 'react-query';
-
+import ReactQueryProvider from '../reactQuery/ReactQueryProvider';
 import GraphQLClient from '../graphQL/ApolloClient'
-import GlobalContextProvider from '../stores/global/Context';
-const queryClient = new QueryClient()
+import GlobalContextProvider from '../stores/global/ContextProvider';
 
 // Will be called once for every metric that has to be reported.
 export function reportWebVitals(metric) {
@@ -17,11 +14,9 @@ function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={GraphQLClient}>
       <GlobalContextProvider>
-        <QueryClientProvider client={queryClient}>
-          <ReactQuerySample>
-            <Component {...pageProps} />
-          </ReactQuerySample>
-        </QueryClientProvider>
+        <ReactQueryProvider>
+          <Component {...pageProps} />
+        </ReactQueryProvider>
       </GlobalContextProvider>)
     </ApolloProvider>
   );

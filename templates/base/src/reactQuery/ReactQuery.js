@@ -1,18 +1,18 @@
-import React, { useEffect } from 'react';
 import { useQuery, useQueryClient } from 'react-query'
+import fetchWrapper from '../utils/serviceUtils/fetch';
 
-
-const fetchListFromAPI = async () => {
-    const res = await fetch('https://swapi.dev/api/people/');
-    return res.json();
+const fetchListFromAPI = async (url) => {
+    const res = fetchWrapper('https://swapi.dev/api/people/', {})
+    return res;
 }
 
-export default function ReactQuerySample({ children }) {
+export default function ReactQuery({ children }) {
+    const url = "https://swapi.dev/api/people/"
+    const queryName = "people";
     const queryClient = useQueryClient();
-    const { data, status } = useQuery("people", fetchListFromAPI);
+    const { data, status } = useQuery(queryName, () => fetchListFromAPI(url));
     console.log("data", data);
     console.log("status", status)
-
 
     return (
         <>
