@@ -1,8 +1,7 @@
 import { render } from '@testing-library/react';
 import GlobalContextProvider from '../../stores/global/ContextProvider'
 import { toHaveTextContent } from "@testing-library/jest-dom"
-
-
+import { renderHook, act } from '@testing-library/react-hooks'
  export const assertByTestId = (renderComp,testId,isTruthy) =>
  {
      if(!isTruthy){
@@ -17,14 +16,27 @@ import { toHaveTextContent } from "@testing-library/jest-dom"
  }
  
 
- export const assertPropertyInObject =(obj,key,val)=>
+ export const assertProperty =(obj,key,val)=>
  {
      return expect(obj).toHaveProperty(key,val)
  }
 
+export const assertInitialStateProp=(hook,property,value)=>
+{
+    const { result } = renderHook(() =>hook())
+    assertProperty(result.current,property,value)
+}
 
- export const renderWithGlobalContext = (componant) =>
+export const getStateAndFunctionsInHook = (hook) =>
+{
+    const { result } = renderHook(() =>hook())
+    return result
+}
+
+ export const renderWithGlobalContext = (children) =>
  {
-  return(render(<GlobalContextProvider>{componant}</GlobalContextProvider>))
+  return(render(<GlobalContextProvider>{children}</GlobalContextProvider>))
  }
+
+ 
 
