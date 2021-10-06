@@ -3,7 +3,6 @@ import { ApolloProvider } from '@apollo/react-hooks';
 
 import GraphQLClient from '../graphQL/ApolloClient'
 import GlobalContextProvider from '../stores/global/ContextProvider';
-import i18n from '../localization/i18n';
 
 // Will be called once for every metric that has to be reported.
 export function reportWebVitals(metric) {
