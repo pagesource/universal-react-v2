@@ -10,9 +10,9 @@ import { renderHook, act } from '@testing-library/react-hooks'
      return expect(renderComp.getByTestId(testId)).toBeTruthy()
  }
 
- export const assertTextContentByTestId = (renderedComp,testId,textContent) =>
+ export const assertByTextContent = (getByText,textContent) =>
  {
-    return expect(renderedComp.getByTestId(testId)).toHaveTextContent(textContent)
+    return expect(getByText(textContent)).toBeInTheDocument()
  }
  
 
@@ -21,22 +21,20 @@ import { renderHook, act } from '@testing-library/react-hooks'
      return expect(obj).toHaveProperty(key,val)
  }
 
-export const assertInitialStateProp=(hook,property,value)=>
-{
-    const { result } = renderHook(() =>hook())
-    assertProperty(result.current,property,value)
-}
-
-export const getStateAndFunctionsInHook = (hook) =>
-{
-    const { result } = renderHook(() =>hook())
-    return result
-}
-
  export const renderWithGlobalContext = (children) =>
  {
   return(render(<GlobalContextProvider>{children}</GlobalContextProvider>))
  }
+
+ export const renderWithContext = ({Comp,ContextRef,state,props}) =>
+ {
+  return(render(<ContextRef value={state}><Comp {...props}/></ContextRef>))
+ }
+
+export const assertMockFunctionArg =({mockFunction,funCallIndex,argIndex,argument})=>
+{
+   return expect(mockFunction.mock.calls[funCallIndex][argIndex]).toBe(argument);
+}
 
  
 
