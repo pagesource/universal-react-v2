@@ -1,8 +1,8 @@
 import createLogger from "./logger";
 
 const browserLogger = (options) => {
-    const { returnable = false, remoteURL, user = "Unset user", landingLogs = false, handleExceptions = false } = options || {};
-    const Log = createLogger({ returnable, remoteURL });
+    const { loggerConfig = {}, user = "Unset user", landingLogs = false, handleExceptions = false } = options || {};
+    const Log = createLogger(loggerConfig);
 
     if (landingLogs) {
         let lastUrl = window.location.href;
