@@ -1,11 +1,8 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
-import { theme } from "../themes/theme";
 import Button from "../components/atoms/Button"
 
 export default function Home() {
   return (
-    <ThemeProvider theme={theme}>
       <div className="container">
         <div>
           <title>Create Next App</title>
@@ -203,6 +200,5 @@ export default function Home() {
           }
         `}</style>
       </div>
-    </ThemeProvider>
   );
 }
