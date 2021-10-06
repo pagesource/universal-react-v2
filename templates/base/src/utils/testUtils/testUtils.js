@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 import GlobalContextProvider from '../../stores/global/ContextProvider'
-import { toHaveTextContent } from "@testing-library/jest-dom"
-import { renderHook, act } from '@testing-library/react-hooks'
+
  export const assertByTestId = (renderComp,testId,isTruthy) =>
  {
      if(!isTruthy){
