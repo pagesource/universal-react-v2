@@ -4,6 +4,9 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import GraphQLClient from '../graphQL/ApolloClient'
 import GlobalContextProvider from '../stores/global/ContextProvider';
 
+import { ThemeProvider } from 'styled-components';
+import { theme } from "../themes/theme";
+
 // Will be called once for every metric that has to be reported.
 export function reportWebVitals(metric) {
   // These metrics can be sent to any analytics service
@@ -13,9 +16,11 @@ export function reportWebVitals(metric) {
 function MyApp({ Component, pageProps }) {
   return (
     <ApolloProvider client={GraphQLClient}>
-      <GlobalContextProvider>
-        <Component {...pageProps} />
-      </GlobalContextProvider>)
+      <ThemeProvider theme={theme}>
+        <GlobalContextProvider>
+          <Component {...pageProps} />
+        </GlobalContextProvider>
+      </ThemeProvider>
     </ApolloProvider>
   );
 }
