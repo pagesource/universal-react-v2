@@ -1,23 +1,23 @@
 /**
- *
- * {{ properCase name }}
- *
- */
-// @flow
+*
+* {{ properCase name }}
+*
+*/
 
 // Node_Module Imports
 import React, { ComponentType } from 'react';
 import styled from 'styled-components';
 
 // Relative imports
-import styles, { AppContainer } from './{{ properCase name }}.style';
+import styles, { CompRoot } from './{{ properCase name }}.style';
 
-const {{ properCase name }} = ({ className, children }) => <AppContainer className={className} data-testid='AppContainer'>{children}</AppContainer>;
+const {{ properCase name }} = ({ className, children }) => <CompRoot className={className} data-testid='CompRoot'>
+  {children}</CompRoot>;
 
 {{ properCase name }}.defaultProps = {};
 
 const Styled{{ properCase name }} = styled({{ properCase name }})`
-  ${styles};
+${styles};
 `;
 
 export default Styled{{ properCase name }};
