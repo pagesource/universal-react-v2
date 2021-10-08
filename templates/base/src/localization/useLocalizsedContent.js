@@ -3,28 +3,29 @@ import { useState, useEffect } from 'react';
 const languageStorageKey = "language"
 
 const getLanguageFromLocalStorage = () => {
-  return JSON.parse(localStorage.getItem(languageKey))
+  return localStorage.getItem(languageKey);
 }
 
 const setLanguageToLocalStorage = (language) => {
-  return JSON.parse(localStorage.setItem(languageKey, language))
+  localStorage.setItem(languageKey, language);
 }
 
 const getLanguageFromSessionStorage = () => {
-  return JSON.parse(sessionStorage.getItem(languageKey))
+  return sessionStorage.getItem(languageKey);
 }
 
 const setLanguageToSessionStorage = (language) => {
-  return JSON.parse(sessionStorage.setItem(languageKey, language))
+  sessionStorage.setItem(languageKey, language);
 }
 
-export default function useFetchWithLocale(url, fetchOptions){
+export default function useLocalizsedContent(url, fetchOptions){
 
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState();
   const [error, setError] = useState();
 
   //Logic for handling multi locale requests
+  
   // const language = getLanguageFromLocalStorage();
   // const language = getLanguageFromSessionStorage(); 
 
