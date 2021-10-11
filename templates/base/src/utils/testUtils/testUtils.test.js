@@ -59,7 +59,9 @@ describe('assertMockFunctionsArgument', () => {
        }
        const mockCallback = jest.fn(x => 42 + x);
        forEach([0, 1], mockCallback);
-       const obj={mockFunction:mockCallback,funCallIndex:1,argIndex:0,argument:1}
-       assertMockFunctionArg(obj)
+       const obj1={mockFunction:mockCallback,funCallIndex:1,argIndex:0,argument:1}
+       assertMockFunctionArg(obj1)
+       const obj2={mockFunction:mockCallback,argument:0}
+       assertMockFunctionArg(obj2)
     })
 })
