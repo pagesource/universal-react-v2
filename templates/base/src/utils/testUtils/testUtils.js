@@ -1,6 +1,5 @@
 import { render } from '@testing-library/react';
-import GlobalContextProvider from '../../stores/global/ContextProvider'
-
+import {toBeInTheDocument} from '@testing-library/jest-dom'
  export const assertByTestId = (renderComp,testId,isTruthy) =>
  {
      if(!isTruthy){
@@ -20,14 +19,14 @@ import GlobalContextProvider from '../../stores/global/ContextProvider'
      return expect(obj).toHaveProperty(key,val)
  }
 
- export const renderWithGlobalContext = (children) =>
+ export const renderWithSmartContext = ({SmartContextProviderRef,children}) =>
  {
-  return(render(<GlobalContextProvider>{children}</GlobalContextProvider>))
+  return(render(<SmartContextProviderRef>{children}</SmartContextProviderRef>))
  }
 
- export const renderWithContext = ({Comp,ContextRef,state,props}) =>
+ export const renderWithContext = ({Comp,ContextProviderRef,state,props}) =>
  {
-  return(render(<ContextRef value={state}><Comp {...props}/></ContextRef>))
+  return(render(<ContextProviderRef value={state}><Comp {...props}/></ContextProviderRef>))
  }
 
 export const assertMockFunctionArg =({mockFunction,funCallIndex,argIndex,argument})=>
