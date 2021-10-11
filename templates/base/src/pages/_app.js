@@ -1,10 +1,10 @@
 import React from 'react';
 import { ApolloProvider } from '@apollo/react-hooks';
-// import ReactQueryProvider from '../reactQuery/ReactQueryProvider';
 import GraphQLClient from '../graphQL/ApolloClient'
 import GlobalContextProvider from '../stores/global/ContextProvider';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import TestComponent from '../reactQuery/TestComponent';
+import GetTestComponent from '../reactQuery/GetTestComponent';
+import PostTestComponent from '../reactQuery/PostTestComponent';
 import ReactQueryProvider from '../reactQuery/ReactQueryProvider';
 
 // Will be called once for every metric that has to be reported.
@@ -18,7 +18,6 @@ function MyApp({ Component, pageProps }) {
     <ApolloProvider client={GraphQLClient}>
       <GlobalContextProvider>
         <ReactQueryProvider>
-          <TestComponent />
           <Component {...pageProps} />
         </ReactQueryProvider>
       </GlobalContextProvider>)
