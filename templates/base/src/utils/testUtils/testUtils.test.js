@@ -1,50 +1,50 @@
-import { render,fireEvent } from "@testing-library/react"
-import {Context,ContextDemo} from "./ContextDemo";
-import { assertByTestId, assertProperty,assertByTextContent,renderWithContext, assertMockFunctionArg } from "./testUtils"
+import { render, fireEvent } from "@testing-library/react"
+import { Context, ContextDemo } from "./ContextDemo";
+import { assertByTestId, assertProperty, assertByTextContent, renderWithContext, assertMockFunctionArg } from "./testUtils"
 
 
 describe('assertByTestId', () => {
-    const renderCom=render(<h1 data-testid='hello'>Hello</h1>)
+    const renderCom = render(<h1 data-testid='hello'>Hello</h1>)
     test('testId exists', () => {
-       assertByTestId(renderCom,'hello',true)
+        assertByTestId(renderCom, 'hello', true)
     })
 
     test('testId do not exists', () => {
-      
-       assertByTestId(renderCom,'Hello',false)
+
+        assertByTestId(renderCom, 'Hello', false)
     })
 })
 
 describe('assertProperty', () => {
     test('test property', () => {
-        const componant={
-            name:'default'
+        const componant = {
+            name: 'default'
         };
-        assertProperty(componant,'name','default')
+        assertProperty(componant, 'name', 'default')
     })
 })
 
 describe('asserByTextContent', () => {
     test('assert test content', () => {
-        const renderedComp=render(<h1>Hello default</h1>)
-        assertByTextContent(renderedComp,'Hello default',true)
+        const renderedComp = render(<h1>Hello default</h1>)
+        assertByTextContent(renderedComp, 'Hello default', true)
     })
     test('assert test content not present', () => {
-        const renderedComp=render(<h1>Hello default</h1>)
-        assertByTextContent(renderedComp,'Not Found',false)
+        const renderedComp = render(<h1>Hello default</h1>)
+        assertByTextContent(renderedComp, 'Not Found', false)
     })
 })
 
 describe('renderWithContext', () => {
     test('assert context state', () => {
-        const contextData={
-            value:'context'
+        const contextData = {
+            value: 'context'
         }
-        const props={}
-        const obj={Comp:ContextDemo,ContextProviderRef:Context.Provider,state:contextData,props:props}
-        const renderedComp  = renderWithContext(obj)
-        assertByTextContent(renderedComp,'context',true)
-        
+        const props = {}
+        const obj = { Comp: ContextDemo, ContextProviderRef: Context.Provider, state: contextData, props: props }
+        const renderedComp = renderWithContext(obj)
+        assertByTextContent(renderedComp, 'context', true)
+
     })
 })
 
@@ -52,16 +52,16 @@ describe('renderWithContext', () => {
 
 describe('assertMockFunctionsArgument', () => {
     test('test arguments in mock function call', () => {
-       function forEach(items, callback) {
-          for (let index = 0; index < items.length; index++) {
-            callback(items[index]);
-          }
-       }
-       const mockCallback = jest.fn(x => 42 + x);
-       forEach([0, 1], mockCallback);
-       const obj1={mockFunction:mockCallback,funCallIndex:1,argIndex:0,argument:1}
-       assertMockFunctionArg(obj1)
-       const obj2={mockFunction:mockCallback,argument:0}
-       assertMockFunctionArg(obj2)
+        function forEach(items, callback) {
+            for (let index = 0; index < items.length; index++) {
+                callback(items[index]);
+            }
+        }
+        const mockCallback = jest.fn(x => 42 + x);
+        forEach([0, 1], mockCallback);
+        const obj1 = { mockFunction: mockCallback, funCallIndex: 1, argIndex: 0, argument: 1 }
+        assertMockFunctionArg(obj1)
+        const obj2 = { mockFunction: mockCallback, argument: 0 }
+        assertMockFunctionArg(obj2)
     })
 })
