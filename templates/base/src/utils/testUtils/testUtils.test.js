@@ -20,14 +20,18 @@ describe('assertProperty', () => {
         const componant={
             name:'default'
         };
-       assertProperty(componant,'name','default')
+        assertProperty(componant,'name','default')
     })
 })
 
 describe('asserByTextContent', () => {
     test('assert test content', () => {
-        const {getByText}=render(<h1>Hello default</h1>)
-        assertByTextContent(getByText,'Hello default')
+        const renderedComp=render(<h1>Hello default</h1>)
+        assertByTextContent(renderedComp,'Hello default',true)
+    })
+    test('assert test content not present', () => {
+        const renderedComp=render(<h1>Hello default</h1>)
+        assertByTextContent(renderedComp,'Not Found',false)
     })
 })
 
@@ -38,24 +42,24 @@ describe('renderWithContext', () => {
         }
         const props={}
         const obj={Comp:ContextDemo,ContextProviderRef:Context.Provider,state:contextData,props:props}
-        const {getByText}  = renderWithContext(obj)
-        assertByTextContent(getByText,'context')
+        const renderedComp  = renderWithContext(obj)
+        assertByTextContent(renderedComp,'context',true)
         
     })
 })
 
+
+
 describe('assertMockFunctionsArgument', () => {
     test('test arguments in mock function call', () => {
-function forEach(items, callback) {
-    for (let index = 0; index < items.length; index++) {
-      callback(items[index]);
-    }
-  }
-
-  const mockCallback = jest.fn(x => 42 + x);
-  forEach([0, 1], mockCallback);
-  const obj={mockFunction:mockCallback,funCallIndex:0,argIndex:0,argument:0}
-  assertMockFunctionArg(obj)
-
+       function forEach(items, callback) {
+          for (let index = 0; index < items.length; index++) {
+            callback(items[index]);
+          }
+       }
+       const mockCallback = jest.fn(x => 42 + x);
+       forEach([0, 1], mockCallback);
+       const obj={mockFunction:mockCallback,funCallIndex:1,argIndex:0,argument:1}
+       assertMockFunctionArg(obj)
     })
 })
