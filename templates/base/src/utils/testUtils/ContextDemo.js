@@ -1,9 +1,8 @@
-import { useContext, useState } from "react"
-import { render } from "react-dom"
+import { useContext } from "react"
 
 export const Context = React.createContext('default')
 
 export const ContextDemo = () => {
     const { value } = useContext(Context);
-    return (<h1 data-testid='value'><div>{value}</div></h1>)
+    return (<h1 data-testid='value'>{value}</h1>)
 }

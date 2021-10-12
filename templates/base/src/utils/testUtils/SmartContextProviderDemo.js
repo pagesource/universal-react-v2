@@ -1,5 +1,4 @@
 import { WithContextProvider } from "smart-context";
-import React from "react";
 const initialState = {
     name: "Smart Context"
 };

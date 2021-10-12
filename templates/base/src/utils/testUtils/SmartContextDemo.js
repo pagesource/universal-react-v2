@@ -1,5 +1,4 @@
-import { useContext, useState } from "react"
-import { render } from "react-dom"
+import { useContext } from "react"
 import { getContext } from "smart-context"
 
 const SmartContextDemo = () => {
@@ -7,6 +6,6 @@ const SmartContextDemo = () => {
     state: { name },
     actions: { setName }
   } = useContext(getContext("nameContext"));
-  return (<h1 data-testid='name'><div>{name}</div></h1>)
+  return (<h1 data-testid='name'>{name}</h1>)
 }
 export default SmartContextDemo
