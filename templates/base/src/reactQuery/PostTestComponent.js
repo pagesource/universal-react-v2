@@ -4,7 +4,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 // Example use of ReactQuery 
 export default function PostTestComponent() {
     // Example of POST request
-    const { isSuccess, isLoading } = useQueryWrapper({ queryKey: "People", url: "https://httpbin.org/post", data: { "name": "React Query" }, method: 'POST' });
+    const { isSuccess, isLoading } = useQueryWrapper({ queryKey: 'People', url: "https://httpbin.org/post", data: { "name": "React Query" }, method: 'POST' });
 
     return (
         <>

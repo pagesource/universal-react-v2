@@ -36,7 +36,7 @@ async function fetchWrapper(url, fetchOptions) {
   const payload = {
     method: method || 'GET',
     headers: { ...defaultHeaders, ...headers },
-    body: body,
+    body,
     mode: 'cors', // no-cors, *cors, same-origin
     cache: cache || 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
     credentials: isCredentialsForCrossOrigin ? 'include' : 'same-origin', // include, *same-origin, omit -> to pass the credentials for cross-origin use include

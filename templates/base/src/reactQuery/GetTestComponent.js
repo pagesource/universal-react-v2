@@ -4,7 +4,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 // Example use of ReactQuery 
 export default function GetTestComponent() {
     // Example of GET request
-    const { data, isSuccess, isLoading } = useQueryWrapper({ queryKey: "People", url: "https://gorest.co.in/public/v1/users" });
+    const { data, isSuccess, isLoading } = useQueryWrapper({ queryKey: 'People', url: "https://gorest.co.in/public/v1/users" });
     return (
         <>
             <ClipLoader color="#339FFF" loading={isLoading} css={` display: block; margin: 0 auto;`} size={150} />

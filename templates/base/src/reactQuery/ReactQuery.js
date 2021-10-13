@@ -1,8 +1,7 @@
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import fetchWrapper from '../utils/serviceUtils/fetch';
 
-const fetchListFromAPI = async (url, method, data) => {
-    // add method and data
+const fetchListFromAPI = ({ url, method, data }) => {
     const res = fetchWrapper(url, { method: method, body: data })
     return res;
 }
@@ -14,7 +13,10 @@ export default function useQueryWrapper(queryOptions) {
         method,
         queryData
     } = queryOptions || {};
-    const { data, isSuccess, isError, isFetching, isLoading, error } = useQuery(queryKey, () => fetchListFromAPI(url, method, queryData));
+    const { data, isSuccess, isError, isLoading, error } = useQuery(queryKey, () => fetchListFromAPI({ url: url, method: method, data: queryData }));
     if (isError) console.log(`Error: ${error}`);
-    return { data, isSuccess, isError, isFetching, isLoading, error };
+    const queryClient = useQueryClient();
+    console.log("QueryClient info:");
+    console.log(queryClient);
+    return { data, isSuccess, isError, isLoading, error };
 }
