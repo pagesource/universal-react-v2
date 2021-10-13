@@ -38,19 +38,18 @@ This logger collect logs based on different levels and structures them
 ```
 
 This logger util provides two logger initializers:
-- `createLogger`: A basic logger init function that returns a logger which follows the above structure. The init function takes as parameters some optional config values.
-- `browserLogger`: A utility logger init function that returns a logger which follows the above structure and allows only 3 types of logs(browser specific logs): landing, interaction, error. This init function takes as parameters the config settings of the basic logger as well as some optional config values like:
-  - `user`: user info to be set as the value of `userInfo` key of the log structure.
+- `createDefaultLogger`: A basic logger init function that returns a logger which follows the above structure. The init function takes as parameters some optional config values.
+- `createLogger`: A utility logger init function that returns a logger which follows the above structure along with some extra auto-logging features:
   - `landingLogs`: takes a boolean value that sets wheather landing logs to be automatically logged or not on url change. Adds an event listener to actively check for url changes.
   - `handleExceptions`: takes a boolean value that sets wheather unhandled syntax/runtime errors/exceptions to be automatically logged or not. Adds an event listener to actively check for such errors.      
 
 ## Usage 
 
-createLogger:
+createDefaultLogger:
 ```javascript
-import { createLogger } from '../utils/Logger';
+import { createDefaultLogger } from '../utils/Logger';
 
-const Logger = createLogger({
+const Logger = createDefaultLogger({
   appName: 'application name to be shown in the logs',
   level: 'info',  // lowest allowed level of log
   parseUserAgent: true, // return device, browser and os details if true; returns user-agent string if false
@@ -82,9 +81,9 @@ Logger.error({
 });
 ```
 
-browserLogger:
+createLogger:
 ```javascript
-import { browserLogger } from '../utils/Logger';
+import { createLogger } from '../utils/Logger';
 
 const createLoggerConfig = {
   appName: 'application name to be shown in the logs',
@@ -98,7 +97,7 @@ const user = {
   id: '101'
 }
 
-const Logger = browserLogger({
+const Logger = createLogger({
   loggerConfig: createLoggerConfig,
   user,
   landingLogs: true,
