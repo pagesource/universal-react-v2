@@ -45,7 +45,8 @@
     "react-dom": "*",
     "styled-jsx": "4.0.1",
     "styled-components": "^5.3.1",
-    "smart-context": "^2.1.0"
+    "smart-context": "^2.1.0",
+    "ua-parser-js": "^0.7.28"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "11.1.2",
