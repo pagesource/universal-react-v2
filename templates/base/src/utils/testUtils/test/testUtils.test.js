@@ -1,6 +1,6 @@
 import { render, fireEvent } from "@testing-library/react"
 import { Context, ContextDemo } from "./ContextDemo";
-import { assertByTestId, assertProperty, assertByTextContent, renderWithContext, renderWithSmartContext, assertMockFunctionArg } from "./testUtils"
+import { assertByTestId, assertProperty, assertByTextContent, renderWithContext, renderWithSmartContext, assertMockFunctionArg } from "../testUtils"
 import SmartContextDemo from "./SmartContextDemo"
 import SmartContextProvider from "./SmartContextProviderDemo"
 
