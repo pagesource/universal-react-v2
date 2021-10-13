@@ -3,12 +3,13 @@ import { UAParser } from 'ua-parser-js';
 
 const logObject = ({ logLevel, logObj }, server = false) => {
   try {
-    const { appName, logInfo: { component, subComponent }, parseUserAgent, userInfo = "Unset user", event, service, error } = logObj || {};
+    const { appName, logInfo, parseUserAgent, userInfo = "Unset user", event, service, error } = logObj || {};
     const isBrowser = process.browser;
     const localTimestamp = new Date();
     //const test_string = 'Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'
     const ua_result = new UAParser().getResult();
 
+    const { component: logInfo_component, subComponent: logInfo_subComponent } = logInfo || {};
     const { name: event_name, attributes: event_attributes } = event || {};
     const { url: service_url, body: service_body } = service || {};
     const { name: error_name, attributes: error_attributes } = error || {};
@@ -16,10 +17,6 @@ const logObject = ({ logLevel, logObj }, server = false) => {
     let returnObj = {
       appName: appName || "universal-react",
       logLevel,
-      logInfo: {
-        component,
-        subComponent
-      },
       userInfo,
       localTimestamp
     };
@@ -39,6 +36,13 @@ const logObject = ({ logLevel, logObj }, server = false) => {
           host: window.location.host,
           userAgent: navigator.userAgent
         }
+      }
+    }
+
+    if (logInfo_component) {
+      returnObj.logInfo = {
+        component: logInfo_component,
+        subComponent: logInfo_subComponent
       }
     }
 
@@ -97,7 +101,7 @@ const callLog = ({ logLevel, logObj, remoteURL }) => {
   return logged;
 }
 
-const createLogger = (options = {}) => {
+const createDefaultLogger = (options = {}) => {
   const { appName, level: loggerLevel, returnable = false, parseUserAgent = true, remoteDataAgregatorUrl: remoteURL } = options;
   const logLevels = {
     error: 0,
@@ -127,4 +131,4 @@ const createLogger = (options = {}) => {
   return loggingObj;
 }
 
-export default createLogger;
+export default createDefaultLogger;

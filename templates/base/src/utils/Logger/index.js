@@ -1,7 +1,7 @@
-import { default as browserLogger } from './log-util';
-import { default as createLogger } from './logger';
+import { default as createLogger } from './log-util';
+import { default as createDefaultLogger } from './logger';
 
 export {
-    browserLogger,
-    createLogger
+    createLogger,
+    createDefaultLogger
 }
