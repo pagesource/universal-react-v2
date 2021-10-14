@@ -1,5 +1,5 @@
 {
-  "name": "test-again",
+  "name": "base",
   "version": "0.1.0",
   "private": true,
     "scripts": {
@@ -42,7 +42,7 @@
     "cross-env": "^7.0.2",
     "express": "4.17.1",
     "fetch-mock": "9.11.0",
-    "graphql": "15.6.0",
+    "graphql": "15.6.0", 
     "helmet": "4.6.0",
     "next": "*",
     "react": "*",
@@ -68,7 +68,9 @@
     "plop": "^2.6.0",
     "standard-version": "^9.3.1",
     "prettier": "^2.4.1",
-    "pretty-quick": "^3.1.1"
+    "pretty-quick": "^3.1.1",
+    "styled-components": "^5.3.1",
+    "smart-context": "^2.1.0"
   },
   "config": {
     "commitizen": {
@@ -80,7 +82,6 @@
       "defaultSubject": "",
       "defaultBody": "",
       "defaultIssues": ""
-    },
-    "smart-context": "^2.1.0"
+    }
   }
 }
