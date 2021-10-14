@@ -14,7 +14,7 @@
     "url": "https://github.com/pagesource"
   },
   "engines": {
-    "node": "^16.6.1"
+    "node": ">=14.17.6"
   },
   "scripts": {
     "lint": "node scripts/eslint",
