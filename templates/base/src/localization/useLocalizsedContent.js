@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import fetchWrapper from '../utils/serviceUtils/fetch';
 
-const languageStorageKey = "language"
+const languageStorageKey = "language";
+
+// Default base path
+const basePath = "http://localhost:3000";
 
 const getLanguageFromLocalStorage = (nullCheck) => {
   const language = localStorage.getItem(languageStorageKey);
@@ -10,7 +13,7 @@ const getLanguageFromLocalStorage = (nullCheck) => {
 
 const nullCheck = (variable) => {
   if(!variable){
-    //default language
+    // Default language
     return "en-us";
   }
   else{
@@ -29,7 +32,7 @@ export default function useLocalisedContent(url, fetchOptions){
 
   //Logic for handling multi locale requests
   const language = getLanguageFromLocalStorage(nullCheck);
-  url = `/${language}/${url}`;
+  url = `${basePath}/${language}/${url}`;
 
   useEffect(() => {
     setLoading(true);
