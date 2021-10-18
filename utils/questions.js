@@ -19,6 +19,18 @@ const createAppQuestions = [
         return 'Please enter valid app name';
       }
     }
+  },
+  {
+    name: 'basePath',
+    type: 'list',
+    message: 'Set Base path?',
+    choices: () => ['Yes', 'No']
+  },
+  {
+    when: (data) => data.basePath === 'Yes',
+    type: 'input',
+    name: 'customBasePath',
+    message: 'Please enter base path:'
   }
 ];
 
