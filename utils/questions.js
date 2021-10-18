@@ -22,12 +22,12 @@ const createAppQuestions = [
   },
   {
     name: 'basePath',
-    type: 'list',
+    type: 'confirm',
     message: 'Set Base path?',
-    choices: () => ['Yes', 'No']
+    default: false
   },
   {
-    when: (data) => data.basePath === 'Yes',
+    when: (data) => data.basePath === true,
     type: 'input',
     name: 'customBasePath',
     message: 'Please enter base path:'
