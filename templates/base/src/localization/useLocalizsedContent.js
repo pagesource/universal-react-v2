@@ -38,15 +38,13 @@ export default function useLocalisedContent(url, fetchOptions){
   useEffect(() => {
     setLoading(true);
 
-    if(url in cache){
-      setData(cache[url]);
-    }
-    else{
+    if(!(url in cache)){
       cache[url]=fetchWrapper(url,fetchOptions);
-      setData(cache[url]);
     }
-    setLoading(false);
     
+    setData(cache[url]);
+    setLoading(false);
+
   }, [url])
 
 return [loading, data]
