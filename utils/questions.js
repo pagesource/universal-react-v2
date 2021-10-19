@@ -24,13 +24,14 @@ const createAppQuestions = [
     name: 'basePath',
     type: 'confirm',
     message: 'Set Base path?',
-    default: false
+    default: true
   },
   {
     when: (data) => data.basePath === true,
     type: 'input',
     name: 'customBasePath',
-    message: 'Please enter base path:'
+    message: 'Please enter base path:',
+    default: '/docs'
   }
 ];
 

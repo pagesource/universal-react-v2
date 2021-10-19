@@ -125,7 +125,7 @@ const installDependencies = async (filePath, installLocation) => {
   installPackages(installLocation, depArr);
 };
 
-const initializeNewProject = async (appType, appName, features) => {
+const initializeNewProject = async (appType, appName, basePath, features) => {
   createProjectDirectory(appName);
   copyBaseDirectory();
   copyTemplateDirectory(appType);
@@ -135,6 +135,14 @@ const initializeNewProject = async (appType, appName, features) => {
   const appPackage = require(path.join(appTemplatePath, 'package.json'));
   let packageFile = mergeJsons(basePackage, appPackage);
   packageFile = mergeJsons(packageFile, { name: appName });
+  if (basePath != undefined) {
+    packageFile = mergeJsons(packageFile, {
+      scripts: {
+        'env-var': 'cross-env BASE_PATH=' + basePath,
+        dev: 'npm run env-var next dev'
+      }
+    });
+  }
   writeJsonFile(path.join(projectDir, 'package.json'), packageFile);
 
   await createStampFile(appType, appName);
@@ -209,11 +217,17 @@ if (exists) {
           initializeNewProject(
             appTypeMap[answers.appType],
             answers.appName,
+            answers.customBasePath,
             answers_features.features
           );
         });
       } else {
-        initializeNewProject(appTypeMap[answers.appType], answers.appName, []);
+        initializeNewProject(
+          appTypeMap[answers.appType],
+          answers.appName,
+          answers.customBasePath,
+          []
+        );
       }
     }
   });

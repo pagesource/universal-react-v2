@@ -7,6 +7,7 @@ const isAssetPrefix = process.env.BASE_PATH || '';
 module.exports = withBundleAnalyzer({
   distDir: 'build',
   assetPrefix: isAssetPrefix,
+  basePath: isAssetPrefix,
   env: {
     BASE_PATH: isAssetPrefix
   }
