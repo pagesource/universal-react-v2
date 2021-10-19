@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import fetchWrapper from '../utils/serviceUtils/fetch';
 
 const languageStorageKey = "language";
+var cache={};
 
 // Default base path
 const basePath = "http://localhost:3000";
@@ -36,8 +37,16 @@ export default function useLocalisedContent(url, fetchOptions){
 
   useEffect(() => {
     setLoading(true);
-    setData(fetchWrapper(url,fetchOptions));
+
+    if(url in cache){
+      setData(cache[url]);
+    }
+    else{
+      cache[url]=fetchWrapper(url,fetchOptions);
+      setData(cache[url]);
+    }
     setLoading(false);
+    
   }, [url])
 
 return [loading, data]
