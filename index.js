@@ -138,7 +138,6 @@ const initializeNewProject = async (appType, appName, basePath, features) => {
     packageFile = mergeJsons(packageFile, {
       scripts: {
         'env-var': 'cross-env BASE_PATH=' + basePath,
-        dev: 'npm run env-var next dev'
       }
     });
   }

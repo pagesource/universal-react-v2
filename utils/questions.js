@@ -22,11 +22,10 @@ const createAppQuestions = [
   },
   {
     when: (data) =>
-      data.appType === 'SSR(Server-side rendering)' ||
-      data.appType === 'SSG(Static site generation)',
+      appTypeMap[data.appType] === 'ssr' || appTypeMap[data.appType] === 'ssg',
     name: 'basePath',
     type: 'confirm',
-    message: 'Set Base path?',
+    message: 'Do you want to run your application from deep/base path?',
     default: true
   },
   {
