@@ -19,6 +19,21 @@ const createAppQuestions = [
         return 'Please enter valid app name';
       }
     }
+  },
+  {
+    when: (data) =>
+      appTypeMap[data.appType] === 'ssr' || appTypeMap[data.appType] === 'ssg',
+    name: 'basePath',
+    type: 'confirm',
+    message: 'Do you want to run your application from deep/base path?',
+    default: true
+  },
+  {
+    when: (data) => data.basePath === true,
+    type: 'input',
+    name: 'customBasePath',
+    message: 'Please enter base path:',
+    default: '/docs'
   }
 ];
 
