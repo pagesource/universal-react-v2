@@ -3,7 +3,7 @@ const appTemplateFileExclusions = [];
 const appTypeMap = {
   'SSR(Server-side rendering)': 'ssr',
   'SSG(Static site generation)': 'ssg',
-  'Micro-Frontend Application': 'microApp'
+  'Micro-App': 'microApp'
 };
 
 const universalReactStampData = {
