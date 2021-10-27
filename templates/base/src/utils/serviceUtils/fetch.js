@@ -1,9 +1,7 @@
 import Logger from '../Logger';
 
 const defaultHeaders = {
-  headers: {
     'Content-Type': 'application/json'
-  }
 };
 
 /**
