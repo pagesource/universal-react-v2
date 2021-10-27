@@ -137,7 +137,7 @@ const initializeNewProject = async (appType, appName, basePath, features) => {
   if (basePath != undefined) {
     packageFile = mergeJsons(packageFile, {
       scripts: {
-        'env-var': 'cross-env BASE_PATH=' + basePath,
+        'env-var': 'cross-env BASE_PATH=' + basePath
       }
     });
   }
@@ -205,7 +205,7 @@ if (exists) {
         const featureQuestion = [
           {
             type: 'checkbox',
-            message: 'Select features you want to add (Optional)',
+            message: 'Select optional features you want to add (Press enter to skip)',
             name: 'features',
             choices: features
           }
