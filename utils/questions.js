@@ -34,6 +34,12 @@ const createAppQuestions = [
     name: 'customBasePath',
     message: 'Please enter base path:',
     default: '/docs'
+  },
+  {
+    name: 'initializeGit',
+    type: 'confirm',
+    message: 'Do you want to initialize a git repo?',
+    default: true
   }
 ];
 

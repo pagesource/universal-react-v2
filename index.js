@@ -27,6 +27,16 @@ let projectDir = '';
 const cwd = process.cwd();
 const stampFileName = 'universal-react-stamp.json';
 
+const util = require('util');
+const exec = util.promisify(require('child_process').exec);
+
+const intializeGitRepo = async (projectDir) => {
+  let cmd = 'cd ' + projectDir + ' && git init';
+  const { stdout, stderr } = await exec(cmd).catch((err) => {
+    console.info(chalk.red(`Error ${err}`));
+  });
+  console.info(`${stdout}`);
+};
 const createProjectDirectory = (appName) => {
   projectDir = path.join(cwd, appName);
   createDir(projectDir);
@@ -124,7 +134,13 @@ const installDependencies = async (filePath, installLocation) => {
   installPackages(installLocation, depArr);
 };
 
-const initializeNewProject = async (appType, appName, basePath, features) => {
+const initializeNewProject = async (
+  appType,
+  appName,
+  basePath,
+  initializeGit,
+  features
+) => {
   createProjectDirectory(appName);
   copyBaseDirectory();
   copyTemplateDirectory(appType);
@@ -147,6 +163,9 @@ const initializeNewProject = async (appType, appName, basePath, features) => {
   const features_found = await copyOptionalTemplates(features, projectDir);
   await updateStampFile(features_found, projectDir);
   installDependencies(path.join(projectDir, 'package.json'), projectDir);
+  if (initializeGit != false) {
+    intializeGitRepo(projectDir);
+  }
 };
 
 const updateProject = async (features) => {
@@ -216,6 +235,7 @@ if (exists) {
             appTypeMap[answers.appType],
             answers.appName,
             answers.customBasePath,
+            answers.initializeGit,
             answers_features.features
           );
         });
@@ -224,6 +244,7 @@ if (exists) {
           appTypeMap[answers.appType],
           answers.appName,
           answers.customBasePath,
+          answers.initializeGit,
           []
         );
       }
