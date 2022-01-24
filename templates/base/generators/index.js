@@ -8,11 +8,13 @@ const componentGenerator = require('./component/index.js');
 const hooksGenerator = require('./hooks/index.js');
 const pagesGenerator = require('./pages/index.js');
 const storesGenerator = require('./stores/index.js');
+const serviceGenerator = require('./services/index.js');
 
 module.exports = (plop) => {
   plop.setGenerator('components', componentGenerator);
   plop.setGenerator('hooks', hooksGenerator);
   plop.setGenerator('pages', pagesGenerator);
   plop.setGenerator('stores', storesGenerator);
+  plop.setGenerator('services', serviceGenerator);
   plop.addHelper('curly', (object, open) => (open ? '{' : '}'));
 };

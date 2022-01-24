@@ -1,0 +1,51 @@
+import { useQuery } from 'react-query';
+import { fetchWrapper } from '../utils/serviceUtils';
+
+/**
+* @function {{ properCase name }}Service This function will call the API end point using useQuery from react-query
+* @description This function takes an object as parameter which consists of following keys
+*
+* @param {Object} props An object containing props related to query an API endpoint
+* @param {String} props.queryId A unique key to store the result
+* @param {String} props.url API end point
+* @param {Object} props.options anything you want to pass as headers to API end point 
+* @param {Object} props.config in case you want to configure react-query's useQuery
+* @param {Function} props.component any component you want to return with result from API
+*
+*@return - This function will return a component with API response as props to this component
+**/
+
+const {{ properCase name }}Service = ({queryId, url, options, config, Component}) => {
+ const result = useQuery({
+   queryKey: [queryId ?? '{{ properCase name }}'],
+   queryFn: () => fetchWrapper(url, options),
+   ...config,
+ })
+
+return  <Component {...result} />
+};
+
+
+/**
+* @function use{{ properCase name }}Service This function will call the API end point using useQuery from react-query
+* @description This is a hook, which will make parent component rerender multiple times based on the state e.g isLoading, data, error
+* This function takes an object as parameter which consists of following keys
+*
+* @param {Object} props An object containing props related to query an API endpoint
+* @param {String} props.queryId A unique key to store the result
+* @param {String} props.url API end point
+* @param {Object} props.options anything you want to pass as headers to API end point 
+* @param {Object} props.config in case you want to configure react-query's useQuery
+*
+*@return - This function will return API end point response with different states
+**/
+
+export const use{{ properCase name }}Service = ({ queryId, url, options, config }) =>
+   useQuery({
+     queryKey: [queryId ?? '{{ properCase name }}'],
+     queryFn: () => fetchWrapper(url, options),
+     ...config
+   });
+
+
+export default {{ properCase name }}Service;

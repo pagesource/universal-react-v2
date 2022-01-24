@@ -13,8 +13,19 @@ const checkStatus = (response) => {
   if (response.ok) {
     return response;
   } else {
-    let error = new Error({ statusText: response.statusText, response: response.json() });
-    return Promise.reject(error);
+    Logger.error({
+      message: 'failed to fetch',
+      error: {
+        code: err.statusText,
+        errMessage: err.response,
+        operationName: url
+      },
+      service: {
+        name: '',
+        path: url,
+      }
+    });
+    throw new Error({ statusText: response.statusText, response: response.json() });
   }
 };
 
@@ -46,22 +57,10 @@ async function fetchWrapper(url, fetchOptions) {
     ...payload
   })
     .then(checkStatus)
-    .then((res) => res.json())
-    .catch((err) => {
-      Logger.error({
-        message: 'failed to fetch',
-        error: {
-          code: err.statusText,
-          errMessage: err.response,
-          operationName: url
-        },
-        service: {
-          name: '',
-          path: url,
-        }
-      });
-      return err;
-    });
+    .then((res) => {
+      checkStatus(res)
+     return res.json()
+    })
 }
 
 export default fetchWrapper;

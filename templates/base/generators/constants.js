@@ -3,5 +3,6 @@ module.exports = {
   HOOKS_PATH: 'src/hooks/',
   PAGES_PATH: 'src/pages/',
   ROUTES_PATH: 'src/routes/',
-  STORES_PATH: 'src/stores/'
+  STORES_PATH: 'src/stores/',
+  SERVICES_PATH: 'src/services/'
 };
