@@ -4,7 +4,8 @@
   "description": "A simple JSON mock API",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "json-server --watch src/db.json",
+    "start:gql": "json-graphql-server src/db.js"
   },
   "dependencies": {
     "json-graphql-server": "^2.3.1",
