@@ -22,6 +22,8 @@ To start and mock Graphql APIs, run the command
 
 ### Reference & Documentation
 
+For detailed usage with different scenarios please refer to below links:
+
 - https://github.com/typicode/json-server
 - https://github.com/marmelab/json-graphql-server
 
