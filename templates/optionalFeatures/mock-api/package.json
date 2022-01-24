@@ -4,8 +4,8 @@
   "description": "A simple JSON mock API",
   "main": "index.js",
   "scripts": {
-    "start": "json-server --watch src/db.json",
-    "start:gql": "json-graphql-server src/db.js"
+    "mock:rest": "json-server --watch src/db.json",
+    "mock:graphql": "json-graphql-server src/db.js"
   },
   "dependencies": {
     "json-graphql-server": "^2.3.1",

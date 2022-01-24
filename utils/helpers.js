@@ -16,7 +16,8 @@ function arrayUnique(array) {
 const optionalFeatures = [
   { name: 'Add Test Cafe Setup', value: 'test-cafe' },
   { name: 'Add Something Else', value: 'else' },
-  { name: 'Yet Something Else', value: 'yet' }
+  { name: 'Yet Something Else', value: 'yet' },
+  { name: 'Add Mock Api setup', value: 'mock-api' }
 ];
 
 const getOptionalFeatures = (features) => {
