@@ -17,7 +17,8 @@ const {
   copyDir,
   writeJsonFile,
   dirFileExists,
-  isEmptyDir
+  isEmptyDir,
+  getMostRecentDirectory
 } = require('./utils/fileDirOps');
 const { installPackages } = require('./utils/install');
 const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
@@ -26,6 +27,7 @@ const templatesPath = path.join(__dirname, 'templates');
 const baseTemplatePath = path.join(templatesPath, 'base');
 let appTemplatePath = '';
 let projectDir = '';
+let turboProjectDir = '';
 const cwd = process.cwd();
 const stampFileName = 'universal-react-stamp.json';
 
@@ -217,11 +219,25 @@ if (exists) {
   // create new project
 
   if (isEmptyDir(cwd)) {
-    console.log(chalk.green('Setting up a new mono repo project using Turborepo'))
+    console.log(chalk.green('Setting up a new mono repo project using Turborepo'));
     setupTurboRepoProject();
   } else {
-    console.log(chalk.red('Current working directory is not empty. Please use a clean directory to setup the project'))
+    console.log(chalk.red('Current working directory is not empty. Please use a clean directory to setup the project'));
     process.exit(1);
+  }
+
+  // determine the project directory path
+  if (dirFileExists(path.join(cwd, 'package.json'))) {
+    turboProjectDir = cwd;
+  } else {
+    const recentDir = getMostRecentDirectory(cwd);
+    if (!recentDir) {
+      console.log(chalk.red('An unexpected error occured'));
+      process.exit(1);
+    }
+
+    // path to turbo project directory
+    turboProjectDir = path.join(cwd, recentDir);
   }
 
   inquirer.prompt(createAppQuestions).then((answers) => {
