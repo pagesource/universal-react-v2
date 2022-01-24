@@ -13,12 +13,12 @@ This will install the module globally on your app.
 To start and mock rest APIs, run the command
 
 - yarn mock:rest
-- edit db.json for the mocking API and create new route
+- edit src/db.json for the mocking API and create new route
 
 To start and mock Graphql APIs, run the command
 
 - yarn mock:graphql
-- edit db.js for the mocking API and create new route
+- edit src/db.js for the mocking API and create new route
 
 ### Reference & Documentation
 
