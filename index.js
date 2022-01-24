@@ -213,16 +213,15 @@ if (exists) {
     console.info('Nothing to update however :)');
   }
 } else {
-  // create new project
 
+  // create new project
 
   if (isEmptyDir(cwd)) {
     console.log(chalk.green('Setting up a new mono repo project using Turborepo'))
     setupTurboRepoProject();
   } else {
-    console.log(chalk.red('Current working directory is not empty. Pleaes use a clean directory to setup the project'))
+    console.log(chalk.red('Current working directory is not empty. Please use a clean directory to setup the project'))
     process.exit(1);
-
   }
 
   inquirer.prompt(createAppQuestions).then((answers) => {
