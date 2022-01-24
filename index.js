@@ -19,6 +19,7 @@ const {
   dirFileExists
 } = require('./utils/fileDirOps');
 const { installPackages } = require('./utils/install');
+const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
 
 const templatesPath = path.join(__dirname, 'templates');
 const baseTemplatePath = path.join(templatesPath, 'base');
@@ -212,6 +213,9 @@ if (exists) {
   }
 } else {
   // create new project
+
+  console.log(chalk.green('Setting up a new mono repo project using Turborepo'))
+  setupTurboRepoProject();
 
   inquirer.prompt(createAppQuestions).then((answers) => {
     if (appTypeMap[answers.appType] === undefined) {
