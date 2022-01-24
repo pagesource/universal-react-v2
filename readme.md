@@ -13,9 +13,12 @@ To create a new app, run the command
 
 - universal-react-v2
 
-### Todos
+### Troubleshooting
 
--
+| Issue                                  | possible fix                                                     |
+| -------------------------------------- | ---------------------------------------------------------------- |
+| Python not found                       | Install python - https://www.python.org/downloads/               |
+| msvs_version not set from command line | npm install --global windows-build-tools (using elevated rights) |
 
 ### License
 

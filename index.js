@@ -16,7 +16,8 @@ const {
   createDir,
   copyDir,
   writeJsonFile,
-  dirFileExists
+  dirFileExists,
+  isEmptyDir
 } = require('./utils/fileDirOps');
 const { installPackages } = require('./utils/install');
 const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
@@ -214,8 +215,15 @@ if (exists) {
 } else {
   // create new project
 
-  console.log(chalk.green('Setting up a new mono repo project using Turborepo'))
-  setupTurboRepoProject();
+
+  if (isEmptyDir(cwd)) {
+    console.log(chalk.green('Setting up a new mono repo project using Turborepo'))
+    setupTurboRepoProject();
+  } else {
+    console.log(chalk.red('Current working directory is not empty. Pleaes use a clean directory to setup the project'))
+    process.exit(1);
+
+  }
 
   inquirer.prompt(createAppQuestions).then((answers) => {
     if (appTypeMap[answers.appType] === undefined) {

@@ -56,9 +56,19 @@ function writeJsonFile(jsonFilePath, json) {
   }
 }
 
+function isEmptyDir(directoryName) {
+  try {
+    const files = fs.readdirSync(directoryName);
+    return files.length === 0;
+  } catch (e) {
+    return false;
+  }
+}
+
 module.exports = {
   dirFileExists,
   createDir,
   copyDir,
-  writeJsonFile
+  writeJsonFile,
+  isEmptyDir
 };
