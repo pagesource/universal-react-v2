@@ -1,7 +1,7 @@
-const { appTypeMap } = require('./constants');
+const { appTypeMap } = require('../static/constants');
 const choices = Object.keys(appTypeMap);
 
-const createAppQuestions = [
+const setupTemplatePrompts = [
   {
     type: 'list',
     name: 'appType',
@@ -43,6 +43,19 @@ const createAppQuestions = [
   }
 ];
 
+
+function getOptionalFeaturePrompts(features) {
+  return [
+    {
+      type: 'checkbox',
+      message: 'Select features you want to add (Optional). Press Enter to skip this step',
+      name: 'optionalFeatures',
+      choices: features
+    }
+  ];
+};
+
 module.exports = {
-  createAppQuestions
+  setupTemplatePrompts,
+  getOptionalFeaturePrompts
 };
