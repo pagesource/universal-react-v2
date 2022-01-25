@@ -25,13 +25,28 @@ const {
 } = require('./utils/fileDirOps');
 const { installPackages } = require('./utils/install');
 const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
+const util = require('util');
 
-const templatesPath = path.join(__dirname, 'templates');
-const baseTemplatePath = path.join(templatesPath, 'base');
-const commonTemplatePath = path.join(templatesPath, 'common');
-const essentialsTemplatePath = path.join(commonTemplatePath, 'essentials');
-const srcTemplatePath = path.join(commonTemplatePath, 'src');
-const storybookPath = path.join(commonTemplatePath, 'storybook');
+const UV2 = 'universal-react-v2';
+const TEMPLATES_DIR = 'templates';
+const BASE_DIR = 'base';
+const COMMON_DIR = 'common';
+const ESSENTIALS_DIR = 'essentials';
+const SRC_DIR = 'src';
+const STORYBOOK_DIR = 'storybook';
+const PACKAGE_JSON = 'package.json';
+const VSCODE_DIR = '.vscode';
+const DOCS_DIR = 'docs';
+const WEB_DIR = 'web';
+const APPS_DIR = 'apps';
+const OPTIONAL_FEATURES_DIR = 'optionalFeatures';
+
+const templatesPath = path.join(__dirname, TEMPLATES_DIR);
+const baseTemplatePath = path.join(templatesPath, BASE_DIR);
+const commonTemplatePath = path.join(templatesPath, COMMON_DIR);
+const essentialsTemplatePath = path.join(commonTemplatePath, ESSENTIALS_DIR);
+const srcTemplatePath = path.join(commonTemplatePath, SRC_DIR);
+const storybookPath = path.join(commonTemplatePath, STORYBOOK_DIR);
 
 let appTemplatePath = '';
 let rootDir = '';
@@ -41,7 +56,6 @@ let microAppPath = '';
 const cwd = process.cwd();
 const stampFileName = 'universal-react-stamp.json';
 
-const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 const intializeGitRepo = async (dir) => {
@@ -58,14 +72,14 @@ const intializeGitRepo = async (dir) => {
  */
 const createProjectDirectory = (appName) => {
   createDir(path.join(projectDir, appName));
-  createDir(path.join(rootDir, '.vscode'));
+  createDir(path.join(rootDir, VSCODE_DIR));
 };
 
 /**
  * @description: method to place storyBook directory under project directory
  */
 const copyStorybookDirectory = () => {
-  storybookDir = path.join(projectDir, 'storybook');
+  storybookDir = path.join(projectDir, STORYBOOK_DIR);
   createDir(storybookDir);
   copyDir(storybookPath, storybookDir, []);
 };
@@ -75,13 +89,13 @@ const copyStorybookDirectory = () => {
  */
 const copyBaseDirectory = (appName) => {
   microAppPath = path.join(projectDir, appName);
-  removeDir(path.join(projectDir, 'docs'));
-  renameSync(path.join(projectDir, 'web'), microAppPath);
+  removeDir(path.join(projectDir, DOCS_DIR));
+  renameSync(path.join(projectDir, WEB_DIR), microAppPath);
   copyStorybookDirectory();
   copyDir(baseTemplatePath, microAppPath, []);
   copyDir(essentialsTemplatePath, microAppPath, []);
-  copyDir(srcTemplatePath, path.join(microAppPath, 'src'), ['package.json']); // no need to copy package.json and merge it with microAppPath package.json
-  copyDir(path.join(__dirname, '.vscode'), path.join(rootDir, '.vscode'), []);
+  copyDir(srcTemplatePath, path.join(microAppPath, SRC_DIR), [PACKAGE_JSON]); // no need to copy package.json and merge it with microAppPath package.json
+  copyDir(path.join(__dirname, VSCODE_DIR), path.join(rootDir, VSCODE_DIR), []);
 };
 
 const copyTemplateDirectory = (appType) => {
@@ -90,19 +104,19 @@ const copyTemplateDirectory = (appType) => {
 };
 
 const copyOptionalTemplates = async (features, _path = cwd) => {
-  const projectPackage = require(path.join(_path, 'package.json'));
+  const projectPackage = require(path.join(_path, PACKAGE_JSON));
   const done = [];
 
   for (const _feature of features) {
-    const opFeatTemplate = path.join(templatesPath, 'optionalFeatures', _feature);
+    const opFeatTemplate = path.join(templatesPath, OPTIONAL_FEATURES_DIR, _feature);
     if (dirFileExists(opFeatTemplate)) {
       copyDir(opFeatTemplate, _path, appTemplateFileExclusions);
 
-      const appPackagePath = path.join(opFeatTemplate, 'package.json');
+      const appPackagePath = path.join(opFeatTemplate, PACKAGE_JSON);
       if (dirFileExists(appPackagePath)) {
         const json = require(appPackagePath);
         const packageFile = mergeJsons(projectPackage, json);
-        await writeJsonFile(path.join(_path, 'package.json'), packageFile);
+        await writeJsonFile(path.join(_path, PACKAGE_JSON), packageFile);
         console.info(`${_feature} added to package.json`);
         done.push(_feature);
       } else {
@@ -127,11 +141,11 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
 };
 
 const addStampInfoFile = async (appType, appName) => {
-  const universalReactPackageFile = require(path.join(__dirname, 'package.json'));
-  const turboRepoPackageFile = require(path.join(rootDir, 'package.json'));
+  const universalReactPackageFile = require(path.join(__dirname, PACKAGE_JSON));
+  const turboRepoPackageFile = require(path.join(rootDir, PACKAGE_JSON));
   const mergedJson = mergeJsons(turboRepoPackageFile, {
-    name: "universal-react-v2",
-    "universal-react-v2": {
+    name: UV2,
+    [UV2]: {
       apps: [
         {
           name: appName,
@@ -141,7 +155,7 @@ const addStampInfoFile = async (appType, appName) => {
     }
   });
   try {
-    await writeJsonFile(path.join(rootDir, 'package.json'), mergedJson);
+    await writeJsonFile(path.join(rootDir, PACKAGE_JSON), mergedJson);
   } catch (e) {
     console.error('error creating stamp file');
   }
@@ -188,8 +202,8 @@ const initializeNewProject = async (
   copyTemplateDirectory(appType);
   console.info(chalk.green('project created successfully'));
 
-  const basePackage = require(path.join(baseTemplatePath, 'package.json'));
-  const appPackage = require(path.join(appTemplatePath, 'package.json'));
+  const basePackage = require(path.join(baseTemplatePath, PACKAGE_JSON));
+  const appPackage = require(path.join(appTemplatePath, PACKAGE_JSON));
   let packageFile = mergeJsons(basePackage, appPackage);
   packageFile = mergeJsons(packageFile, { name: appName });
   if (basePath != undefined) {
@@ -199,10 +213,10 @@ const initializeNewProject = async (
       }
     });
   }
-  await writeJsonFile(path.join(microAppPath, 'package.json'), packageFile);
+  await writeJsonFile(path.join(microAppPath, PACKAGE_JSON), packageFile);
   await addStampInfoFile(appType, appName);
   const features_found = await copyOptionalTemplates(features, rootDir);
-  installDependencies(path.join(rootDir, 'package.json'), rootDir); //TODOs: enable before commit the code.
+  installDependencies(path.join(rootDir, PACKAGE_JSON), rootDir); //TODOs: enable before commit the code.
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
   }
@@ -212,7 +226,7 @@ const updateProject = async (features) => {
   const features_found = await copyOptionalTemplates(features);
   updateStampFile(features_found);
   if (features_found.length > 0) {
-    installDependencies(path.join(cwd, 'package.json'), cwd); //TODOs: enable before commit the code.
+    installDependencies(path.join(cwd, PACKAGE_JSON), cwd); //TODOs: enable before commit the code.
   }
 };
 
@@ -256,14 +270,14 @@ if (exists) {
     console.log(chalk.green('Setting up a new mono repo project using Turborepo'));
     setupTurboRepoProject(cwd);
     rootDir = cwd;
-    projectDir = path.join(cwd, 'apps');
+    projectDir = path.join(cwd, APPS_DIR);
   } else {
     console.log(chalk.red('Current working directory is not empty. Please use a clean directory to setup the project'));
     process.exit(1);
   }
 
   // determine the project directory path
-  if (dirFileExists(path.join(cwd, 'package.json'))) {
+  if (dirFileExists(path.join(cwd, PACKAGE_JSON))) {
     rootDir = cwd;
   } else {
     const recentDir = getMostRecentDirectory(cwd);
@@ -274,7 +288,7 @@ if (exists) {
 
     // path to turbo project directory
     rootDir = path.join(cwd, recentDir);
-    projectDir = path.join(rootDir, 'apps');
+    projectDir = path.join(rootDir, APPS_DIR);
   }
 
   inquirer.prompt(createAppQuestions).then((answers) => {
