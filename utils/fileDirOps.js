@@ -4,10 +4,59 @@ const path = require('path');
 const chalk = require('chalk');
 const copydir = require('copy-dir');
 
+/**
+ * @description : method to check file exists or not
+ * @param {*} path : path of file
+ * @returns : return ture if file exists else return false
+ */
 function dirFileExists(path) {
   return fs.existsSync(path);
 }
 
+/**
+ * @description : method to rename directory or filename.
+ * @param {*} currPath : current directory or filename
+ * @param {*} newPath : new directory or filename
+ */
+ function renameSync(currPath, newPath) {
+  try {
+    fs.renameSync(currPath, newPath);
+  } catch (e) {
+    console.error(chalk.red(`${e}: Failed renmaing process.`));
+    throw e;
+  }
+}
+
+/**
+ * @description : method to remove folder
+ * @param {*} dir : folder name
+ */
+function removeDir(dirPath) {
+  try {
+    fs.rmSync(dirPath, { recursive: true, force: true });
+  } catch (e) {
+    console.error(chalk.red('error removing directory'));
+    throw e;
+  }
+}
+
+/**
+ * @description : method to remove file
+ * @param {*} filePath : file path
+ */
+function deleteFile(filePath) {
+  try {
+    fs.unlinkSync(filePath)
+  } catch (e) {
+    console.error(chalk.red('error removing file'));
+    throw e;
+  }
+}
+
+/**
+ * @description : method to create folder name
+ * @param {*} dir : folder name
+ */
 function createDir(dir) {
   try {
     fs.mkdirSync(dir);
@@ -17,6 +66,11 @@ function createDir(dir) {
   }
 }
 
+/**
+ * @param {*} sourcePath : source path need to copy
+ * @param {*} destPath : destination path
+ * @param {*} exclusions : list of files and folders name need to be excluded during copy
+ */
 function copyDir(sourcePath, destPath, exclusions) {
   copydir.sync(
     sourcePath,
@@ -26,12 +80,19 @@ function copyDir(sourcePath, destPath, exclusions) {
       mode: true, // keep file mode
       cover: true, // cover file when exists, default is true
 
-      filter: function (stat, filepath) {
+      filter: function (stat, filepath, filename) {
         const _filename = path.parse(filepath).base;
 
+        // do not want copy files
         if (stat === 'file' && exclusions.includes(_filename)) {
           return false;
         }
+
+        // do not want copy directories
+        if (stat === 'directory' && exclusions.includes(filename)) {
+          return false;
+        }
+
         return true;
       }
     },
@@ -94,5 +155,8 @@ module.exports = {
   copyDir,
   writeJsonFile,
   isEmptyDir,
-  getMostRecentDirectory
+  getMostRecentDirectory,
+  removeDir,
+  renameSync,
+  deleteFile
 };
