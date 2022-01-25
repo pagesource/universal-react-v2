@@ -1,5 +1,27 @@
 const appTemplateFileExclusions = [];
 
+const appContants = {
+  UNIVERAL_REACT: 'universal-react',
+  PACKAGE_JSON: 'package.json',
+  VSCODE_DIR: '.vscode'
+}
+
+const sourceDirs = {
+  TEMPLATES_DIR: 'templates',
+  BASE_DIR: 'base',
+  COMMON_DIR: 'common',
+  ESSENTIALS_DIR: 'essentials',
+  SRC_DIR: 'src',
+  STORYBOOK_DIR: 'storybook',
+  OPTIONAL_FEATURES_DIR: 'optionalFeatures'
+}
+
+const destinationDirs = {
+  DOCS_DIR: 'docs',
+  WEB_DIR: 'web',
+  APPS_DIR: 'apps'
+}
+
 const appTypeMap = {
   'SSR(Server-side rendering)': 'ssr',
   'SSG(Static site generation)': 'ssg',
@@ -18,5 +40,8 @@ const universalReactStampData = {
 module.exports = {
   appTemplateFileExclusions,
   universalReactStampData,
-  appTypeMap
+  appTypeMap,
+  appContants,
+  sourceDirs,
+  destinationDirs
 };
