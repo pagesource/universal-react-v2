@@ -1,32 +1,32 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = ({ config }) => {
-  const assetRule = config.module.rules.find(({ test }) => test.test(".svg"));
+  const assetRule = config.module.rules.find(({ test }) => test.test('.svg'));
   const assetLoader = {
     loader: assetRule.loader,
-    options: assetRule.options || assetRule.query,
+    options: assetRule.options || assetRule.query
   };
   config.module.rules.unshift(
     {
       test: /\.svg$/,
-      use: ["@svgr/webpack", assetLoader],
+      use: ['@svgr/webpack', assetLoader]
     },
     {
       test: /\.(css)$/,
-      loader: "css-loader",
+      loader: 'css-loader'
     },
     {
-      test: /\.js$/,
+      test: /\.(j|t)(s|sx)$/,
       use: [
         {
-          loader: "babel-loader",
+          loader: 'babel-loader',
           options: {
-            sourceType: "unambiguous",
+            sourceType: 'unambiguous',
             babelrc: false,
-            presets: ["@babel/preset-react"],
-          },
-        },
-      ],
+            presets: ['@babel/preset-typescript', '@babel/preset-react']
+          }
+        }
+      ]
     }
   );
 
