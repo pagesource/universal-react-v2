@@ -244,7 +244,7 @@ const initializeNewProject = async (
   await writeJsonFile(path.join(microAppPath, appContants.PACKAGE_JSON), packageFile);
   await addInfoIntoPackageJson(appType, appName);
   const features_found = await copyOptionalTemplates(features, rootDir);
-  installDependencies(path.join(rootDir, appContants.PACKAGE_JSON), rootDir); //TODOs: enable before commit the code.
+  installDependencies(path.join(rootDir, appContants.PACKAGE_JSON), rootDir); 
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
   }
@@ -258,7 +258,7 @@ const updateProject = async (features) => {
   const features_found = await copyOptionalTemplates(features);
   updateStampFile(features_found);
   if (features_found.length > 0) {
-    installDependencies(path.join(cwd, appContants.PACKAGE_JSON), cwd); //TODOs: enable before commit the code.
+    installDependencies(path.join(cwd, appContants.PACKAGE_JSON), cwd);
   }
 };
 
