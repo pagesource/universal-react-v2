@@ -56,9 +56,43 @@ function writeJsonFile(jsonFilePath, json) {
   }
 }
 
+function isEmptyDir(directoryPath) {
+  try {
+    const files = fs.readdirSync(directoryPath);
+    return files.length === 0;
+  } catch (e) {
+    return false;
+  }
+}
+
+function getMostRecentDirectory(directoryPath) {
+  let latest = new Date(1900, 1, 1);
+  let latestDir = null;
+  try {
+    const files = fs.readdirSync(directoryPath);
+    files.forEach(f => {
+      const stats = fs.statSync(path.join(directoryPath, f));
+      if (stats.isDirectory()) {
+        const birthtime = new Date(stats.birthtime);
+        if (birthtime > latest) {
+          latest = birthtime;
+          latestDir = f;
+        }
+      }
+    });
+
+    return latestDir;
+  } catch (e) {
+    console.log(e)
+    return null;
+  }
+};
+
 module.exports = {
   dirFileExists,
   createDir,
   copyDir,
-  writeJsonFile
+  writeJsonFile,
+  isEmptyDir,
+  getMostRecentDirectory
 };

@@ -14,13 +14,22 @@ module.exports = {
   prompts: [
     {
       type: 'input',
+      name: 'isGraphql',
+      message: 'Will it be a graphql call?',
+      default: 'no',
+
+        return 'The name is required';
+      }
+    },
+    {
+      type: 'input',
       name: 'name',
       message: 'What should it be called?',
       default: 'ChangeTitle',
       validate: (value) => {
-        value = `use${value}`;
+        value = `${value}Service`;
         if (/.+/.test(value)) {
-          return componentExists(value, 'hooks')
+          return componentExists(value, 'service')
             ? 'A service with this name already exists '
             : true;
         }
@@ -30,13 +39,13 @@ module.exports = {
     }
   ],
   actions: (data) => {
-    // Generate useHookName.js and useHookName.test.js
-    const folderPath = `../${config.SERVICES_PATH}`;
+    // Generate serviceName.js 
+    const folderPath =  `../${config.SERVICES_PATH}`;
     const actions = [
       {
         type: 'add',
         path: `${folderPath}/{{properCase name}}Service.js`,
-        templateFile: './services/index.js.hbs',
+        templateFile: isGraphql == 'yes'? './services/graphql.js.hbs' : './services/index.js.hbs',
         abortOnFail: true
       }
      
