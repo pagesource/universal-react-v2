@@ -25,7 +25,7 @@ const {
 const { installPackages } = require('./utils/install');
 const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
 
-const UV2 = 'universal-react-v2';
+const UNIVERAL_REACT = 'universal-react';
 const TEMPLATES_DIR = 'templates';
 const BASE_DIR = 'base';
 const COMMON_DIR = 'common';
@@ -138,12 +138,12 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
   return done;
 };
 
-const addStampInfoFile = async (appType, appName) => {
+const addInfoIntoPackageJson = async (appType, appName) => {
   const universalReactPackageFile = require(path.join(__dirname, PACKAGE_JSON));
   const turboRepoPackageFile = require(path.join(rootDir, PACKAGE_JSON));
   const mergedJson = mergeJsons(turboRepoPackageFile, {
-    name: UV2,
-    [UV2]: {
+    name: UNIVERAL_REACT,
+    [UNIVERAL_REACT]: {
       apps: [
         {
           name: appName,
@@ -212,7 +212,7 @@ const initializeNewProject = async (
     });
   }
   await writeJsonFile(path.join(microAppPath, PACKAGE_JSON), packageFile);
-  await addStampInfoFile(appType, appName);
+  await addInfoIntoPackageJson(appType, appName);
   const features_found = await copyOptionalTemplates(features, rootDir);
   installDependencies(path.join(rootDir, PACKAGE_JSON), rootDir); //TODOs: enable before commit the code.
   if (initializeGit != false) {
