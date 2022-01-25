@@ -1,6 +1,6 @@
 const appTemplateFileExclusions = [];
 
-const appContants = {
+const appConstants = {
   UNIVERAL_REACT: 'universal-react',
   PACKAGE_JSON: 'package.json',
   VSCODE_DIR: '.vscode'
@@ -41,7 +41,7 @@ module.exports = {
   appTemplateFileExclusions,
   universalReactStampData,
   appTypeMap,
-  appContants,
+  appConstants,
   sourceDirs,
   destinationDirs
 };

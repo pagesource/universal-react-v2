@@ -5,7 +5,7 @@ import GraphQLClient from '../graphQL/ApolloClient'
 import GlobalContextProvider from '../stores/global/ContextProvider';
 
 import { ThemeProvider } from 'styled-components';
-import { theme } from "../themes/theme";
+import { theme } from '../styles/themes/theme';
 
 // Will be called once for every metric that has to be reported.
 export function reportWebVitals(metric) {

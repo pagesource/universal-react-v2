@@ -13,7 +13,7 @@ const { createAppQuestions } = require('./utils/questions');
 const {
   appTemplateFileExclusions,
   appTypeMap,
-  appContants,
+  appConstants,
   sourceDirs,
   destinationDirs
 } = require('./utils/constants');
@@ -63,7 +63,7 @@ const intializeGitRepo = async (dir) => {
  */
 const createProjectDirectory = (appName) => {
   createDir(path.join(projectDir, appName));
-  createDir(path.join(rootDir, appContants.VSCODE_DIR));
+  createDir(path.join(rootDir, appConstants.VSCODE_DIR));
 };
 
 /**
@@ -89,8 +89,8 @@ const copyBaseDirectory = (appName) => {
 
   copyDir(baseTemplatePath, microAppPath, []);
   copyDir(essentialsTemplatePath, microAppPath, []);
-  copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [appContants.PACKAGE_JSON]);
-  copyDir(path.join(__dirname, appContants.VSCODE_DIR), path.join(rootDir, appContants.VSCODE_DIR), []);
+  copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [appConstants.PACKAGE_JSON]);
+  copyDir(path.join(__dirname, appConstants.VSCODE_DIR), path.join(rootDir, appConstants.VSCODE_DIR), []);
 };
 
 /**
@@ -109,7 +109,7 @@ const copyTemplateDirectory = (appType) => {
  * @returns list of optional features
  */
 const copyOptionalTemplates = async (features, _path = cwd) => {
-  const projectPackage = require(path.join(_path, appContants.PACKAGE_JSON));
+  const projectPackage = require(path.join(_path, appConstants.PACKAGE_JSON));
   const done = [];
 
   for (const _feature of features) {
@@ -117,11 +117,11 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
     if (dirFileExists(opFeatTemplate)) {
       copyDir(opFeatTemplate, _path, appTemplateFileExclusions);
 
-      const appPackagePath = path.join(opFeatTemplate, appContants.PACKAGE_JSON);
+      const appPackagePath = path.join(opFeatTemplate, appConstants.PACKAGE_JSON);
       if (dirFileExists(appPackagePath)) {
         const json = require(appPackagePath);
         const packageFile = mergeJsons(projectPackage, json);
-        await writeJsonFile(path.join(_path, appContants.PACKAGE_JSON), packageFile);
+        await writeJsonFile(path.join(_path, appConstants.PACKAGE_JSON), packageFile);
         console.info(`${_feature} added to package.json`);
         done.push(_feature);
       } else {
@@ -151,11 +151,11 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
  * @param {*} appName : user selected app name
  */
 const addInfoIntoPackageJson = async (appType, appName) => {
-  const universalReactPackageFile = require(path.join(__dirname, appContants.PACKAGE_JSON));
-  const turboRepoPackageFile = require(path.join(rootDir, appContants.PACKAGE_JSON));
+  const universalReactPackageFile = require(path.join(__dirname, appConstants.PACKAGE_JSON));
+  const turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
   const mergedJson = mergeJsons(turboRepoPackageFile, {
-    name: appContants.UNIVERAL_REACT,
-    [appContants.UNIVERAL_REACT]: {
+    name: appConstants.UNIVERAL_REACT,
+    [appConstants.UNIVERAL_REACT]: {
       apps: [
         {
           name: appName,
@@ -165,7 +165,7 @@ const addInfoIntoPackageJson = async (appType, appName) => {
     }
   });
   try {
-    await writeJsonFile(path.join(rootDir, appContants.PACKAGE_JSON), mergedJson);
+    await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), mergedJson);
   } catch (e) {
     console.error('error creating stamp file');
   }
@@ -230,8 +230,8 @@ const initializeNewProject = async (
   copyTemplateDirectory(appType);
   console.info(chalk.green('project created successfully'));
 
-  const basePackage = require(path.join(baseTemplatePath, appContants.PACKAGE_JSON));
-  const appPackage = require(path.join(appTemplatePath, appContants.PACKAGE_JSON));
+  const basePackage = require(path.join(baseTemplatePath, appConstants.PACKAGE_JSON));
+  const appPackage = require(path.join(appTemplatePath, appConstants.PACKAGE_JSON));
   let packageFile = mergeJsons(basePackage, appPackage);
   packageFile = mergeJsons(packageFile, { name: appName });
   if (basePath != undefined) {
@@ -241,10 +241,10 @@ const initializeNewProject = async (
       }
     });
   }
-  await writeJsonFile(path.join(microAppPath, appContants.PACKAGE_JSON), packageFile);
+  await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
   await addInfoIntoPackageJson(appType, appName);
   const features_found = await copyOptionalTemplates(features, rootDir);
-  installDependencies(path.join(rootDir, appContants.PACKAGE_JSON), rootDir); 
+  installDependencies(path.join(rootDir, appConstants.PACKAGE_JSON), rootDir); 
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
   }
@@ -258,7 +258,7 @@ const updateProject = async (features) => {
   const features_found = await copyOptionalTemplates(features);
   updateStampFile(features_found);
   if (features_found.length > 0) {
-    installDependencies(path.join(cwd, appContants.PACKAGE_JSON), cwd);
+    installDependencies(path.join(cwd, appConstants.PACKAGE_JSON), cwd);
   }
 };
 
@@ -309,7 +309,7 @@ if (exists) {
   }
 
   // determine the project directory path
-  if (dirFileExists(path.join(cwd, appContants.PACKAGE_JSON))) {
+  if (dirFileExists(path.join(cwd, appConstants.PACKAGE_JSON))) {
     rootDir = cwd;
   } else {
     const recentDir = getMostRecentDirectory(cwd);
