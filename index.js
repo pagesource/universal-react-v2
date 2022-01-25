@@ -4,12 +4,12 @@
 const path = require('path');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
+const util = require('util');
 const { createNpmDependenciesArray, mergeJsons } = require('./utils/jsonHelper');
 const { arrayUnique, getOptionalFeatures } = require('./utils/helpers');
 const { createAppQuestions } = require('./utils/questions');
 const {
   appTemplateFileExclusions,
-  universalReactStampData,
   appTypeMap
 } = require('./utils/constants');
 const {
@@ -21,11 +21,9 @@ const {
   getMostRecentDirectory,
   removeDir,
   renameSync,
-  deleteFile
 } = require('./utils/fileDirOps');
 const { installPackages } = require('./utils/install');
 const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
-const util = require('util');
 
 const UV2 = 'universal-react-v2';
 const TEMPLATES_DIR = 'templates';
@@ -59,8 +57,8 @@ const stampFileName = 'universal-react-stamp.json';
 const exec = util.promisify(require('child_process').exec);
 
 const intializeGitRepo = async (dir) => {
-  let cmd = 'cd ' + dir + ' && git init';
-  const { stdout, stderr } = await exec(cmd).catch((err) => {
+  const cmd = `cd ${dir} && git init`;
+  const { stdout } = await exec(cmd).catch((err) => {
     console.info(chalk.red(`Error ${err}`));
   });
   console.info(`${stdout}`);
@@ -94,7 +92,7 @@ const copyBaseDirectory = (appName) => {
   copyStorybookDirectory();
   copyDir(baseTemplatePath, microAppPath, []);
   copyDir(essentialsTemplatePath, microAppPath, []);
-  copyDir(srcTemplatePath, path.join(microAppPath, SRC_DIR), [PACKAGE_JSON]); // no need to copy package.json and merge it with microAppPath package.json
+  copyDir(srcTemplatePath, path.join(microAppPath, SRC_DIR), [PACKAGE_JSON]);
   copyDir(path.join(__dirname, VSCODE_DIR), path.join(rootDir, VSCODE_DIR), []);
 };
 
