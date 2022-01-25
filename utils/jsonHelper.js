@@ -2,9 +2,6 @@ const deepmerge = require('deepmerge');
 
 function createNpmDependenciesArray(packageFilePath) {
   const p = require(packageFilePath);
-  if (!p.dependencies) {
-    return [];
-  }
 
   const deps = [];
   for (const mod in p.dependencies) {

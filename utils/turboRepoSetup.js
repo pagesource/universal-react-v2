@@ -1,7 +1,7 @@
 const { execSync } = require('child_process');
 
-function setupTurboRepoProject() {
-    execSync('npx create-turbo@latest', { stdio: 'inherit', cwd: process.cwd() });
+function setupTurboRepoProject(dir) {
+    execSync('npx create-turbo@latest', { stdio: 'inherit', cwd: dir });
 };
 
 module.exports = {

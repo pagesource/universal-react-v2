@@ -1,5 +1,6 @@
 const npm = require('npm');
 const chalk = require('chalk');
+const { exec } = require('child_process');
 
 function installPackages(installPath, depArr) {
   npm.load(() => {
