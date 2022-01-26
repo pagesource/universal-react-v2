@@ -3,12 +3,7 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-      "@apollo/react-hooks": "4.0.0",
-      "apollo-boost": "0.4.9",
-      "apollo-link": "1.2.14",
-      "apollo-link-error": "1.1.13",
       "fetch-mock": "9.11.0",
-      "graphql": "15.6.0",
       "smart-context": "^2.1.0",
       "ua-parser-js": "^0.7.28"
     },
