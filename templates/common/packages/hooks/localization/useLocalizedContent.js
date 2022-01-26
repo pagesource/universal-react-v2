@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import fetchWrapper from '../utils/serviceUtils/fetch';
+import { fetchWrapper } from 'utils';
 
 var cache={};
 const languageStorageKey = "language";

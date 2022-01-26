@@ -35,13 +35,15 @@ const baseTemplatePath = path.join(templatesPath, sourceDirs.BASE_DIR);
 const commonTemplatePath = path.join(templatesPath, sourceDirs.COMMON_DIR);
 const essentialsTemplatePath = path.join(commonTemplatePath, sourceDirs.ESSENTIALS_DIR);
 const srcTemplatePath = path.join(commonTemplatePath, sourceDirs.SRC_DIR);
+const sourcePackagesPath = path.join(commonTemplatePath, appConstants.PACKAGES_DIR);
 const storybookPath = path.join(commonTemplatePath, sourceDirs.STORYBOOK_DIR);
 
 let appTemplatePath = ''; // template path of [ssg, ssr, microApp] templates
 let rootDir = ''; // root folder of generated project ./
 let projectDir = ''; // apps folder under root
 let storybookDir = ''; // storybook folder under template/common
-let microAppPath = ''; // project directory under ./apps/${appName}
+let microAppPath = ''; // project folder under ./apps/${appName}
+let packagesAppPath = ''; // packages folder on the same level of ./apps
 const cwd = process.cwd(); // current working directory
 const stampFileName = 'universal-react-stamp.json'; // TODOs: need to remove as will depricate in future commit
 
@@ -81,6 +83,7 @@ const copyStorybookDirectory = () => {
 const copyBaseDirectory = (appName) => {
   // path of app need to be created inside root director -> apps folder
   microAppPath = path.join(projectDir, appName);
+  packagesAppPath = path.join(rootDir, appConstants.PACKAGES_DIR);
 
   removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
   renameSync(path.join(projectDir, destinationDirs.WEB_DIR), microAppPath);
@@ -92,6 +95,8 @@ const copyBaseDirectory = (appName) => {
 
   // removing pages folder gnerated by turboRepo
   removeDir(path.join(microAppPath, destinationDirs.PAGES_DIR));
+
+  copyDir(sourcePackagesPath, packagesAppPath, []);
 
   copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [appConstants.PACKAGE_JSON]);
   copyDir(path.join(__dirname, appConstants.VSCODE_DIR), path.join(rootDir, appConstants.VSCODE_DIR), []);
@@ -213,7 +218,7 @@ const updateStampFile = async (features, _path = cwd) => {
 const installDependencies = async (filePath, installLocation) => {
   console.info('installing dependencies...');
   const depArr = await createNpmDependenciesArray(filePath);
-  // installPackages(installLocation, depArr);
+  installPackages(installLocation, depArr);
 };
 
 /**
