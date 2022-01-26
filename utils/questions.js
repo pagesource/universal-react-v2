@@ -43,6 +43,16 @@ const createAppQuestions = [
   }
 ];
 
+const featureQuestions = [
+  {
+    type: 'checkbox',
+    message: 'Select optional features you want to add (Press enter to skip)',
+    name: 'features',
+    choices: []
+  }
+];
+
 module.exports = {
-  createAppQuestions
+  createAppQuestions,
+  featureQuestions
 };

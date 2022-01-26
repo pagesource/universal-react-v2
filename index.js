@@ -9,7 +9,7 @@ const exec = util.promisify(require('child_process').exec);
 
 const { createNpmDependenciesArray, mergeJsons } = require('./utils/jsonHelper');
 const { arrayUnique, getOptionalFeatures } = require('./utils/helpers');
-const { createAppQuestions } = require('./utils/questions');
+const { createAppQuestions, featureQuestions } = require('./utils/questions');
 const {
   appTemplateFileExclusions,
   appTypeMap,
@@ -44,6 +44,7 @@ let projectDir = ''; // apps folder under root
 let storybookDir = ''; // storybook folder under template/common
 let microAppPath = ''; // project folder under ./apps/${appName}
 let packagesAppPath = ''; // packages folder on the same level of ./apps
+let turboRepoPackageFile = ''; // root folder package.json file path
 const cwd = process.cwd(); // current working directory
 const stampFileName = 'universal-react-stamp.json'; // TODOs: need to remove as will depricate in future commit
 
@@ -118,19 +119,23 @@ const copyTemplateDirectory = (appType) => {
  * @returns list of optional features
  */
 const copyOptionalTemplates = async (features, _path = cwd) => {
-  const projectPackage = require(path.join(_path, appConstants.PACKAGE_JSON));
+  const projectPackage = require(path.join(microAppPath, appConstants.PACKAGE_JSON));
   const done = [];
 
   for (const _feature of features) {
     const opFeatTemplate = path.join(templatesPath, sourceDirs.OPTIONAL_FEATURES_DIR, _feature);
     if (dirFileExists(opFeatTemplate)) {
-      copyDir(opFeatTemplate, _path, appTemplateFileExclusions);
+      const destinationOpFeatureDir = path.join(microAppPath, _feature);
+      if (!dirFileExists(destinationOpFeatureDir)) {
+        createDir(destinationOpFeatureDir);
+      }
+      copyDir(opFeatTemplate, destinationOpFeatureDir, []);
 
       const appPackagePath = path.join(opFeatTemplate, appConstants.PACKAGE_JSON);
       if (dirFileExists(appPackagePath)) {
         const json = require(appPackagePath);
         const packageFile = mergeJsons(projectPackage, json);
-        await writeJsonFile(path.join(_path, appConstants.PACKAGE_JSON), packageFile);
+        await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
         console.info(`${_feature} added to package.json`);
         done.push(_feature);
       } else {
@@ -161,7 +166,7 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
  */
 const addInfoIntoPackageJson = async (appType, appName) => {
   const universalReactPackageFile = require(path.join(__dirname, appConstants.PACKAGE_JSON));
-  const turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
+  turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
   const srcStorybookPackageFile = require(path.join(storybookDir, appConstants.PACKAGE_JSON));
   const mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERAL_REACT,
@@ -169,8 +174,9 @@ const addInfoIntoPackageJson = async (appType, appName) => {
     [appConstants.UNIVERAL_REACT]: {
       apps: [
         {
-          name: appName,
-          type: appType
+          appName,
+          appType,
+          optionalFeatures: []
         }
       ]
     }
@@ -255,7 +261,7 @@ const initializeNewProject = async (
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
   await addInfoIntoPackageJson(appType, appName);
   const features_found = await copyOptionalTemplates(features, rootDir);
-  installDependencies(path.join(rootDir, appConstants.PACKAGE_JSON), rootDir); 
+  await installDependencies(path.join(rootDir, appConstants.PACKAGE_JSON), rootDir); 
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
   }
@@ -267,35 +273,47 @@ const initializeNewProject = async (
  */
 const updateProject = async (features) => {
   const features_found = await copyOptionalTemplates(features);
-  updateStampFile(features_found);
+  updateStampFile(features_found); //TODOs: need to update root packages.json with newly added optional feature
   if (features_found.length > 0) {
     installDependencies(path.join(cwd, appConstants.PACKAGE_JSON), cwd);
   }
 };
 
 /************************************** Execution starts ******************************************/
-const stampFilePath = path.join(cwd, stampFileName);
-const exists = dirFileExists(stampFilePath);
+let existingProject = false;
+const rootPackagePath = path.join(cwd, appConstants.PACKAGE_JSON);
 
-if (exists) {
-  //update project
+if (dirFileExists(rootPackagePath)) {
+  rootDir = cwd;
+  turboRepoPackageFile = require(rootPackagePath);
+  if(turboRepoPackageFile['name'] === appConstants.UNIVERAL_REACT && turboRepoPackageFile[appConstants.UNIVERAL_REACT]) {
+    existingProject = true;
+  }
+}
 
-  const existingAppInfo = require(stampFilePath);
+if (existingProject) {
+//update project
+
   console.info(
     chalk.yellow(
-      `There is an existing project "${existingAppInfo.appName}" in the current directory. The app will go into update mode`
+      [
+        'There is an existing project',
+        `${turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0].appName}`,
+        'in the current directory. The app will go into update mode'
+      ].join(' ')
     )
   );
+  
+  microAppPath = path.join(cwd, 'apps', turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0].appName);
 
   // only get the features that are not already added in the project
-  const features = getOptionalFeatures(existingAppInfo.optionalFeatures);
+  const features = getOptionalFeatures(turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0]?.optionalFeatures || []);
+  console.log(turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0], '====>');
 
   if (features.length > 0) {
     const featureQuestion = [
       {
-        type: 'checkbox',
-        message: 'Select features you want to add (Optional)',
-        name: 'features',
+        ...featureQuestions[0],
         choices: features
       }
     ];
@@ -344,9 +362,7 @@ if (exists) {
       if (features.length > 0) {
         const featureQuestion = [
           {
-            type: 'checkbox',
-            message: 'Select optional features you want to add (Press enter to skip)',
-            name: 'features',
+            ...featureQuestions[0],
             choices: features
           }
         ];
