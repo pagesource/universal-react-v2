@@ -25,10 +25,11 @@ const {
   isEmptyDir,
   getMostRecentDirectory,
   removeDir,
-  renameSync,
+  renameSync
 } = require('./utils/fileDirOps');
 const { installPackages } = require('./utils/install');
 const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
+const optionalFeatureHelpers = require('./utils/optionalFeature');
 
 const templatesPath = path.join(__dirname, sourceDirs.TEMPLATES_DIR);
 const baseTemplatePath = path.join(templatesPath, sourceDirs.BASE_DIR);
@@ -99,8 +100,14 @@ const copyBaseDirectory = (appName) => {
 
   copyDir(sourcePackagesPath, packagesAppPath, []);
 
-  copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [appConstants.PACKAGE_JSON]);
-  copyDir(path.join(__dirname, appConstants.VSCODE_DIR), path.join(rootDir, appConstants.VSCODE_DIR), []);
+  copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [
+    appConstants.PACKAGE_JSON
+  ]);
+  copyDir(
+    path.join(__dirname, appConstants.VSCODE_DIR),
+    path.join(rootDir, appConstants.VSCODE_DIR),
+    []
+  );
 };
 
 /**
@@ -121,34 +128,47 @@ const copyTemplateDirectory = (appType) => {
 const copyOptionalTemplates = async (features, _path = cwd) => {
   const projectPackage = require(path.join(microAppPath, appConstants.PACKAGE_JSON));
   const done = [];
+  const skipInlineExecution = ['service-worker', 'pwa'];
 
   for (const _feature of features) {
-    const opFeatTemplate = path.join(templatesPath, sourceDirs.OPTIONAL_FEATURES_DIR, _feature);
-    if (dirFileExists(opFeatTemplate)) {
-      const destinationOpFeatureDir = path.join(microAppPath, _feature);
-      if (!dirFileExists(destinationOpFeatureDir)) {
-        createDir(destinationOpFeatureDir);
-      }
-      copyDir(opFeatTemplate, destinationOpFeatureDir, []);
+    const opFeatTemplate = path.join(
+      templatesPath,
+      sourceDirs.OPTIONAL_FEATURES_DIR,
+      _feature
+    );
+    if (skipInlineExecution.includes(_feature)) {
+      optionalFeatureHelpers[_feature]({ opFeatTemplate, microAppPath });
+      done.push(_feature);
+    } else {
+      if (dirFileExists(opFeatTemplate)) {
+        const destinationOpFeatureDir = path.join(microAppPath, _feature);
+        if (!dirFileExists(destinationOpFeatureDir)) {
+          createDir(destinationOpFeatureDir);
+        }
+        copyDir(opFeatTemplate, destinationOpFeatureDir, []);
 
-      const appPackagePath = path.join(opFeatTemplate, appConstants.PACKAGE_JSON);
-      if (dirFileExists(appPackagePath)) {
-        const json = require(appPackagePath);
-        const packageFile = mergeJsons(projectPackage, json);
-        await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
-        console.info(`${_feature} added to package.json`);
-        done.push(_feature);
+        const appPackagePath = path.join(opFeatTemplate, appConstants.PACKAGE_JSON);
+        if (dirFileExists(appPackagePath)) {
+          const json = require(appPackagePath);
+          const packageFile = mergeJsons(projectPackage, json);
+          await writeJsonFile(
+            path.join(microAppPath, appConstants.PACKAGE_JSON),
+            packageFile
+          );
+          console.info(`${_feature} added to package.json`);
+          done.push(_feature);
+        } else {
+          console.info(
+            chalk.red(
+              `${_feature}/package.json missing. could not find feature dependencies.`
+            )
+          );
+          console.info(chalk.red(`skipping ${_feature}...`));
+        }
       } else {
-        console.info(
-          chalk.red(
-            `${_feature}/package.json missing. could not find feature dependencies.`
-          )
-        );
+        console.info(chalk.red(`${_feature} missing. feature not found.`));
         console.info(chalk.red(`skipping ${_feature}...`));
       }
-    } else {
-      console.info(chalk.red(`${_feature} missing. feature not found.`));
-      console.info(chalk.red(`skipping ${_feature}...`));
     }
   }
   if (done.length > 0) {
@@ -165,9 +185,15 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
  * @param {*} appName : user selected app name
  */
 const addInfoIntoPackageJson = async (appType, appName) => {
-  const universalReactPackageFile = require(path.join(__dirname, appConstants.PACKAGE_JSON));
+  const universalReactPackageFile = require(path.join(
+    __dirname,
+    appConstants.PACKAGE_JSON
+  ));
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
-  const srcStorybookPackageFile = require(path.join(storybookDir, appConstants.PACKAGE_JSON));
+  const srcStorybookPackageFile = require(path.join(
+    storybookDir,
+    appConstants.PACKAGE_JSON
+  ));
   const mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERAL_REACT,
     scripts: srcStorybookPackageFile.scripts,
@@ -187,11 +213,7 @@ const addInfoIntoPackageJson = async (appType, appName) => {
     console.error('error creating stamp file');
   }
   console.info('root package.json file update with universal-react-v2 stamp');
-  console.info(
-    chalk.yellow(
-      'Root package.json updated by universal-react-v2'
-    )
-  );
+  console.info(chalk.yellow('Root package.json updated by universal-react-v2'));
 };
 
 /**
@@ -261,7 +283,7 @@ const initializeNewProject = async (
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
   await addInfoIntoPackageJson(appType, appName);
   const features_found = await copyOptionalTemplates(features, rootDir);
-  await installDependencies(path.join(rootDir, appConstants.PACKAGE_JSON), rootDir); 
+  await installDependencies(path.join(rootDir, appConstants.PACKAGE_JSON), rootDir);
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
   }
@@ -286,13 +308,16 @@ const rootPackagePath = path.join(cwd, appConstants.PACKAGE_JSON);
 if (dirFileExists(rootPackagePath)) {
   rootDir = cwd;
   turboRepoPackageFile = require(rootPackagePath);
-  if(turboRepoPackageFile['name'] === appConstants.UNIVERAL_REACT && turboRepoPackageFile[appConstants.UNIVERAL_REACT]) {
+  if (
+    turboRepoPackageFile['name'] === appConstants.UNIVERAL_REACT &&
+    turboRepoPackageFile[appConstants.UNIVERAL_REACT]
+  ) {
     existingProject = true;
   }
 }
 
 if (existingProject) {
-//update project
+  //update project
 
   console.info(
     chalk.yellow(
@@ -303,11 +328,17 @@ if (existingProject) {
       ].join(' ')
     )
   );
-  
-  microAppPath = path.join(cwd, 'apps', turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0].appName);
+
+  microAppPath = path.join(
+    cwd,
+    'apps',
+    turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0].appName
+  );
 
   // only get the features that are not already added in the project
-  const features = getOptionalFeatures(turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0]?.optionalFeatures || []);
+  const features = getOptionalFeatures(
+    turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0]?.optionalFeatures || []
+  );
   console.log(turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0], '====>');
 
   if (features.length > 0) {
@@ -325,7 +356,6 @@ if (existingProject) {
     console.info('Nothing to update however :)');
   }
 } else {
-
   // create new project
   if (isEmptyDir(cwd)) {
     console.log(chalk.green('Setting up a new mono repo project using Turborepo'));
@@ -333,7 +363,11 @@ if (existingProject) {
     rootDir = cwd;
     projectDir = path.join(cwd, destinationDirs.APPS_DIR);
   } else {
-    console.log(chalk.red('Current working directory is not empty. Please use a clean directory to setup the project'));
+    console.log(
+      chalk.red(
+        'Current working directory is not empty. Please use a clean directory to setup the project'
+      )
+    );
     process.exit(1);
   }
 

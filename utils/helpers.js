@@ -15,7 +15,8 @@ function arrayUnique(array) {
 // setup assumes that a dir inside templates/optionalFeatures exists with the same name as the value below
 const optionalFeatures = [
   { name: 'Add Test Cafe Setup', value: 'test-cafe' },
-  { name: 'Add Something Else', value: 'else' },
+  { name: 'Add Service Workers setup and guide', value: 'service-worker' },
+  { name: 'Add PWA setup guide', value: 'pwa' },
   { name: 'Yet Something Else', value: 'yet' }
 ];
 
