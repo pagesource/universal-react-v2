@@ -15,3 +15,16 @@ export const endpoints = {
 export const contentDomain = 'https://jsonplaceholder.typicode.com/';
 export const apiGeeDomain = 'https://jsonplaceholder.typicode.com/';
 export const graphQLApiUri = 'https://48p1r2roz4.sse.codesandbox.io';
+
+export const apiEndPoints = {
+  users:{
+    mockUrl: 'http://localhost:5002/profile',
+    mockGraphqlUrl: 'http://localhost:5004/',
+    actualUrl:'http://qa.somedomain.com/profile'
+  },
+  account:{
+    mockUrl: 'http://localhost:5002/account',
+    mockGraphqlUrl: 'http://localhost:5004/',
+    actualUrl:'http://qa.somedomain.com/account'
+  }
+};
