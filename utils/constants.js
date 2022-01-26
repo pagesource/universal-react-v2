@@ -19,7 +19,8 @@ const sourceDirs = {
 const destinationDirs = {
   DOCS_DIR: 'docs',
   WEB_DIR: 'web',
-  APPS_DIR: 'apps'
+  APPS_DIR: 'apps',
+  PAGES_DIR: 'pages'
 }
 
 const appTypeMap = {

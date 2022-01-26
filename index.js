@@ -41,7 +41,7 @@ let appTemplatePath = ''; // template path of [ssg, ssr, microApp] templates
 let rootDir = ''; // root folder of generated project ./
 let projectDir = ''; // apps folder under root
 let storybookDir = ''; // storybook folder under template/common
-let microAppPath = ''; // project directory under ./apps/appName
+let microAppPath = ''; // project directory under ./apps/${appName}
 const cwd = process.cwd(); // current working directory
 const stampFileName = 'universal-react-stamp.json'; // TODOs: need to remove as will depricate in future commit
 
@@ -89,6 +89,10 @@ const copyBaseDirectory = (appName) => {
 
   copyDir(baseTemplatePath, microAppPath, []);
   copyDir(essentialsTemplatePath, microAppPath, []);
+
+  // removing pages folder gnerated by turboRepo
+  removeDir(path.join(microAppPath, destinationDirs.PAGES_DIR));
+
   copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [appConstants.PACKAGE_JSON]);
   copyDir(path.join(__dirname, appConstants.VSCODE_DIR), path.join(rootDir, appConstants.VSCODE_DIR), []);
 };
