@@ -157,8 +157,10 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
 const addInfoIntoPackageJson = async (appType, appName) => {
   const universalReactPackageFile = require(path.join(__dirname, appConstants.PACKAGE_JSON));
   const turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
+  const srcStorybookPackageFile = require(path.join(storybookDir, appConstants.PACKAGE_JSON));
   const mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERAL_REACT,
+    scripts: srcStorybookPackageFile.scripts,
     [appConstants.UNIVERAL_REACT]: {
       apps: [
         {
@@ -211,7 +213,7 @@ const updateStampFile = async (features, _path = cwd) => {
 const installDependencies = async (filePath, installLocation) => {
   console.info('installing dependencies...');
   const depArr = await createNpmDependenciesArray(filePath);
-  installPackages(installLocation, depArr);
+  // installPackages(installLocation, depArr);
 };
 
 /**
