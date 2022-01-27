@@ -3,9 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "storybook:install": "cd storybook && yarn",
-    "storybook:run": "cd storybook && yarn start-storybook",
-    "storybook:build": "cd storybook && yarn build-storybook"
+    "storybook": "start-storybook",
+    "build-storybook": "build-storybook -c .storybook -o ./storybook-output"
   },
   "dependencies": {
     "@babel/core": "^7.15.5",
@@ -16,7 +15,6 @@
     "@storybook/addon-knobs": "^6.3.1",
     "@storybook/addon-links": "^6.3.8",
     "@storybook/addon-viewport": "^6.3.8",
-    "@storybook/cli": "^6.4.14",
     "@storybook/react": "^6.3.8",
     "babel-loader": "^8.2.2",
     "css-loader": "^3.6.0",
