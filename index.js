@@ -46,7 +46,6 @@ let microAppPath = ''; // project folder under ./apps/${appName}
 let packagesAppPath = ''; // packages folder on the same level of ./apps
 let turboRepoPackageFile = ''; // root folder package.json file path
 const cwd = process.cwd(); // current working directory
-// const stampFileName = 'universal-react-stamp.json'; // TODOs: need to remove as will depricate in future commit
 
 /**
  * @description : method to initialize git repositiy
@@ -195,29 +194,6 @@ const addInfoIntoPackageJson = async (appType, appName) => {
 };
 
 /**
- * @deprecated : this method need to remove
- * @description : method to updated turbo repo package.json
- * @param {*} features : list of optional features
- * @param {*} _path : project directory path
-const updateStampFile = async (features, _path = cwd) => {
-  const stampFilePath = path.join(_path, stampFileName);
-  if (features.length > 0) {
-    if (dirFileExists(stampFilePath)) {
-      const json = require(stampFilePath);
-      const opFeat = json.optionalFeatures;
-      json.optionalFeatures = arrayUnique(opFeat.concat(features));
-      await writeJsonFile(stampFilePath, json);
-      console.info('stamp file updated. optional features tracked.');
-    } else {
-      console.info(chalk.red('stamp file was not found!'));
-    }
-  } else {
-    console.info('No optional feature was applied.');
-  }
-};
- */
-
-/**
  * @description : method to install depencies of project
  * @param {*} filePath : path of package.json file from root directory
  * @param {*} installLocation : location of root where dependencies need to install
@@ -274,7 +250,6 @@ const initializeNewProject = async (
  */
 const updateProject = async (features) => {
   const features_found = await copyOptionalTemplates(features);
-  // updateStampFile(features_found); //TODOs: need to update root packages.json with newly added optional feature
   if (features_found.length > 0) {
     installDependencies(path.join(cwd, appConstants.PACKAGE_JSON), cwd);
   }
