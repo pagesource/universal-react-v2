@@ -18,5 +18,5 @@ export const getDataServiceUrl = (key, isMock = false) => {
 export const getApiEndPoints = (queryId, isMock = false, isGraphQlApi=false) => {
   const urlObject =  apiEndPoints[queryId];
   const key = isGraphQlApi ? 'mockGraphqlUrl': 'mockUrl';
-  return isMock ? urlObject[key] : urlObject.actualUrl;
+  return sessionStorage.getItem('serveMock') === 'true' || isMock ? urlObject[key] : urlObject.actualUrl;
 };
