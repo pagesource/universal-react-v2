@@ -3,7 +3,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const deps = require('./package.json').dependencies;
+const PACKAGE_JSON = require('./package.json');
 
 const WP = require('webpack');
 const path = require('path');
@@ -11,21 +11,20 @@ const path = require('path');
 /**
  * HTMLTemplate: Used to run dev build
  * ENTRY_PATH: index file
- * LIB_NAME: Library name to access render
+ * APP_NAME: Library name to access render
  */
-const ENTRY_PATH = './src/index.js';
+const ENTRY_PATH = './src/index.tsx';
 const HTMLTemplate = './src/index.html';
-const LIB_NAME = 'remoteApp';
+const APP_NAME = PACKAGE_JSON.name.toLowerCase();
 
 /**
  * Module federation config
  * By default all dependencies are added to shared
  */
 const MF_CONFIG = {
-  name: 'remote',
+  name: `${APP_NAME}_remote`,
   remotes: {},
   exposes: {
-    './Heading': './src/components/atoms/Heading',
     './app': './src/index'
   }
 };
@@ -42,7 +41,8 @@ module.exports = (env, argv) => {
 
   const addDefinePlugin = () => {
     const instance = new WP.DefinePlugin({
-      __IS_DEV__: isDev
+      __IS_DEV__: isDev,
+      __APP_NAME__: APP_NAME
     });
 
     return instance;
@@ -53,7 +53,7 @@ module.exports = (env, argv) => {
       ...MF_CONFIG,
       filename: 'remoteEntry.js',
       shared: {
-        ...deps,
+        ...PACKAGE_JSON.dependencies,
         react: {
           eager: true,
           singleton: true
@@ -70,7 +70,11 @@ module.exports = (env, argv) => {
 
   const addHTMLTemplate = () => {
     const instance = new HtmlWebPackPlugin({
-      template: HTMLTemplate
+      template: HTMLTemplate,
+      filename: 'index.html',
+      templateParameters: {
+        app_name: APP_NAME
+      }
     });
 
     return instance;
@@ -90,17 +94,26 @@ module.exports = (env, argv) => {
     return instance;
   };
 
+  /** Add styles to custom object instead of adding to Head */
+  function addStylesToWindow(el) {
+    const _window = typeof window !== 'undefined' ? window : {};
+    if (!_window.customElStyles) {
+      _window.customElStyles = [];
+    }
+    _window.customElStyles.push(el);
+  }
+
   const config = {
     entry: ENTRY_PATH,
 
     output: {
       path: path.join(__dirname, '/dist'),
       filename: '[name]-[hash].js',
-      library: LIB_NAME
+      library: APP_NAME
     },
 
     resolve: {
-      extensions: ['.jsx', '.js', '.json']
+      extensions: ['.ts', '.tsx', '.jsx', '.js']
     },
 
     devServer: {
@@ -108,12 +121,12 @@ module.exports = (env, argv) => {
       allowedHosts: 'all',
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
-        'Access-Control-Allow-Headers': 'X-Requested-With, content-type, Authorization'
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*'
       }
     },
 
-    devtool: isDev ? 'inline-source-map' : '',
+    devtool: isDev ? 'inline-source-map' : undefined,
 
     module: {
       rules: [
@@ -123,23 +136,17 @@ module.exports = (env, argv) => {
             {
               loader: 'style-loader',
               options: {
-                insert: function addStylesToWindow(el) {
-                  const _window = typeof window !== 'undefined' ? window : {};
-                  if (!_window.customElStyles) {
-                    _window.customElStyles = [];
-                  }
-                  _window.customElStyles.push(el);
-                }
+                insert: isDev ? 'head' : addStylesToWindow
               }
             },
             'css-loader'
           ]
         },
         {
-          test: /\.(js|jsx)$/,
+          test: /\.[jt]sx?$/,
           exclude: /node_modules/,
           use: {
-            loader: 'babel-loader'
+            loader: 'ts-loader'
           }
         }
       ]

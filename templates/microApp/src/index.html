@@ -3,18 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title><%= app_name %></title>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app" data-app=<%= app_name %>></div>
   <script>
     window.onload = () => {
-      const LIB_NAME = 'remoteApp'
+      const el = document.getElementById('app')
+      const APP_NAME = el.dataset.app
 
-      const { render } = window[LIB_NAME].default
+      const { render } = window[APP_NAME]
       const props = {}
 
-      render(document.getElementById('app'), { props, shadowROOT: false })
+      render(el, { props, shadowROOT: false })
     }
   </script>
 </body>
