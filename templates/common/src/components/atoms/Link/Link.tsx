@@ -13,10 +13,9 @@ import NextLink from 'next/link';
 // Relative imports
 import type { Props } from './types';
 import styles from './Link.style';
-import { BASE_PATH } from '../../../routes';
 
 const Link: React.FunctionComponent<Props> = ({ children, href, ...props }) => (
-  <NextLink {...props} href={href} as={`${BASE_PATH}${href}`}>
+  <NextLink {...props} href={href} as={`${href}`}>
     {children}
   </NextLink>
 );
