@@ -15,15 +15,11 @@ export const endpoints = {
 export const contentDomain = 'https://jsonplaceholder.typicode.com/';
 export const apiGeeDomain = 'https://jsonplaceholder.typicode.com/';
 
+export const mockRestDomain = 'http://localhost:5002/';
+export const mockGraphQLDomain = 'http://localhost:5004/';
+export const apiDomain = 'http://qa.somedomain.com/';
+
 export const apiEndPoints = {
-  users:{
-    mockUrl: 'http://localhost:5002/profile',
-    mockGraphqlUrl: 'http://localhost:5004/',
-    actualUrl:'http://qa.somedomain.com/profile'
-  },
-  account:{
-    mockUrl: 'http://localhost:5002/account',
-    mockGraphqlUrl: 'http://localhost:5004/',
-    actualUrl:'http://qa.somedomain.com/account'
-  }
+  users: 'profile',
+  account: 'account',
 };

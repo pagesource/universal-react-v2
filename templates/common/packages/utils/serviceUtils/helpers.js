@@ -1,4 +1,4 @@
-import { endpoints, contentDomain, apiGeeDomain, apiEndPoints } from '../../../config/endpoints';
+import { endpoints, contentDomain, apiGeeDomain, apiEndPoints, mockRestDomain, mockGraphQLDomain, apiDomain } from '../../../config/endpoints';
 /** getContentServiceUrl - return content service url to be passed to fetch api
  * (key, isMock) - > key - get url from endpoints ;  isMock - serve data from public folder
  */
@@ -16,7 +16,7 @@ export const getDataServiceUrl = (key, isMock = false) => {
 };
 
 export const getApiEndPoints = (queryId, isMock = false, isGraphQlApi=false) => {
-  const urlObject =  apiEndPoints[queryId];
-  const key = isGraphQlApi ? 'mockGraphqlUrl': 'mockUrl';
-  return sessionStorage.getItem('serveMock') === 'true' || isMock ? urlObject[key] : urlObject.actualUrl;
+  const url =  apiEndPoints[queryId];
+  const domain = isGraphQlApi ? mockGraphQLDomain : mockRestDomain;
+  return sessionStorage.getItem('serveMock') === 'true' || isMock ? `${domain}${url}` : `${apiDomain}${url}`;
 };

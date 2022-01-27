@@ -1,12 +1,14 @@
-# Universal React App Generator
+# Mock server to mock all api calls
+
+  - we are using json-server package for mocking rest apis and json-graphql-server for mocking graphql calls.
 
 ### Installation
 
-In App folder
+In Project folder
 
 - yarn install
 
-This will install the module globally on your app.
+This will install the module on your Project.
 
 ### Running
 
