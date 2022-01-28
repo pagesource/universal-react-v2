@@ -17,7 +17,7 @@ const optionalFeatures = [
   { name: 'Add Test Cafe Setup', value: 'test-cafe' },
   { name: 'Add Service Workers setup and guide', value: 'service-worker' },
   { name: 'Add PWA setup guide', value: 'pwa' },
-  { name: 'Yet Something Else', value: 'yet' }
+  { name: 'Add Mock Api setup', value: 'mock-api' }
 ];
 
 const getOptionalFeatures = (features) => {

@@ -1,0 +1,16 @@
+{
+  "name": "json-mock-api",
+  "version": "1.0.0",
+  "description": "A simple JSON mock API",
+  "main": "index.js",
+  "scripts": {
+    "mock:rest": "json-server --watch src/db.json --p 5002",
+    "mock:graphql": "json-graphql-server src/db.js --p 5004"
+  },
+  "dependencies": {
+    "json-graphql-server": "^2.3.1",
+    "json-server": "^0.17.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
