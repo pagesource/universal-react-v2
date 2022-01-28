@@ -3,7 +3,7 @@ import Button from "../components/atoms/Button"
 
 export default function Home() {
   return (
-      <div className="container">
+      <div className="container" data-testid="HomeContainer">
         <div>
           <title>Create Next App</title>
           <link rel="icon" href="/favicon.ico" />
