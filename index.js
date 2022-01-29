@@ -32,6 +32,7 @@ const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
 const optionalFeatureHelpers = require('./utils/optionalFeature');
 
 const templatesPath = path.join(__dirname, sourceDirs.TEMPLATES_DIR);
+const microAppTemplatePath = path.join(templatesPath, sourceDirs.MICRO_APP);
 const baseTemplatePath = path.join(templatesPath, sourceDirs.BASE_DIR);
 const commonTemplatePath = path.join(templatesPath, sourceDirs.COMMON_DIR);
 const essentialsTemplatePath = path.join(commonTemplatePath, sourceDirs.ESSENTIALS_DIR);
@@ -81,22 +82,29 @@ const copyStorybookDirectory = () => {
 /**
  * @description: method to create project directory with base template.
  */
-const copyBaseDirectory = (appName) => {
+const copyBaseDirectory = (appName, appType) => {
   // path of app need to be created inside root director -> apps folder
   microAppPath = path.join(projectDir, appName);
   packagesAppPath = path.join(rootDir, appConstants.PACKAGES_DIR);
-
-  removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
-  renameSync(path.join(projectDir, destinationDirs.WEB_DIR), microAppPath);
-
   copyStorybookDirectory();
 
-  copyDir(baseTemplatePath, microAppPath, []);
-  copyDir(essentialsTemplatePath, microAppPath, []);
+  removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
 
-  // removing pages folder gnerated by turboRepo
-  removeDir(path.join(microAppPath, destinationDirs.PAGES_DIR));
 
+  if (appType === sourceDirs.MICRO_APP) {
+    removeDir(path.join(projectDir, destinationDirs.WEB_DIR));
+    console.info(
+      chalk.green(`Start creating ${appType}.`)
+    );
+    copyDir(microAppTemplatePath, microAppPath, []);
+    copyDir(essentialsTemplatePath, microAppPath, []);
+  } else {
+    renameSync(path.join(projectDir, destinationDirs.WEB_DIR), microAppPath);
+    copyDir(baseTemplatePath, microAppPath, []);
+    copyDir(essentialsTemplatePath, microAppPath, []);
+    // removing pages folder gnerated by turboRepo
+    removeDir(path.join(microAppPath, destinationDirs.PAGES_DIR));
+  }
   copyDir(sourcePackagesPath, packagesAppPath, []);
 
   copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [
@@ -242,7 +250,7 @@ const initializeNewProject = async (
   features
 ) => {
   createProjectDirectory(appName);
-  copyBaseDirectory(appName);
+  copyBaseDirectory(appName, appType);
   copyTemplateDirectory(appType);
   console.info(chalk.green('project created successfully'));
 

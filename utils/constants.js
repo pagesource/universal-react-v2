@@ -9,6 +9,7 @@ const appConstants = {
 
 const sourceDirs = {
   TEMPLATES_DIR: 'templates',
+  MICRO_APP: 'microApp',
   BASE_DIR: 'base',
   COMMON_DIR: 'common',
   ESSENTIALS_DIR: 'essentials',
