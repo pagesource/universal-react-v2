@@ -191,7 +191,7 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
  * @param {*} appType : unser passed app type [ssg, ssr, microApp]
  * @param {*} appName : user selected app name
  */
-const updateRootPackageJson = async (appType, appName) => {
+const addInfoToRootPackageJson = async (appType, appName, features) => {
   const universalReactPackageFile = require(path.join(
     __dirname,
     appConstants.PACKAGE_JSON
@@ -202,14 +202,14 @@ const updateRootPackageJson = async (appType, appName) => {
     appConstants.PACKAGE_JSON
   ));
   const mergedJson = mergeJsons(turboRepoPackageFile, {
-    name: appConstants.UNIVERAL_REACT,
+    name: appConstants.UNIVERSAL_REACT,
     scripts: srcStorybookPackageFile.scripts,
-    [appConstants.UNIVERAL_REACT]: {
+    [appConstants.UNIVERSAL_REACT]: {
       appType,
       apps: [
         {
           appName,
-          optionalFeatures: []
+          optionalFeatures: features?.length ? features : []
         }
       ]
     }
@@ -217,10 +217,39 @@ const updateRootPackageJson = async (appType, appName) => {
   try {
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), mergedJson);
   } catch (e) {
-    console.error('error creating stamp file');
+    console.error('error updating root package.json file');
   }
   console.info('root package.json file update with universal-react-v2 stamp');
   console.info(chalk.yellow('Root package.json updated by universal-react-v2'));
+};
+
+/**
+ * @description : method to update turbo repo package.json to have info about universal-react
+ * @param {*} appType : unser passed app type [ssg, ssr, microApp]
+ * @param {*} appName : user selected app name
+ * @param {*} features : user selected list of optional features
+ */
+ const updateRootPackageJson = async (appType, appName, features) => {
+  turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
+  const universalAppsInfoObj = turboRepoPackageFile[appConstants.UNIVERSAL_REACT];
+  const updatedObj = universalAppsInfoObj.apps.map(app => {
+    return {
+      appName: app.appName,
+      optionalFeatures: [
+        ...app.optionalFeatures,
+        ...features
+      ]
+    }
+  })
+  universalAppsInfoObj.apps = updatedObj;
+  turboRepoPackageFile[appConstants.UNIVERSAL_REACT] = universalAppsInfoObj;
+  try {
+    await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), turboRepoPackageFile);
+  } catch (e) {
+    console.error('Error: Failed updating root package.json file');
+  }
+  console.info('Success: Root package.json file update with universal-react-v2 stamp');
+  console.info(chalk.yellow('Success: Root package.json updated by universal-react-v2'));
 };
 
 /**
@@ -266,8 +295,8 @@ const initializeNewProject = async (
     });
   }
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
-  await updateRootPackageJson(appType, appName);
   const features_found = await copyOptionalTemplates(features, rootDir);
+  await addInfoToRootPackageJson(appType, appName, features_found);
   await installDependencies(path.join(rootDir, appConstants.PACKAGE_JSON), rootDir);
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
@@ -275,11 +304,15 @@ const initializeNewProject = async (
 };
 
 /**
- * @description : method to update existing universal-react project
- * @param {*} features : user selected optional features
+ * @description : method to update existing universal-react project package.json
+ * @param {*} appType : unser passed app type [ssg, ssr, microApp]
+ * @param {*} appName : user selected app name
+ * @param {*} features : user selected list of optional features
  */
-const updateProject = async (features) => {
-  const features_found = await copyOptionalTemplates(features);
+const updateProject = async (appType, appName, features) => {
+  const features_found = await copyOptionalTemplates(features, cwd);
+  await updateRootPackageJson(appType, appName, features_found);
+
   if (features_found.length > 0) {
     installDependencies(path.join(cwd, appConstants.PACKAGE_JSON), cwd);
   }
@@ -293,8 +326,8 @@ if (dirFileExists(rootPackagePath)) {
   rootDir = cwd;
   turboRepoPackageFile = require(rootPackagePath);
   if (
-    turboRepoPackageFile['name'] === appConstants.UNIVERAL_REACT &&
-    turboRepoPackageFile[appConstants.UNIVERAL_REACT]
+    turboRepoPackageFile['name'] === appConstants.UNIVERSAL_REACT &&
+    turboRepoPackageFile[appConstants.UNIVERSAL_REACT]
   ) {
     existingProject = true;
   }
@@ -302,8 +335,7 @@ if (dirFileExists(rootPackagePath)) {
 
 if (existingProject) {
   //update project
-
-  const projectsList = turboRepoPackageFile[appConstants.UNIVERAL_REACT]?.apps?.map(app => app.appName);
+  const projectsList = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps?.map(app => app.appName);
   console.info(
     chalk.yellow(
       [
@@ -317,7 +349,7 @@ if (existingProject) {
     chalk.yellow(
       [
         'Current app type is',
-        `[${turboRepoPackageFile[appConstants.UNIVERAL_REACT].appType}]`
+        `[${turboRepoPackageFile[appConstants.UNIVERSAL_REACT].appType}]`
       ].join(' ')
     )
   );
@@ -325,12 +357,12 @@ if (existingProject) {
   microAppPath = path.join(
     cwd,
     'apps',
-    turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0].appName
+    turboRepoPackageFile[appConstants.UNIVERSAL_REACT].apps[0].appName
   );
 
   // only get the features that are not already added in the project
   const features = getOptionalFeatures(
-    turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0]?.optionalFeatures || []
+    turboRepoPackageFile[appConstants.UNIVERSAL_REACT].apps[0]?.optionalFeatures || []
   );
 
   if (features.length > 0) {
@@ -342,7 +374,7 @@ if (existingProject) {
     ];
 
     inquirer.prompt(featureQuestion).then((answers) => {
-      updateProject(answers.features);
+      updateProject(appTypeMap[answers.appType], answers.appName, answers.features);
     });
   } else {
     console.info('Nothing to update however :)');

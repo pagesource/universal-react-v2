@@ -1,7 +1,7 @@
 const appTemplateFileExclusions = [];
 
 const appConstants = {
-  UNIVERAL_REACT: 'universal-react',
+  UNIVERSAL_REACT: 'universal-react',
   PACKAGE_JSON: 'package.json',
   VSCODE_DIR: '.vscode',
   PACKAGES_DIR: 'packages',
