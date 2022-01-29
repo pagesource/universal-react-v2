@@ -135,7 +135,7 @@ const copyTemplateDirectory = (appType) => {
 const copyOptionalTemplates = async (features, _path = cwd) => {
   const projectPackage = require(path.join(microAppPath, appConstants.PACKAGE_JSON));
   const done = [];
-  const skipInlineExecution = ['service-worker', 'pwa'];
+  const skipInlineExecution = [appConstants.SERVICE_WORKER, appConstants.PWA];
 
   for (const _feature of features) {
     const opFeatTemplate = path.join(
@@ -191,7 +191,7 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
  * @param {*} appType : unser passed app type [ssg, ssr, microApp]
  * @param {*} appName : user selected app name
  */
-const addInfoIntoPackageJson = async (appType, appName) => {
+const updateRootPackageJson = async (appType, appName) => {
   const universalReactPackageFile = require(path.join(
     __dirname,
     appConstants.PACKAGE_JSON
@@ -205,10 +205,10 @@ const addInfoIntoPackageJson = async (appType, appName) => {
     name: appConstants.UNIVERAL_REACT,
     scripts: srcStorybookPackageFile.scripts,
     [appConstants.UNIVERAL_REACT]: {
+      appType,
       apps: [
         {
           appName,
-          appType,
           optionalFeatures: []
         }
       ]
@@ -266,7 +266,7 @@ const initializeNewProject = async (
     });
   }
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
-  await addInfoIntoPackageJson(appType, appName);
+  await updateRootPackageJson(appType, appName);
   const features_found = await copyOptionalTemplates(features, rootDir);
   await installDependencies(path.join(rootDir, appConstants.PACKAGE_JSON), rootDir);
   if (initializeGit != false) {
@@ -303,12 +303,21 @@ if (dirFileExists(rootPackagePath)) {
 if (existingProject) {
   //update project
 
+  const projectsList = turboRepoPackageFile[appConstants.UNIVERAL_REACT]?.apps?.map(app => app.appName);
   console.info(
     chalk.yellow(
       [
-        'There is an existing project',
-        `${turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0].appName}`,
-        'in the current directory. The app will go into update mode'
+        'There are existing projects',
+        `[${projectsList.join(',')}]`,
+        'arch type. The app will go into update mode.'
+      ].join(' ')
+    )
+  );
+  console.info(
+    chalk.yellow(
+      [
+        'Current app type is',
+        `[${turboRepoPackageFile[appConstants.UNIVERAL_REACT].appType}]`
       ].join(' ')
     )
   );
@@ -323,7 +332,6 @@ if (existingProject) {
   const features = getOptionalFeatures(
     turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0]?.optionalFeatures || []
   );
-  console.log(turboRepoPackageFile[appConstants.UNIVERAL_REACT].apps[0], '====>');
 
   if (features.length > 0) {
     const featureQuestion = [

@@ -6,7 +6,11 @@ const loggerUtil = require('./logHelpers');
 const { createDir, copyDir, dirFileExists } = require('./fileDirOps');
 
 function getDestionPath(microAppPath, feature) {
-  return path.join(microAppPath, 'config', feature);
+  const configOptionalFeaturePath = path.join(microAppPath, appConstants.CONFIG_DIR);
+  if (!dirFileExists(configOptionalFeaturePath)) {
+    createDir(configOptionalFeaturePath);
+  }
+  return path.join(microAppPath, appConstants.CONFIG_DIR, feature);
 }
 
 function checkDirAndCopy({ opFeatTemplate, microAppPath, feature }) {
@@ -32,7 +36,7 @@ function copySWSetup({ opFeatTemplate, microAppPath }) {
   const isSuccess = checkDirAndCopy({
     opFeatTemplate,
     microAppPath,
-    feature: 'service-worker'
+    feature: appConstants.SERVICE_WORKER
   });
 
   isSuccess
@@ -54,7 +58,12 @@ function copyPWASetup({ opFeatTemplate, microAppPath }) {
     color: 'blue',
     message: 'copying pwa setup guide..'
   });
-  const isSuccess = checkDirAndCopy({ opFeatTemplate, microAppPath, feature: 'pwa' });
+  
+  const isSuccess = checkDirAndCopy({
+    opFeatTemplate,
+    microAppPath,
+    feature: appConstants.PWA
+  });
 
   isSuccess
     ? loggerUtil({
@@ -70,6 +79,6 @@ function copyPWASetup({ opFeatTemplate, microAppPath }) {
 }
 
 module.exports = {
-  'service-worker': copySWSetup,
+  [appConstants.SERVICE_WORKER]: copySWSetup,
   pwa: copyPWASetup
 };

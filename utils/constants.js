@@ -4,7 +4,10 @@ const appConstants = {
   UNIVERAL_REACT: 'universal-react',
   PACKAGE_JSON: 'package.json',
   VSCODE_DIR: '.vscode',
-  PACKAGES_DIR: 'packages'
+  PACKAGES_DIR: 'packages',
+  CONFIG_DIR: 'config',
+  SERVICE_WORKER: 'service-worker',
+  PWA: 'pwa'
 }
 
 const sourceDirs = {
