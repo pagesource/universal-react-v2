@@ -7,7 +7,10 @@ const appConstants = {
   PACKAGES_DIR: 'packages',
   CONFIG_DIR: 'config',
   SERVICE_WORKER: 'service-worker',
-  PWA: 'pwa'
+  PWA: 'pwa',
+  YARN_LOCK: 'yarn.lock',
+  PACKAGE_LOCK: 'package-lock.json',
+  PNPM_LOCK: 'pnpm-lock.yaml'
 }
 
 const sourceDirs = {

@@ -66,7 +66,10 @@ const intializeGitRepo = async (dir) => {
  * @param {*} appName : name of app
  */
 const createProjectDirectory = (appName) => {
-  createDir(path.join(projectDir, appName));
+  const projectPath = path.join(projectDir, appName);
+  if(!dirFileExists(projectPath)) {
+    createDir(projectPath);
+  }
   createDir(path.join(rootDir, appConstants.VSCODE_DIR));
 };
 
@@ -253,14 +256,35 @@ const addInfoToRootPackageJson = async (appType, appName, features) => {
 };
 
 /**
- * @description : method to install depencies of project
+ * @description : method to install depencies of project using [yarn | pnpm | npm]
  * @param {*} filePath : path of package.json file from root directory
  * @param {*} installLocation : location of root where dependencies need to install
  */
-const installDependencies = async (filePath, installLocation) => {
-  console.info('installing dependencies...');
-  const depArr = await createNpmDependenciesArray(filePath);
-  installPackages(installLocation, depArr);
+const installDependencies = async (installLocation) => {
+  const packageLock = path.join(installLocation, appConstants.PACKAGE_LOCK);
+  const pnpmLock = path.join(installLocation, appConstants.PNPM_LOCK);
+  const yarnLock = path.join(installLocation, appConstants.YARN_LOCK);
+
+  if(dirFileExists(yarnLock)) {
+    console.info(chalk.green('Please wait. Installing dependencies using yarn...'));
+    installPackages('yarn')
+    return;
+  } 
+
+  if(dirFileExists(pnpmLock)) {
+    console.info(chalk.green('Please wait. Installing dependencies using pnpm...'));
+    installPackages('pnpm')
+    return;
+  } 
+
+  if(dirFileExists(packageLock)) {
+    console.info(chalk.green('Please wait. Installing dependencies using npm...'));
+    installPackages('yarn')
+    return;
+  } 
+
+  console.info(chalk.green('[Defautl] - Please wait. Installing dependencies using yarn...'));
+  installPackages('yarn')
 };
 
 /**
@@ -297,7 +321,7 @@ const initializeNewProject = async (
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
   const features_found = await copyOptionalTemplates(features, rootDir);
   await addInfoToRootPackageJson(appType, appName, features_found);
-  await installDependencies(path.join(rootDir, appConstants.PACKAGE_JSON), rootDir);
+  await installDependencies(rootDir);
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
   }
@@ -314,7 +338,7 @@ const updateProject = async (appType, appName, features) => {
   await updateRootPackageJson(appType, appName, features_found);
 
   if (features_found.length > 0) {
-    installDependencies(path.join(cwd, appConstants.PACKAGE_JSON), cwd);
+    installDependencies(cwd);
   }
 };
 

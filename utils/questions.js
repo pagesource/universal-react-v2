@@ -12,7 +12,7 @@ const createAppQuestions = [
     name: 'appName',
     type: 'input',
     message: 'Enter your app name?',
-    default: 'my-universal-app',
+    default: 'web',
   },
   {
     when: (data) =>
