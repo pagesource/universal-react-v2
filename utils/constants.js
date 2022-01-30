@@ -13,6 +13,12 @@ const appConstants = {
   PNPM_LOCK: 'pnpm-lock.yaml'
 }
 
+const commandTypes = {
+  NPM: 'npm',
+  YARN: 'yarn',
+  PNPM: 'pnpm'
+}
+
 const sourceDirs = {
   TEMPLATES_DIR: 'templates',
   MICRO_APP: 'microApp',
@@ -52,5 +58,6 @@ module.exports = {
   appTypeMap,
   appConstants,
   sourceDirs,
-  destinationDirs
+  destinationDirs,
+  commandTypes
 };

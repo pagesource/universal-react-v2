@@ -7,7 +7,7 @@ const inquirer = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-const { createNpmDependenciesArray, mergeJsons } = require('./utils/jsonHelper');
+const { createNpmDependenciesArray, mergeJsons, applyCommandType } = require('./utils/jsonHelper');
 const { arrayUnique, getOptionalFeatures } = require('./utils/helpers');
 const { createAppQuestions, featureQuestions } = require('./utils/questions');
 const {
@@ -15,7 +15,8 @@ const {
   appTypeMap,
   appConstants,
   sourceDirs,
-  destinationDirs
+  destinationDirs,
+  commandTypes
 } = require('./utils/constants');
 const {
   createDir,
@@ -56,7 +57,7 @@ const cwd = process.cwd(); // current working directory
 const intializeGitRepo = async (dir) => {
   const cmd = `cd ${dir} && git init`;
   const { stdout } = await exec(cmd).catch((err) => {
-    console.info(chalk.red(`Error ${err}`));
+    console.error(chalk.red(`Error: Failed to intialized git repo. ${err}`));
   });
   console.info(`${stdout}`);
 };
@@ -76,10 +77,22 @@ const createProjectDirectory = (appName) => {
 /**
  * @description: method to place storyBook directory under project directory
  */
-const copyStorybookDirectory = () => {
+const copyStorybookDirectory = async () => {
   storybookDir = path.join(rootDir, sourceDirs.STORYBOOK_DIR);
   createDir(storybookDir);
   copyDir(storybookPath, storybookDir, []);
+  const storyBookPackagePath = path.join(storybookDir, appConstants.PACKAGE_JSON);
+
+  if(dirFileExists(storyBookPackagePath)){
+    try {
+      let storyBookPackage = require(path.join(storybookDir, appConstants.PACKAGE_JSON));
+      storyBookPackage = applyCommandType(storyBookPackage, getCommandType(rootDir));
+      await writeJsonFile(storyBookPackagePath, storyBookPackage);
+    } catch (e) {
+      console.error(chalk.red('Error: Failed to updating storybook package.json file'), e);
+    }
+  }
+
 };
 
 /**
@@ -168,7 +181,7 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
           console.info(`${_feature} added to package.json`);
           done.push(_feature);
         } else {
-          console.info(
+          console.error(
             chalk.red(
               `${_feature}/package.json missing. could not find feature dependencies.`
             )
@@ -176,8 +189,8 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
           console.info(chalk.red(`skipping ${_feature}...`));
         }
       } else {
-        console.info(chalk.red(`${_feature} missing. feature not found.`));
-        console.info(chalk.red(`skipping ${_feature}...`));
+        console.error(chalk.red(`${_feature} missing. feature not found.`));
+        console.error(chalk.red(`skipping ${_feature}...`));
       }
     }
   }
@@ -204,7 +217,7 @@ const addInfoToRootPackageJson = async (appType, appName, features) => {
     storybookDir,
     appConstants.PACKAGE_JSON
   ));
-  const mergedJson = mergeJsons(turboRepoPackageFile, {
+  let mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERSAL_REACT,
     scripts: srcStorybookPackageFile.scripts,
     [appConstants.UNIVERSAL_REACT]: {
@@ -218,12 +231,12 @@ const addInfoToRootPackageJson = async (appType, appName, features) => {
     }
   });
   try {
+    mergedJson = applyCommandType(mergedJson, getCommandType(rootDir));
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), mergedJson);
   } catch (e) {
-    console.error('error updating root package.json file');
+    console.error(chalk.red('Error: Failed to updating root package.json file'), e);
   }
-  console.info('root package.json file update with universal-react-v2 stamp');
-  console.info(chalk.yellow('Root package.json updated by universal-react-v2'));
+  console.info(chalk.green('Root package.json updated by universal-react-v2'));
 };
 
 /**
@@ -249,43 +262,43 @@ const addInfoToRootPackageJson = async (appType, appName, features) => {
   try {
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), turboRepoPackageFile);
   } catch (e) {
-    console.error('Error: Failed updating root package.json file');
+    console.error(chalk.red('Error: Failed updating root package.json file'), e);
   }
-  console.info('Success: Root package.json file update with universal-react-v2 stamp');
   console.info(chalk.yellow('Success: Root package.json updated by universal-react-v2'));
 };
 
 /**
  * @description : method to install depencies of project using [yarn | pnpm | npm]
- * @param {*} filePath : path of package.json file from root directory
  * @param {*} installLocation : location of root where dependencies need to install
  */
 const installDependencies = async (installLocation) => {
+  installPackages(getCommandType(installLocation));
+};
+
+/**
+ * @description : method to identify which command type need to use
+ * @param {*} installLocation : localtion of lock files
+ * @returns command type
+ */
+const getCommandType = (installLocation) => {
   const packageLock = path.join(installLocation, appConstants.PACKAGE_LOCK);
   const pnpmLock = path.join(installLocation, appConstants.PNPM_LOCK);
   const yarnLock = path.join(installLocation, appConstants.YARN_LOCK);
 
   if(dirFileExists(yarnLock)) {
-    console.info(chalk.green('Please wait. Installing dependencies using yarn...'));
-    installPackages('yarn')
-    return;
+    return commandTypes.YARN;
   } 
 
   if(dirFileExists(pnpmLock)) {
-    console.info(chalk.green('Please wait. Installing dependencies using pnpm...'));
-    installPackages('pnpm')
-    return;
+    return commandTypes.PNPM;
   } 
 
   if(dirFileExists(packageLock)) {
-    console.info(chalk.green('Please wait. Installing dependencies using npm...'));
-    installPackages('yarn')
-    return;
-  } 
+    return commandTypes.NPM
+  }
 
-  console.info(chalk.green('[Defautl] - Please wait. Installing dependencies using yarn...'));
-  installPackages('yarn')
-};
+  return commandTypes.YARN;
+}
 
 /**
  * @description : method to initialize new project
@@ -306,7 +319,7 @@ const initializeNewProject = async (
   copyBaseDirectory(appName, appType);
   copyTemplateDirectory(appType);
   console.info(chalk.green('project created successfully'));
-
+    
   const basePackage = require(path.join(baseTemplatePath, appConstants.PACKAGE_JSON));
   const appPackage = require(path.join(appTemplatePath, appConstants.PACKAGE_JSON));
   let packageFile = mergeJsons(basePackage, appPackage);
@@ -318,6 +331,7 @@ const initializeNewProject = async (
       }
     });
   }
+  packageFile = applyCommandType(packageFile, getCommandType(rootDir));
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
   const features_found = await copyOptionalTemplates(features, rootDir);
   await addInfoToRootPackageJson(appType, appName, features_found);
@@ -401,7 +415,7 @@ if (existingProject) {
       updateProject(appTypeMap[answers.appType], answers.appName, answers.features);
     });
   } else {
-    console.info('Nothing to update however :)');
+    console.info(chalk.yellow('Nothing to update however :)'));
   }
 } else {
   // create new project
@@ -411,7 +425,7 @@ if (existingProject) {
     rootDir = cwd;
     projectDir = path.join(cwd, destinationDirs.APPS_DIR);
   } else {
-    console.log(
+    console.error(
       chalk.red(
         'Current working directory is not empty. Please use a clean directory to setup the project'
       )
@@ -425,7 +439,7 @@ if (existingProject) {
   } else {
     const recentDir = getMostRecentDirectory(cwd);
     if (!recentDir) {
-      console.log(chalk.red('An unexpected error occured'));
+      console.error(chalk.red('Error: An unexpected error occured'));
       process.exit(1);
     }
 
@@ -436,7 +450,7 @@ if (existingProject) {
 
   inquirer.prompt(createAppQuestions).then((answers) => {
     if (appTypeMap[answers.appType] === undefined) {
-      console.error('Invalid app type.');
+      console.error(chalk.red('Error: Invalid app type.'));
     } else {
       // only get the features that are not already added in the project
       const features = getOptionalFeatures([]);
