@@ -2,7 +2,7 @@
   "scripts": {
     "dev": "webpack serve --open --mode development",
     "build": "webpack --mode production",
-    "build:prod": "npm run env-var && npm run build",
+    "build:prod": "{commandType} env-var && {commandType} build",
     "start": "cd dist && cross-env PORT=8080 serve --cors"
   },
   "devDependencies": {

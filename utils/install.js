@@ -4,7 +4,7 @@ const cp = require('child_process');
 const { exec } = cp;
 
 function installPackages(commandType) {
-  console.info(chalk.green(`Please wait. Installing dependencies using ${commandType}...`));
+  console.info(chalk.yellow(`Please Wait. Installing dependencies using ${commandType}...`));
   exec(`${commandType} install`, (err, stdout, stderr) => {
     if (err) {
       console.error(chalk.red(`Error: Failed to install packages. Please run [${commandType} install] manually on root directory.`));

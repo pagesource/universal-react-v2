@@ -1,5 +1,5 @@
 {
     "scripts": {
-      "dummy": "dummy command"
+      "ssg:build": "{commandType} build && {commandType} export"
     }
   }
