@@ -20,7 +20,21 @@ function mergeJsons(masterJson, slaveJson) {
   return json;
 }
 
+function applyCommandType(obj, commandType) {
+  const packageString = JSON.stringify(obj);
+  const regex = new RegExp('{commandType}', 'gi');
+
+  let str = packageString.replace(regex, commandType);
+
+  if(commandType === 'npm') {
+    str = packageString.replace(regex, `${commandType} run`);
+  }
+  
+  return JSON.parse(str);
+}
+
 module.exports = {
   createNpmDependenciesArray,
-  mergeJsons
+  mergeJsons,
+  applyCommandType
 };

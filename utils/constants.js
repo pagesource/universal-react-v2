@@ -1,14 +1,27 @@
 const appTemplateFileExclusions = [];
 
 const appConstants = {
-  UNIVERAL_REACT: 'universal-react',
+  UNIVERSAL_REACT: 'universal-react',
   PACKAGE_JSON: 'package.json',
   VSCODE_DIR: '.vscode',
-  PACKAGES_DIR: 'packages'
+  PACKAGES_DIR: 'packages',
+  CONFIG_DIR: 'config',
+  SERVICE_WORKER: 'service-worker',
+  PWA: 'pwa',
+  YARN_LOCK: 'yarn.lock',
+  PACKAGE_LOCK: 'package-lock.json',
+  PNPM_LOCK: 'pnpm-lock.yaml'
+}
+
+const commandTypes = {
+  NPM: 'npm',
+  YARN: 'yarn',
+  PNPM: 'pnpm'
 }
 
 const sourceDirs = {
   TEMPLATES_DIR: 'templates',
+  MICRO_APP: 'microApp',
   BASE_DIR: 'base',
   COMMON_DIR: 'common',
   ESSENTIALS_DIR: 'essentials',
@@ -45,5 +58,6 @@ module.exports = {
   appTypeMap,
   appConstants,
   sourceDirs,
-  destinationDirs
+  destinationDirs,
+  commandTypes
 };

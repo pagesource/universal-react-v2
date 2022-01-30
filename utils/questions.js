@@ -12,13 +12,7 @@ const createAppQuestions = [
     name: 'appName',
     type: 'input',
     message: 'Enter your app name?',
-    validate: function (value) {
-      if (value.length) {
-        return true;
-      } else {
-        return 'Please enter valid app name';
-      }
-    }
+    default: 'web',
   },
   {
     when: (data) =>

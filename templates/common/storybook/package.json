@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "storybook:install": "cd storybook && yarn",
-    "storybook:run": "cd storybook && yarn start-storybook",
-    "storybook:build": "cd storybook && yarn build-storybook"
+    "storybook:install": "cd storybook && {commandType}",
+    "storybook:run": "cd storybook && {commandType} start-storybook",
+    "storybook:build": "cd storybook && {commandType} build-storybook"
   },
   "dependencies": {
     "@babel/core": "^7.15.5",
