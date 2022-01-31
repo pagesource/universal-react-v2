@@ -10,7 +10,8 @@ const appConstants = {
   PWA: 'pwa',
   YARN_LOCK: 'yarn.lock',
   PACKAGE_LOCK: 'package-lock.json',
-  PNPM_LOCK: 'pnpm-lock.yaml'
+  PNPM_LOCK: 'pnpm-lock.yaml',
+  NODE_MODULES: 'node_modules'
 }
 
 const commandTypes = {

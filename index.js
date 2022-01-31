@@ -35,11 +35,11 @@ const optionalFeatureHelpers = require('./utils/optionalFeature');
 const templatesPath = path.join(__dirname, sourceDirs.TEMPLATES_DIR);
 const microAppTemplatePath = path.join(templatesPath, sourceDirs.MICRO_APP);
 const baseTemplatePath = path.join(templatesPath, sourceDirs.BASE_DIR);
-const commonTemplatePath = path.join(templatesPath, sourceDirs.COMMON_DIR);
-const essentialsTemplatePath = path.join(commonTemplatePath, sourceDirs.ESSENTIALS_DIR);
-const srcTemplatePath = path.join(commonTemplatePath, sourceDirs.SRC_DIR);
-const sourcePackagesPath = path.join(commonTemplatePath, appConstants.PACKAGES_DIR);
-const storybookPath = path.join(commonTemplatePath, sourceDirs.STORYBOOK_DIR);
+const commonDirPath = path.join(templatesPath, sourceDirs.COMMON_DIR);
+const essentialsTemplatePath = path.join(commonDirPath, sourceDirs.ESSENTIALS_DIR);
+const srcTemplatePath = path.join(commonDirPath, sourceDirs.SRC_DIR);
+const sourcePackagesPath = path.join(commonDirPath, appConstants.PACKAGES_DIR);
+const storybookPath = path.join(commonDirPath, sourceDirs.STORYBOOK_DIR);
 
 let appTemplatePath = ''; // template path of [ssg, ssr, microApp] templates
 let rootDir = ''; // root folder of generated project ./
@@ -86,7 +86,7 @@ const copyStorybookDirectory = async () => {
   if(dirFileExists(storyBookPackagePath)){
     try {
       let storyBookPackage = require(path.join(storybookDir, appConstants.PACKAGE_JSON));
-      storyBookPackage = applyCommandType(storyBookPackage, getCommandType(rootDir));
+      storyBookPackage = applyCommandType(storyBookPackage, getCommandType(rootDir).command);
       await writeJsonFile(storyBookPackagePath, storyBookPackage);
     } catch (e) {
       console.error(chalk.red('Error: Failed to updating storybook package.json file'), e);
@@ -196,7 +196,7 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
   }
   if (done.length > 0) {
     console.info(
-      chalk.green('optional features validated. ready to install dependencies...')
+      chalk.green('Optional Features Validated. Ready to install Dependencies...')
     );
   }
   return done;
@@ -231,7 +231,7 @@ const addInfoToRootPackageJson = async (appType, appName, features) => {
     }
   });
   try {
-    mergedJson = applyCommandType(mergedJson, getCommandType(rootDir));
+    mergedJson = applyCommandType(mergedJson, getCommandType(rootDir).command);
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), mergedJson);
   } catch (e) {
     console.error(chalk.red('Error: Failed to updating root package.json file'), e);
@@ -270,9 +270,20 @@ const addInfoToRootPackageJson = async (appType, appName, features) => {
 /**
  * @description : method to install depencies of project using [yarn | pnpm | npm]
  * @param {*} installLocation : location of root where dependencies need to install
+ * @param {*} isUpdate : boolean
  */
-const installDependencies = async (installLocation) => {
-  installPackages(getCommandType(installLocation));
+const installDependencies = async (installLocation, isUpdate) => {
+  const { command, fileName } = getCommandType(installLocation);
+  if(!isUpdate) {
+    console.info(chalk.yellow('Removing existing lock file and node_module folder.'));
+    try {
+      removeDir(path.join(rootDir, appConstants.NODE_MODULES));
+      removeDir(path.join(rootDir, fileName));
+    } catch (err) {
+      console.error(chalk.red('Error: Failed to delete node_module and lock file/folder from root'), err);
+    }
+  }
+  installPackages(command);
 };
 
 /**
@@ -286,18 +297,33 @@ const getCommandType = (installLocation) => {
   const yarnLock = path.join(installLocation, appConstants.YARN_LOCK);
 
   if(dirFileExists(yarnLock)) {
-    return commandTypes.YARN;
+    return {
+      command: commandTypes.YARN,
+      fileName: appConstants.YARN_LOCK
+    };
+    // return commandTypes.YARN;
   } 
 
   if(dirFileExists(pnpmLock)) {
-    return commandTypes.PNPM;
+    return {
+      command: commandTypes.PNPM,
+      fileName: appConstants.PNPM_LOCK
+    };
+    // return commandTypes.PNPM;
   } 
 
   if(dirFileExists(packageLock)) {
-    return commandTypes.NPM
+    return {
+      command: commandTypes.NPM,
+      fileName: appConstants.PACKAGE_LOCK
+    };
+    // return commandTypes.NPM
   }
 
-  return commandTypes.YARN;
+  return {
+    command: commandTypes.YARN,
+    fileName: appConstants.YARN_LOCK
+  };
 }
 
 /**
@@ -318,11 +344,29 @@ const initializeNewProject = async (
   createProjectDirectory(appName);
   copyBaseDirectory(appName, appType);
   copyTemplateDirectory(appType);
-  console.info(chalk.green('project created successfully'));
+  console.info(chalk.green('Project Created Successfully'));
     
   const basePackage = require(path.join(baseTemplatePath, appConstants.PACKAGE_JSON));
   const appPackage = require(path.join(appTemplatePath, appConstants.PACKAGE_JSON));
+  const commonPackage = require(path.join(commonDirPath, appConstants.PACKAGE_JSON));
   let packageFile = mergeJsons(basePackage, appPackage);
+
+  if(appType === sourceDirs.MICRO_APP) {
+    packageFile.scripts = {
+      ...appPackage.scripts,
+      ...commonPackage.scripts
+    };
+    packageFile.dependencies = {
+      ...appPackage.dependencies,
+      ...commonPackage.dependencies
+    };
+    packageFile.devDependencies = {
+      ...appPackage.devDependencies,
+      ...commonPackage.devDependencies
+    };
+  } else {
+    packageFile = mergeJsons(packageFile, commonPackage);
+  }
   packageFile = mergeJsons(packageFile, { name: appName });
   if (basePath != undefined) {
     packageFile = mergeJsons(packageFile, {
@@ -331,11 +375,11 @@ const initializeNewProject = async (
       }
     });
   }
-  packageFile = applyCommandType(packageFile, getCommandType(rootDir));
+  packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
   const features_found = await copyOptionalTemplates(features, rootDir);
   await addInfoToRootPackageJson(appType, appName, features_found);
-  await installDependencies(rootDir);
+  await installDependencies(rootDir, false);
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
   }
@@ -352,7 +396,7 @@ const updateProject = async (appType, appName, features) => {
   await updateRootPackageJson(appType, appName, features_found);
 
   if (features_found.length > 0) {
-    installDependencies(cwd);
+    installDependencies(cwd, true);
   }
 };
 
@@ -420,7 +464,8 @@ if (existingProject) {
 } else {
   // create new project
   if (isEmptyDir(cwd)) {
-    console.log(chalk.green('Setting up a new mono repo project using Turborepo'));
+    console.log(chalk.bgYellow.bold.black('[:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.'));
+    console.log(chalk.green.underline('Setting up a new mono repo project using Turborepo.'));
     setupTurboRepoProject(cwd);
     rootDir = cwd;
     projectDir = path.join(cwd, destinationDirs.APPS_DIR);
