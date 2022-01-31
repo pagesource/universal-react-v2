@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "env-var": "cross-env BASE_PATH=/universal-react",
     "dev": "next dev",
     "build": "next build",
     "build:prod": "{commandType} env-var && {commandType} build",

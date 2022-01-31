@@ -7,7 +7,7 @@ const inquirer = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
-const { createNpmDependenciesArray, mergeJsons, applyCommandType } = require('./utils/jsonHelper');
+const { createNpmDependenciesArray, mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
 const { arrayUnique, getOptionalFeatures } = require('./utils/helpers');
 const { createAppQuestions, featureQuestions } = require('./utils/questions');
 const {
@@ -368,12 +368,14 @@ const initializeNewProject = async (
     packageFile = mergeJsons(packageFile, commonPackage);
   }
   packageFile = mergeJsons(packageFile, { name: appName });
-  if (basePath != undefined) {
+  if (basePath !== undefined) {
     packageFile = mergeJsons(packageFile, {
       scripts: {
-        'env-var': 'cross-env BASE_PATH=' + basePath
+        'env-var': `cross-env BASE_PATH=${basePath}`
       }
     });
+  } else {
+    packageFile = replaceString(packageFile, '{commandType} env-var && ');
   }
   packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
