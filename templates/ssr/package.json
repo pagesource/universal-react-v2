@@ -1,5 +1,5 @@
 {
     "scripts": {
-      "ssr:build": "{commandType} build"
+      "build": "{commandType} env-var && {commandType} build"
     }
   }

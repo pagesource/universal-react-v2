@@ -35,11 +35,11 @@ const optionalFeatureHelpers = require('./utils/optionalFeature');
 const templatesPath = path.join(__dirname, sourceDirs.TEMPLATES_DIR);
 const microAppTemplatePath = path.join(templatesPath, sourceDirs.MICRO_APP);
 const baseTemplatePath = path.join(templatesPath, sourceDirs.BASE_DIR);
-const commonTemplatePath = path.join(templatesPath, sourceDirs.COMMON_DIR);
-const essentialsTemplatePath = path.join(commonTemplatePath, sourceDirs.ESSENTIALS_DIR);
-const srcTemplatePath = path.join(commonTemplatePath, sourceDirs.SRC_DIR);
-const sourcePackagesPath = path.join(commonTemplatePath, appConstants.PACKAGES_DIR);
-const storybookPath = path.join(commonTemplatePath, sourceDirs.STORYBOOK_DIR);
+const commonDirPath = path.join(templatesPath, sourceDirs.COMMON_DIR);
+const essentialsTemplatePath = path.join(commonDirPath, sourceDirs.ESSENTIALS_DIR);
+const srcTemplatePath = path.join(commonDirPath, sourceDirs.SRC_DIR);
+const sourcePackagesPath = path.join(commonDirPath, appConstants.PACKAGES_DIR);
+const storybookPath = path.join(commonDirPath, sourceDirs.STORYBOOK_DIR);
 
 let appTemplatePath = ''; // template path of [ssg, ssr, microApp] templates
 let rootDir = ''; // root folder of generated project ./
@@ -348,7 +348,25 @@ const initializeNewProject = async (
     
   const basePackage = require(path.join(baseTemplatePath, appConstants.PACKAGE_JSON));
   const appPackage = require(path.join(appTemplatePath, appConstants.PACKAGE_JSON));
+  const commonPackage = require(path.join(commonDirPath, appConstants.PACKAGE_JSON));
   let packageFile = mergeJsons(basePackage, appPackage);
+
+  if(appType === sourceDirs.MICRO_APP) {
+    packageFile.scripts = {
+      ...appPackage.scripts,
+      ...commonPackage.scripts
+    };
+    packageFile.dependencies = {
+      ...appPackage.dependencies,
+      ...commonPackage.dependencies
+    };
+    packageFile.devDependencies = {
+      ...appPackage.devDependencies,
+      ...commonPackage.devDependencies
+    };
+  } else {
+    packageFile = mergeJsons(packageFile, commonPackage);
+  }
   packageFile = mergeJsons(packageFile, { name: appName });
   if (basePath != undefined) {
     packageFile = mergeJsons(packageFile, {
