@@ -1,5 +1,7 @@
 {
-	"devDependencies": {
-		"jquery" : "3.6.0"
-	  }
+	"dependencies": {
+		"inquirer": "^8.2.0"},
+	  "scripts": {
+		"setup-testcafe": "node testcafeSetup"
+	}
 }

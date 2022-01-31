@@ -1,0 +1,24 @@
+{"browsers":"chrome",
+"src" :["tests/stepDefs/**/*/*.def.js","tests/features/**/*.feature"],
+"screenshots":{
+    "path":"screenshots/",
+    "takeOnFails":true,
+    "pathPattern":"${DATE} ${TIME}/test-{TEST-INDEX}/${USERAGENT}/${FILE_INDEX}.png"
+},
+"reported":[
+    {
+        "name":"spec"
+    },{
+        "name":"cucuber-json",
+        "output": "reports/report.json"
+    }
+],
+"pageLoadTimeOut":5000,
+"quarantineMode":false,
+"skipJsErrors":true,
+"skipUncaughtErrors":true,
+"concurrency":1,
+"disablePageCaching":true,
+"speed":1,
+"clientScripts":["mockFrames.js"]
+}
