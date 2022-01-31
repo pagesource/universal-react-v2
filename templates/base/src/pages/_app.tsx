@@ -1,8 +1,7 @@
 import React from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
+import type { AppProps } from 'next/app';
 
-import GraphQLClient from '../graphQL/ApolloClient'
-import GlobalContextProvider from '../stores/global/ContextProvider';
+import GlobalContextProvider from 'essentials/stores/global/ContextProvider';
 
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'themes';
@@ -13,15 +12,13 @@ export function reportWebVitals(metric) {
   console.log(metric)
 }
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={GraphQLClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalContextProvider>
-          <Component {...pageProps} />
-        </GlobalContextProvider>
-      </ThemeProvider>
-    </ApolloProvider>
+    <ThemeProvider theme={theme}>
+      <GlobalContextProvider>
+        <Component {...pageProps} />
+      </GlobalContextProvider>
+    </ThemeProvider>
   );
 }
 
