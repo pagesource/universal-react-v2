@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "bundle": "next build",
-    "build:prod": "{commandType} env-var && {commandType} bundle",
+    "build": "{commandType} env-var && {commandType} bundle",
     "start": "next start dev"
   },
   "browserslist": [
