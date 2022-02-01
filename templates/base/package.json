@@ -3,12 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "env-var": "cross-env BASE_PATH=/universal-react",
     "dev": "next dev",
-    "build": "next build",
-    "build:prod": "{commandType} env-var && {commandType} build",
-    "start": "next start dev",
-    "export": "next export"
+    "bundle": "next build",
+    "build:prod": "{commandType} env-var && {commandType} bundle",
+    "start": "next start dev"
   },
   "browserslist": [
     "> 0.25%",
@@ -18,10 +16,7 @@
     "not dead"
   ],
   "dependencies": {
-    "@mdx-js/react": "^1.6.22",
-    "cross-env": "^7.0.2",
-    "express": "4.17.1",
-    "helmet": "4.6.0"
+    "@mdx-js/react": "^1.6.22"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "11.1.2",

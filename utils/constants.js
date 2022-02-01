@@ -28,7 +28,8 @@ const sourceDirs = {
   ESSENTIALS_DIR: 'essentials',
   SRC_DIR: 'src',
   STORYBOOK_DIR: 'storybook',
-  OPTIONAL_FEATURES_DIR: 'optionalFeatures'
+  OPTIONAL_FEATURES_DIR: 'optionalFeatures',
+  TEMP_DIR: 'temp',
 }
 
 const destinationDirs = {

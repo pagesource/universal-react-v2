@@ -104,10 +104,20 @@ function copyDir(sourcePath, destPath, exclusions) {
   );
 }
 
+/**
+ * @description : method to create file at given location
+ * @param {*} filePath : location where file need to be placed
+ * @param {*} data : data need to be written in file
+ */
 function writeFile(filePath, data) {
   fs.writeFileSync(filePath, data);
 }
 
+/**
+ * @description : method to write json file at given locaion
+ * @param {*} jsonFilePath : location where json file need to be placed
+ * @param {*} json : json data need to be written in json file
+ */
 function writeJsonFile(jsonFilePath, json) {
   try {
     writeFile(jsonFilePath, JSON.stringify(json, null, 2) + os.EOL);
@@ -117,6 +127,11 @@ function writeJsonFile(jsonFilePath, json) {
   }
 }
 
+/**
+ * @description : method to check if directory is empty or not
+ * @param {*} directoryPath : location of directory
+ * @returns : boolean value
+ */
 function isEmptyDir(directoryPath) {
   try {
     const files = fs.readdirSync(directoryPath);
@@ -126,6 +141,11 @@ function isEmptyDir(directoryPath) {
   }
 }
 
+/**
+ * @description : method to find latest created directory
+ * @param {*} directoryPath : location of directory
+ * @returns : name of latest directory found or null
+ */
 function getMostRecentDirectory(directoryPath) {
   let latest = new Date(1900, 1, 1);
   let latestDir = null;

@@ -12,7 +12,7 @@ const createAppQuestions = [
     name: 'appName',
     type: 'input',
     message: 'Enter your app name?',
-    default: 'web',
+    default: 'home',
   },
   {
     when: (data) =>
@@ -37,6 +37,28 @@ const createAppQuestions = [
   }
 ];
 
+const addAppQuestions = [
+  {
+    name: 'appName',
+    type: 'input',
+    message: 'Enter your app name?',
+    validate: function (value) {
+      if (value.length) {
+        return true;
+      } else {
+        return 'Please enter valid app name';
+      }
+    }
+  },
+  {
+    when: (data) => data.basePath === true,
+    type: 'input',
+    name: 'customBasePath',
+    message: 'Please enter base path:',
+    default: '/docs'
+  }
+];
+
 const featureQuestions = [
   {
     type: 'checkbox',
@@ -46,7 +68,25 @@ const featureQuestions = [
   }
 ];
 
+const getUpdateProjectQuestions = (projectsList) => [
+  {
+    type: 'confirm',
+    name: 'addMoreProject',
+    message: 'Want to add more project?',
+    default: false
+  },
+  {
+    when: (data) => data.addMoreProject === false,
+    type: 'list',
+    name: 'selectedProject',
+    message: 'Select project you want to update.',
+    choices: projectsList
+  }
+]
+
 module.exports = {
   createAppQuestions,
-  featureQuestions
+  featureQuestions,
+  addAppQuestions,
+  getUpdateProjectQuestions
 };
