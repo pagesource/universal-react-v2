@@ -9,7 +9,7 @@ const exec = util.promisify(require('child_process').exec);
 
 const { createNpmDependenciesArray, mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
 const { arrayUnique, getOptionalFeatures } = require('./utils/helpers');
-const { createAppQuestions, featureQuestions } = require('./utils/questions');
+const { createAppQuestions, featureQuestions, addAppQuestions, getUpdateProjectQuestions } = require('./utils/questions');
 const {
   appTemplateFileExclusions,
   appTypeMap,
@@ -36,6 +36,7 @@ const templatesPath = path.join(__dirname, sourceDirs.TEMPLATES_DIR);
 const microAppTemplatePath = path.join(templatesPath, sourceDirs.MICRO_APP);
 const baseTemplatePath = path.join(templatesPath, sourceDirs.BASE_DIR);
 const commonDirPath = path.join(templatesPath, sourceDirs.COMMON_DIR);
+const tempDirPath = path.join(commonDirPath, sourceDirs.TEMP_DIR);
 const essentialsTemplatePath = path.join(commonDirPath, sourceDirs.ESSENTIALS_DIR);
 const srcTemplatePath = path.join(commonDirPath, sourceDirs.SRC_DIR);
 const sourcePackagesPath = path.join(commonDirPath, appConstants.PACKAGES_DIR);
@@ -58,6 +59,7 @@ const intializeGitRepo = async (dir) => {
   const cmd = `cd ${dir} && git init`;
   const { stdout } = await exec(cmd).catch((err) => {
     console.error(chalk.red(`Error: Failed to intialized git repo. ${err}`));
+    process.exit(0);
   });
   console.info(`${stdout}`);
 };
@@ -66,12 +68,18 @@ const intializeGitRepo = async (dir) => {
  * @description: method to create project directory
  * @param {*} appName : name of app
  */
-const createProjectDirectory = (appName) => {
+const createProjectDirectory = (appName, newProject) => {
   const projectPath = path.join(projectDir, appName);
+  if(dirFileExists(projectPath)) {
+    console.error(chalk.red(`Error: Project named [${appName}] already exist. Use different app name.`));
+    process.exit(0);
+  }
   if(!dirFileExists(projectPath)) {
     createDir(projectPath);
   }
-  createDir(path.join(rootDir, appConstants.VSCODE_DIR));
+  if(newProject) {
+    createDir(path.join(rootDir, appConstants.VSCODE_DIR));
+  }
 };
 
 /**
@@ -98,20 +106,22 @@ const copyStorybookDirectory = async () => {
 /**
  * @description: method to create project directory with base template.
  */
-const copyBaseDirectory = (appName, appType) => {
+const copyBaseDirectory = (appName, appType, newProject) => {
   // path of app need to be created inside root director -> apps folder
   microAppPath = path.join(projectDir, appName);
   packagesAppPath = path.join(rootDir, appConstants.PACKAGES_DIR);
-  copyStorybookDirectory();
+  if(newProject) {
+    copyStorybookDirectory();
+    removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
+  }
 
-  removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
-
+  if(!newProject) {
+    copyDir(tempDirPath, projectDir, []);
+  }
 
   if (appType === sourceDirs.MICRO_APP) {
     removeDir(path.join(projectDir, destinationDirs.WEB_DIR));
-    console.info(
-      chalk.green(`Start creating ${appType}.`)
-    );
+    console.info(chalk.green(`Start creating ${appType}.`));
     copyDir(microAppTemplatePath, microAppPath, []);
     copyDir(essentialsTemplatePath, microAppPath, []);
   } else {
@@ -207,19 +217,15 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
  * @param {*} appType : unser passed app type [ssg, ssr, microApp]
  * @param {*} appName : user selected app name
  */
-const addInfoToRootPackageJson = async (appType, appName, features) => {
+const addInfoToRootPackageJson = async (appType, appName, features, newProject) => {
   const universalReactPackageFile = require(path.join(
     __dirname,
     appConstants.PACKAGE_JSON
   ));
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
-  const srcStorybookPackageFile = require(path.join(
-    storybookDir,
-    appConstants.PACKAGE_JSON
-  ));
+  
   let mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERSAL_REACT,
-    scripts: srcStorybookPackageFile.scripts,
     [appConstants.UNIVERSAL_REACT]: {
       appType,
       apps: [
@@ -230,6 +236,17 @@ const addInfoToRootPackageJson = async (appType, appName, features) => {
       ]
     }
   });
+  
+  if(newProject) {
+    const srcStorybookPackageFile = require(path.join(
+      storybookDir,
+      appConstants.PACKAGE_JSON
+    ));
+    mergedJson = mergeJsons(mergedJson, {
+      scripts: srcStorybookPackageFile.scripts
+    });
+  }
+  
   try {
     mergedJson = applyCommandType(mergedJson, getCommandType(rootDir).command);
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), mergedJson);
@@ -245,17 +262,20 @@ const addInfoToRootPackageJson = async (appType, appName, features) => {
  * @param {*} appName : user selected app name
  * @param {*} features : user selected list of optional features
  */
- const updateRootPackageJson = async (appType, appName, features) => {
+ const updateRootPackageJson = async (appType, appName, features, selecteProject) => {
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
   const universalAppsInfoObj = turboRepoPackageFile[appConstants.UNIVERSAL_REACT];
   const updatedObj = universalAppsInfoObj.apps.map(app => {
-    return {
-      appName: app.appName,
-      optionalFeatures: [
-        ...app.optionalFeatures,
-        ...features
-      ]
+    if(app.appName === selecteProject) {
+      return {
+        appName: app.appName,
+        optionalFeatures: [
+          ...app.optionalFeatures,
+          ...features
+        ]
+      }
     }
+    return app;
   })
   universalAppsInfoObj.apps = updatedObj;
   turboRepoPackageFile[appConstants.UNIVERSAL_REACT] = universalAppsInfoObj;
@@ -339,10 +359,11 @@ const initializeNewProject = async (
   appName,
   basePath,
   initializeGit,
-  features
+  features,
+  newProject
 ) => {
-  createProjectDirectory(appName);
-  copyBaseDirectory(appName, appType);
+  createProjectDirectory(appName, newProject);
+  copyBaseDirectory(appName, appType, newProject);
   copyTemplateDirectory(appType);
   console.info(chalk.green('Project Created Successfully'));
     
@@ -380,7 +401,7 @@ const initializeNewProject = async (
   packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
   const features_found = await copyOptionalTemplates(features, rootDir);
-  await addInfoToRootPackageJson(appType, appName, features_found);
+  await addInfoToRootPackageJson(appType, appName, features_found, newProject);
   await installDependencies(rootDir, false);
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
@@ -393,9 +414,10 @@ const initializeNewProject = async (
  * @param {*} appName : user selected app name
  * @param {*} features : user selected list of optional features
  */
-const updateProject = async (appType, appName, features) => {
+const updateProject = async (appType, appName, features, selecteProject) => {
+  microAppPath = path.join(cwd, 'apps', selecteProject);
   const features_found = await copyOptionalTemplates(features, cwd);
-  await updateRootPackageJson(appType, appName, features_found);
+  await updateRootPackageJson(appType, appName, features_found, selecteProject);
 
   if (features_found.length > 0) {
     installDependencies(cwd, true);
@@ -420,48 +442,56 @@ if (dirFileExists(rootPackagePath)) {
 if (existingProject) {
   //update project
   const projectsList = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps?.map(app => app.appName);
+  const existingAppType = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.appType;
   console.info(
-    chalk.yellow(
+    chalk.bold(
       [
         'There are existing projects',
         `[${projectsList.join(',')}]`,
-        'arch type. The app will go into update mode.'
-      ].join(' ')
-    )
-  );
-  console.info(
-    chalk.yellow(
-      [
         'Current app type is',
-        `[${turboRepoPackageFile[appConstants.UNIVERSAL_REACT].appType}]`
+        `[${turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.appType?.toUpperCase()}]`
       ].join(' ')
     )
-  );
-
-  microAppPath = path.join(
-    cwd,
-    'apps',
-    turboRepoPackageFile[appConstants.UNIVERSAL_REACT].apps[0].appName
   );
 
   // only get the features that are not already added in the project
-  const features = getOptionalFeatures(
-    turboRepoPackageFile[appConstants.UNIVERSAL_REACT].apps[0]?.optionalFeatures || []
+  let features = getOptionalFeatures(
+    turboRepoPackageFile[appConstants.UNIVERSAL_REACT].apps || []
   );
 
-  if (features.length > 0) {
-    const featureQuestion = [
-      {
-        ...featureQuestions[0],
-        choices: features
-      }
-    ];
+  if (features && Object.keys(features).length > 0) {
+    const updateProjectQuestions = getUpdateProjectQuestions(projectsList);
 
-    inquirer.prompt(featureQuestion).then((answers) => {
-      updateProject(appTypeMap[answers.appType], answers.appName, answers.features);
+    inquirer.prompt(updateProjectQuestions).then((ans) => {
+      const featureQuestion = [
+        {
+          when: (data) => ans.selectedProject !== null,
+          ...featureQuestions[0],
+          choices: features[ans.selectedProject]
+        }
+      ];
+      if(ans.addMoreProject) {
+        projectDir = path.join(cwd, destinationDirs.APPS_DIR);
+        inquirer.prompt(addAppQuestions).then((answers) => {
+          initializeNewProject(
+            existingAppType,
+            answers.appName,
+            answers.customBasePath,
+            false,
+            [],
+            false
+          );
+        });
+      } else {
+        if(features[ans.selectedProject].length > 0) {
+          inquirer.prompt(featureQuestion).then((answers) => {
+            updateProject(appTypeMap[answers.appType], answers.appName, answers.features, ans.selectedProject);
+          });
+        } else {
+          console.info(chalk.green.bold.underline('Nothing to update however :)'));
+        }
+      }
     });
-  } else {
-    console.info(chalk.yellow('Nothing to update however :)'));
   }
 } else {
   // create new project
@@ -516,7 +546,8 @@ if (existingProject) {
             answers.appName,
             answers.customBasePath,
             answers.initializeGit,
-            answers_features.features
+            answers_features.features,
+            true
           );
         });
       } else {
@@ -525,7 +556,8 @@ if (existingProject) {
           answers.appName,
           answers.customBasePath,
           answers.initializeGit,
-          []
+          [],
+          true
         );
       }
     }
