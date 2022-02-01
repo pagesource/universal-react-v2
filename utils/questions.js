@@ -12,13 +12,7 @@ const createAppQuestions = [
     name: 'appName',
     type: 'input',
     message: 'Enter your app name?',
-    validate: function (value) {
-      if (value.length) {
-        return true;
-      } else {
-        return 'Please enter valid app name';
-      }
-    }
+    default: 'web',
   },
   {
     when: (data) =>
@@ -43,6 +37,16 @@ const createAppQuestions = [
   }
 ];
 
+const featureQuestions = [
+  {
+    type: 'checkbox',
+    message: 'Select optional features you want to add (Press enter to skip)',
+    name: 'features',
+    choices: []
+  }
+];
+
 module.exports = {
-  createAppQuestions
+  createAppQuestions,
+  featureQuestions
 };

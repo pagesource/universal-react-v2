@@ -1,0 +1,8 @@
+{
+    "name": "themes",
+    "version": "0.1.0",
+    "private": true,
+    "main": "./theme.js",
+    "license": "MIT"
+  }
+  

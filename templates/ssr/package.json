@@ -1,5 +1,5 @@
 {
     "scripts": {
-      "dummy": "dummy command"
+      "build": "{commandType} env-var && {commandType} build"
     }
   }

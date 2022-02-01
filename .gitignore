@@ -9,3 +9,5 @@ reports
 # Dependency directories
 node_modules/
 package-lock.json
+.DS_Store
+.next

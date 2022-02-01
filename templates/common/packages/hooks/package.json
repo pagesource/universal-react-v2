@@ -1,0 +1,14 @@
+{
+    "name": "hooks",
+    "version": "0.1.0",
+    "private": true,
+    "main": "./index.js",
+    "license": "MIT",
+    "files": [
+    "./localization/useLocalizedContent.js"
+    ],
+    "dependencies": {
+      "utils": "*"
+    }
+  }
+  
