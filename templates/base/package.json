@@ -16,8 +16,7 @@
     "not dead"
   ],
   "dependencies": {
-    "@mdx-js/react": "^1.6.22",
-    "cross-env": "^7.0.2"
+    "@mdx-js/react": "^1.6.22"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "11.1.2",

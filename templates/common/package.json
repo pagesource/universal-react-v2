@@ -1,8 +1,8 @@
 {
     "scripts": {
+      "generate": "{commandType} generate-plop",
       "test:watch": "{commandType} test -- --watch",
       "test": "jest -c ./config/jest/jest.config.js",
-      "generate": "plop --plopfile generators/index.js",
       "bundlesize": "bundlesize --config ./config/bundlesize.json",
       "analyze": "cross-env ANALYZE=true && {commandType} build",
       "perf": "docker-compose -f ./config/performance/sitespeed-compose.yml run sitespeed.io  --config sitespeed.config.json --budget.configPath sitespeed.budget.config.json --graphite.host=graphite urls.txt"
@@ -15,9 +15,9 @@
         "themes": "*"
     },
     "devDependencies": {
+        "@xt-pagesource/generate-plop": "^0.1.2",
         "bundlesize": "0.18.1",
         "cross-env": "7.0.3",
-        "plop": "2.7.4",
         "prettier": "^2.4.1"
     }
   }
