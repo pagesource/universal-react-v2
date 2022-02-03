@@ -21,18 +21,25 @@ const optionalFeatures = [
 ];
 
 const getOptionalFeatures = (features) => {
-  const featureChoices = [];
-
-  // get the optional features not already added to the project
-  for (let i = 0; i < optionalFeatures.length; i = i + 1) {
-    const feat = optionalFeatures[i];
-    const includes = features.includes(feat.value);
-    if (!includes) {
-      featureChoices.push(feat);
+  const result = features.map(item => {
+    const featureChoicesObj = {};
+    const featureChoices = [];
+    for (let i = 0; i < optionalFeatures.length; i = i + 1) {
+      const feat = optionalFeatures[i];
+      const features = item.optionalFeatures;
+      const includes = features.includes(feat.value);
+      if(!includes) {
+        featureChoices.push(feat);
+      }
+      featureChoicesObj[item.appName] = featureChoices;
+      
     }
-  }
+    return featureChoicesObj;
+  });
 
-  return featureChoices;
+  return result.reduce((prev, curr) => {
+    return {...prev, ...curr};
+  }, {});
 };
 
 module.exports = {

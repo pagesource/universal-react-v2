@@ -10,7 +10,8 @@ const appConstants = {
   PWA: 'pwa',
   YARN_LOCK: 'yarn.lock',
   PACKAGE_LOCK: 'package-lock.json',
-  PNPM_LOCK: 'pnpm-lock.yaml'
+  PNPM_LOCK: 'pnpm-lock.yaml',
+  NODE_MODULES: 'node_modules'
 }
 
 const commandTypes = {
@@ -27,7 +28,8 @@ const sourceDirs = {
   ESSENTIALS_DIR: 'essentials',
   SRC_DIR: 'src',
   STORYBOOK_DIR: 'storybook',
-  OPTIONAL_FEATURES_DIR: 'optionalFeatures'
+  OPTIONAL_FEATURES_DIR: 'optionalFeatures',
+  TEMP_DIR: 'temp',
 }
 
 const destinationDirs = {

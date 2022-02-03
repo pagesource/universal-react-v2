@@ -1,8 +1,8 @@
 import React from 'react';
-import { ApolloProvider } from '@apollo/react-hooks';
-
-import GraphQLClient from '../graphQL/ApolloClient'
-import GlobalContextProvider from '../stores/global/ContextProvider';
+import type { AppProps } from 'next/app';
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools';
+import GlobalContextProvider from 'essentials/stores/global/ContextProvider';
 
 import { ThemeProvider } from 'styled-components';
 import { theme } from 'themes';
@@ -12,16 +12,18 @@ export function reportWebVitals(metric) {
   // These metrics can be sent to any analytics service
   console.log(metric)
 }
+const queryClient = new QueryClient()
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ApolloProvider client={GraphQLClient}>
-      <ThemeProvider theme={theme}>
-        <GlobalContextProvider>
-          <Component {...pageProps} />
-        </GlobalContextProvider>
-      </ThemeProvider>
-    </ApolloProvider>
+    <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools initialIsOpen={false} />
+    <ThemeProvider theme={theme}>
+     <GlobalContextProvider>
+        <Component {...pageProps} />
+      </GlobalContextProvider>
+    </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

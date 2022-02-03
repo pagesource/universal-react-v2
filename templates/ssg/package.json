@@ -1,5 +1,6 @@
 {
     "scripts": {
-      "dummy": "dummy command"
+      "build:prod": "{commandType} env-var && {commandType} bundle && {commandType} export",
+      "export": "next export"
     }
   }

@@ -1,5 +1,9 @@
 {
     "scripts": {
-      "dummy": "dummy command"
+      "build:prod": "{commandType} env-var && {commandType} bundle"
+  },
+    "dependencies": {
+      "express": "4.17.1",
+      "helmet": "4.6.0"
     }
   }
