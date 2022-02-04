@@ -5,9 +5,9 @@
     "main": "./index.js",
     "license": "MIT",
     "files": [
-        "./logger/index.js",
-        "./serviceUtils/index.js",
-        "./testUtils/testUtils.js"
+        "./logger/index.ts",
+        "./serviceUtils/index.ts",
+        "./testUtils/testUtils.ts"
     ],
     "dependencies": {
         "fetch-mock": "9.11.0",
