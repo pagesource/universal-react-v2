@@ -1,6 +1,7 @@
 import React from 'react';
 import type { AppProps } from 'next/app';
-
+import { QueryClient, QueryClientProvider } from 'react-query'
+import { ReactQueryDevtools } from 'react-query/devtools';
 import GlobalContextProvider from 'essentials/stores/global/ContextProvider';
 
 import { ThemeProvider } from 'styled-components';
@@ -11,14 +12,18 @@ export function reportWebVitals(metric) {
   // These metrics can be sent to any analytics service
   console.log(metric)
 }
+const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
+    <QueryClientProvider client={queryClient}>
+    <ReactQueryDevtools initialIsOpen={false} />
     <ThemeProvider theme={theme}>
-      <GlobalContextProvider>
+     <GlobalContextProvider>
         <Component {...pageProps} />
       </GlobalContextProvider>
     </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 

@@ -2,7 +2,7 @@
     "name": "themes",
     "version": "0.1.0",
     "private": true,
-    "main": "./theme.js",
+    "main": "./theme.ts",
     "license": "MIT"
   }
   

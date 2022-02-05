@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { fetchWrapper } from 'utils';
+import fetchWrapper from '../../utils/serviceUtils/fetch';
+import { FetchOptions } from '../../utils/serviceUtils/types';
 
-var cache={};
+var cache: Record<string,string>={};
 const languageStorageKey = "language";
 // Default base path
 const basePath = "http://localhost:3000";
@@ -12,12 +13,12 @@ const getLanguageFromLocalStorage = () => {
   return language || "en_us";
 }
 
-const getCacheKey = (language,url) => {
+const getCacheKey = (language: string,url: string) => {
   url = url.replace(/[-/]/g,"_"));
   return `${language}_${url}`;
 }
 
-export default function useLocalizedContent(url, fetchOptions){
+export default function useLocalizedContent(url: string, fetchOptions: FetchOptions){
 
   const [loading, setLoading] = useState(true);
 
@@ -28,7 +29,7 @@ export default function useLocalizedContent(url, fetchOptions){
 
   const getAllLabels = () => cache[cacheKey];
   
-  const getLabel = (label) => cache[cacheKey][label];
+  const getLabel = (label: string) => cache[cacheKey][label];
 
   useEffect(() => {
     setLoading(true);

@@ -1,7 +1,8 @@
 import Logger from '../Logger';
+import { FetchOptions } from './types';
 
 const defaultHeaders = {
-    'Content-Type': 'application/json'
+  'Content-Type': 'application/json'
 };
 
 /**
@@ -9,7 +10,7 @@ const defaultHeaders = {
  * @param {*} response  - response from the fetch api
  * checks whether the response has a status ok or else returns error
  */
-const checkStatus = (response) => {
+const checkStatus = (response: any) => {
   if (response.ok) {
     return response;
   } else {
@@ -23,7 +24,7 @@ const checkStatus = (response) => {
  * @param {*} url - url returned from endpoints getContentServiceUrl  || getDataServiceUrl
  * @param {*} fetchOptions - other options like body or headers
  */
-async function fetchWrapper(url, fetchOptions) {
+async function fetchWrapper(url: string, fetchOptions: FetchOptions) {
   const {
     headers,
     isCredentialsForCrossOrigin,
@@ -32,7 +33,7 @@ async function fetchWrapper(url, fetchOptions) {
     referrerPolicy,
     body = null
   } = fetchOptions || {};
-  const payload = {
+  const payload: RequestInit = {
     method: 'GET',
     headers: { ...defaultHeaders, ...headers },
     body,
@@ -57,9 +58,10 @@ async function fetchWrapper(url, fetchOptions) {
         },
         service: {
           name: '',
-          path: url,
+          path: url
         }
       });
+
       return err;
     });
 }

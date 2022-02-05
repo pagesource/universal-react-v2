@@ -6,14 +6,10 @@ export default {
   component: Link,
   componentName: 'LinkPage',
   componentType: 'Atoms',
-  componentChapters: [
+  sections: [
     {
-      sections: [
-        {
-          title: 'Link Component',
-          sectionFn: () => <Link />,
-        },
-      ],
-    },
-  ],
+      title: 'Link Component',
+      sectionFn: () => <Link href="/">Click Me</Link>
+    }
+  ]
 };
