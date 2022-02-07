@@ -14,10 +14,10 @@ function arrayUnique(array) {
 
 // setup assumes that a dir inside templates/optionalFeatures exists with the same name as the value below
 const optionalFeatures = [
-  { name: 'Add Test Cafe Setup', value: 'test-cafe' },
-  { name: 'Add Service Workers setup and guide', value: 'service-worker' },
-  { name: 'Add PWA setup guide', value: 'pwa' },
-  { name: 'Add Mock Api setup', value: 'mock-api' }
+  { name: 'Add Test Cafe Setup', value: 'test-cafe', scope: 'root' },
+  { name: 'Add Service Workers setup and guide', value: 'service-worker', scope: 'app' },
+  { name: 'Add PWA setup guide', value: 'pwa', scope: 'app' },
+  { name: 'Add Mock Api setup', value: 'mock-api', scope: 'root' }
 ];
 
 const getOptionalFeatures = (features) => {
@@ -32,7 +32,7 @@ const getOptionalFeatures = (features) => {
         featureChoices.push(feat);
       }
       featureChoicesObj[item.appName] = featureChoices;
-      
+
     }
     return featureChoicesObj;
   });
@@ -44,5 +44,6 @@ const getOptionalFeatures = (features) => {
 
 module.exports = {
   arrayUnique,
-  getOptionalFeatures
+  getOptionalFeatures,
+  optionalFeatures
 };
