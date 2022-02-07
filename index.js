@@ -227,10 +227,15 @@ const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) =
       } else {
         const dest = path.join(projectDir, appName);
         copyDir(source, dest, [appConstants.PACKAGE_JSON]);
-        const optPackageFile = require(path.join(source, appConstants.PACKAGE_JSON));
-        const rootPackageFile = require(path.join(dest, appConstants.PACKAGE_JSON));
-        const packageFile = mergeJsons(rootPackageFile, optPackageFile);
-        writeJsonFile(path.join(dest, appConstants.PACKAGE_JSON), packageFile);
+
+        const optPackageFilePath = path.join(source, appConstants.PACKAGE_JSON);
+
+        if(dirFileExists(optPackageFilePath)) {
+          const optPackageFile = require(optPackageFilePath);
+          const rootPackageFile = require(path.join(dest, appConstants.PACKAGE_JSON));
+          const packageFile = mergeJsons(rootPackageFile, optPackageFile);
+          writeJsonFile(path.join(dest, appConstants.PACKAGE_JSON), packageFile);
+        } 
       }
     }
   });
