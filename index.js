@@ -8,7 +8,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 const { createNpmDependenciesArray, mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
-const { arrayUnique, getOptionalFeatures } = require('./utils/helpers');
+const { arrayUnique, getOptionalFeatures, optionalFeatures } = require('./utils/helpers');
 const { createAppQuestions, featureQuestions, addAppQuestions, getUpdateProjectQuestions } = require('./utils/questions');
 const {
   appTemplateFileExclusions,
@@ -50,6 +50,7 @@ let microAppPath = ''; // project folder under ./apps/${appName}
 let packagesAppPath = ''; // packages folder on the same level of ./apps
 let turboRepoPackageFile = ''; // root folder package.json file path
 const cwd = process.cwd(); // current working directory
+let optionalTemplatesDir = '';
 
 /**
  * @description : method to initialize git repositiy
@@ -70,12 +71,14 @@ const intializeGitRepo = async (dir) => {
  */
 const createProjectDirectory = (appName, newProject) => {
   const projectPath = path.join(projectDir, appName);
+  optionalTemplatesDir = path.join(rootDir, 'modules');
   if(dirFileExists(projectPath)) {
     console.error(chalk.red(`Error: Project named [${appName}] already exist. Use different app name.`));
     process.exit(0);
   }
   if(!dirFileExists(projectPath)) {
     createDir(projectPath);
+    createDir(optionalTemplatesDir);
   }
   if(newProject) {
     createDir(path.join(rootDir, appConstants.VSCODE_DIR));
@@ -210,6 +213,32 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
     );
   }
   return done;
+};
+
+const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) => {
+  const feat = optionalFeatures.filter(f => {
+    if (features.includes(f.value)) {
+      const source = path.join(templatesPath, sourceDirs.OPTIONAL_FEATURES_DIR, f.value);
+
+      if (f.scope === 'root') {
+        const dest = path.join(optionalTemplatesDir, f.value);
+        createDir(dest);
+        copyDir(source, dest, []);
+      } else {
+        const dest = path.join(projectDir, appName);
+        copyDir(source, dest, [appConstants.PACKAGE_JSON]);
+
+        const optPackageFilePath = path.join(source, appConstants.PACKAGE_JSON);
+
+        if(dirFileExists(optPackageFilePath)) {
+          const optPackageFile = require(optPackageFilePath);
+          const rootPackageFile = require(path.join(dest, appConstants.PACKAGE_JSON));
+          const packageFile = mergeJsons(rootPackageFile, optPackageFile);
+          writeJsonFile(path.join(dest, appConstants.PACKAGE_JSON), packageFile);
+        } 
+      }
+    }
+  });
 };
 
 /**
@@ -400,7 +429,7 @@ const initializeNewProject = async (
   }
   packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
-  const features_found = await copyOptionalTemplates(features, rootDir);
+  const features_found = await copyOptionalTemplatesNewProject(features, appName, rootDir);
   await addInfoToRootPackageJson(appType, appName, features_found, newProject);
   await installDependencies(rootDir, false);
   if (initializeGit != false) {
