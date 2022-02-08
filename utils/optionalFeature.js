@@ -58,7 +58,7 @@ function copyPWASetup({ opFeatTemplate, microAppPath }) {
     color: 'blue',
     message: 'copying pwa setup guide..'
   });
-  
+
   const isSuccess = checkDirAndCopy({
     opFeatTemplate,
     microAppPath,
@@ -78,7 +78,27 @@ function copyPWASetup({ opFeatTemplate, microAppPath }) {
       });
 }
 
+function copyTestcafeSetup({ opFeatTemplate, microAppPath, rootDir }) {
+  const testcafeBasePath = path.join(rootDir, 'e2e-tests');
+  const isBaseSetupExist = dirFileExists(testcafeBasePath);
+
+  if (!isBaseSetupExist) {
+    // create e2e base directory
+    const baseSetupDir = path.join(opFeatTemplate, 'base');
+    createDir(testcafeBasePath);
+    createDir(path.join(testcafeBasePath, 'apps'));
+    copyDir(baseSetupDir, testcafeBasePath, []);
+  }
+
+  const appName = require(path.join(microAppPath, 'package.json')).name;
+  const appTestsPath = path.join(testcafeBasePath, 'apps', appName);
+  const templatePath = path.join(opFeatTemplate, 'template');
+  createDir(appTestsPath);
+  copyDir(templatePath, appTestsPath, []);
+}
+
 module.exports = {
   [appConstants.SERVICE_WORKER]: copySWSetup,
-  pwa: copyPWASetup
+  pwa: copyPWASetup,
+  testcafe: copyTestcafeSetup
 };

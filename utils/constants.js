@@ -11,14 +11,15 @@ const appConstants = {
   YARN_LOCK: 'yarn.lock',
   PACKAGE_LOCK: 'package-lock.json',
   PNPM_LOCK: 'pnpm-lock.yaml',
-  NODE_MODULES: 'node_modules'
-}
+  NODE_MODULES: 'node_modules',
+  TESTCAFE: 'testcafe'
+};
 
 const commandTypes = {
   NPM: 'npm',
   YARN: 'yarn',
   PNPM: 'pnpm'
-}
+};
 
 const sourceDirs = {
   TEMPLATES_DIR: 'templates',
@@ -29,15 +30,15 @@ const sourceDirs = {
   SRC_DIR: 'src',
   STORYBOOK_DIR: 'storybook',
   OPTIONAL_FEATURES_DIR: 'optionalFeatures',
-  TEMP_DIR: 'temp',
-}
+  TEMP_DIR: 'temp'
+};
 
 const destinationDirs = {
   DOCS_DIR: 'docs',
   WEB_DIR: 'web',
   APPS_DIR: 'apps',
   PAGES_DIR: 'pages'
-}
+};
 
 const appTypeMap = {
   'SSR(Server-side rendering)': 'ssr',

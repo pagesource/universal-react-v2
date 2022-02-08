@@ -1,7 +1,0 @@
-{
-	"dependencies": {
-		"inquirer": "^8.2.0"},
-	  "scripts": {
-		"setup-testcafe": "node testcafeSetup"
-	}
-}
