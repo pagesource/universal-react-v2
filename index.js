@@ -244,7 +244,7 @@ const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) =
       const source = path.join(templatesPath, sourceDirs.OPTIONAL_FEATURES_DIR, f.value);
 
       if (f.scope === 'root') {
-        const dest = path.join(optionalTemplatesDir, f.dirName);
+        const dest = path.join(optionalTemplatesDir, f.value);
         createDir(dest);
         copyDir(source, dest, []);
       } else {
