@@ -252,7 +252,6 @@ const addInfoToRootPackageJson = async (appType, appName, features, newProject) 
     appConstants.PACKAGE_JSON
   ));
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
-  
   let mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERSAL_REACT,
     [appConstants.UNIVERSAL_REACT]: {
@@ -272,7 +271,13 @@ const addInfoToRootPackageJson = async (appType, appName, features, newProject) 
       appConstants.PACKAGE_JSON
     ));
     mergedJson = mergeJsons(mergedJson, {
-      scripts: srcStorybookPackageFile.scripts
+      scripts: {
+        ...srcStorybookPackageFile.scripts,
+        generate: 'generate'
+      },
+      devDependencies: {
+        '@xt-pagesource/generate-plop': '^0.1.2'
+      }
     });
   }
   
