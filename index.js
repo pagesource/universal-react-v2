@@ -16,7 +16,8 @@ const {
   appConstants,
   sourceDirs,
   destinationDirs,
-  commandTypes
+  commandTypes,
+  updateProjectConst
 } = require('./utils/constants');
 const {
   createDir,
@@ -78,6 +79,8 @@ const createProjectDirectory = (appName, newProject) => {
   }
   if(!dirFileExists(projectPath)) {
     createDir(projectPath);
+  }
+  if(!dirFileExists(optionalTemplatesDir)) {
     createDir(optionalTemplatesDir);
   }
   if(newProject) {
@@ -216,6 +219,9 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
 };
 
 const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) => {
+  const root = [];
+  const apps = [];
+
   const feat = optionalFeatures.filter(f => {
     if (features.includes(f.value)) {
       const source = path.join(templatesPath, sourceDirs.OPTIONAL_FEATURES_DIR, f.value);
@@ -224,6 +230,7 @@ const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) =
         const dest = path.join(optionalTemplatesDir, f.value);
         createDir(dest);
         copyDir(source, dest, []);
+        root.push(f.value);
       } else {
         const dest = path.join(projectDir, appName);
         copyDir(source, dest, [appConstants.PACKAGE_JSON]);
@@ -236,9 +243,15 @@ const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) =
           const packageFile = mergeJsons(rootPackageFile, optPackageFile);
           writeJsonFile(path.join(dest, appConstants.PACKAGE_JSON), packageFile);
         } 
+        apps.push(f.value);
       }
     }
   });
+
+  return {
+    root,
+    apps
+  };
 };
 
 /**
@@ -246,12 +259,19 @@ const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) =
  * @param {*} appType : unser passed app type [ssg, ssr, microApp]
  * @param {*} appName : user selected app name
  */
-const addInfoToRootPackageJson = async (appType, appName, features, newProject) => {
+const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces, newProject) => {
   const universalReactPackageFile = require(path.join(
     __dirname,
     appConstants.PACKAGE_JSON
   ));
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
+
+  workspaces.forEach(ws => {
+    if(!turboRepoPackageFile.workspaces.includes(ws)) {
+      turboRepoPackageFile.workspaces.push(ws);
+    }
+  });
+  
   let mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERSAL_REACT,
     [appConstants.UNIVERSAL_REACT]: {
@@ -259,9 +279,10 @@ const addInfoToRootPackageJson = async (appType, appName, features, newProject) 
         {
           appType,
           appName,
-          optionalFeatures: features?.length ? features : []
+          optionalFeatures: app?.length ? app : []
         }
-      ]
+      ],
+      root: root
     }
   });
   
@@ -302,6 +323,7 @@ const addInfoToRootPackageJson = async (appType, appName, features, newProject) 
   const updatedObj = universalAppsInfoObj.apps.map(app => {
     if(app.appName === selecteProject) {
       return {
+        appType: app.appType,
         appName: app.appName,
         optionalFeatures: [
           ...app.optionalFeatures,
@@ -434,8 +456,17 @@ const initializeNewProject = async (
   }
   packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
-  const features_found = await copyOptionalTemplatesNewProject(features, appName, rootDir);
-  await addInfoToRootPackageJson(appType, appName, features_found, newProject);
+
+  const workspaces = ["modules/*"];
+  
+  if(newProject) {
+    const { root, apps } = await copyOptionalTemplatesNewProject(features, appName, rootDir);
+    addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
+  } else {
+    const features_found = await copyOptionalTemplates(features, rootDir);
+    await addInfoToRootPackageJson(appType, appName, features_found, [], workspaces, newProject);
+  }
+
   await installDependencies(rootDir, false);
   if (initializeGit != false) {
     intializeGitRepo(rootDir);
@@ -476,7 +507,6 @@ if (dirFileExists(rootPackagePath)) {
 if (existingProject) {
   //update project
   const projectsList = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps?.map(app => app.appName);
-  const existingAppType = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.appType;
   console.info(
     chalk.bold(
       [
@@ -497,34 +527,57 @@ if (existingProject) {
     const updateProjectQuestions = getUpdateProjectQuestions(projectsList);
 
     inquirer.prompt(updateProjectQuestions).then((ans) => {
-      const featureQuestion = [
+      const updateFeatureQuestion = [
         {
           when: (data) => ans.selectedProject !== null,
           ...featureQuestions[0],
           choices: features[ans.selectedProject]
         }
       ];
-      if(ans.addMoreProject) {
+
+      // Add new project under apps folder
+      if(ans.updateOption === updateProjectConst.ADD_NEW_APP) {
         projectDir = path.join(cwd, destinationDirs.APPS_DIR);
         inquirer.prompt(addAppQuestions).then((answers) => {
-          initializeNewProject(
-            existingAppType,
-            answers.appName,
-            answers.customBasePath,
-            false,
-            [],
-            false
-          );
-        });
-      } else {
-        if(features[ans.selectedProject].length > 0) {
-          inquirer.prompt(featureQuestion).then((answers) => {
-            updateProject(appTypeMap[answers.appType], answers.appName, answers.features, ans.selectedProject);
+
+          const featureQuestion = [
+            {
+              ...featureQuestions[0],
+              choices: optionalFeatures
+            }
+          ];
+
+          inquirer.prompt(featureQuestion).then((answers_features) => {
+            initializeNewProject(
+              appTypeMap[answers.appType],
+              answers.appName,
+              answers.customBasePath,
+              false,
+              answers_features.features,
+              false
+            );
           });
-        } else {
-          console.info(chalk.green.bold.underline('Nothing to update however :)'));
-        }
+          
+        });
+        return;
       }
+
+      // Add new optional feature to each app level
+      if(ans.updateOption === updateProjectConst.APPS_LEVEL && features[ans.selectedProject].length > 0) {
+        inquirer.prompt(updateFeatureQuestion).then((answers) => {
+          updateProject(appTypeMap[answers.appType], answers.appName, answers.features, ans.selectedProject);
+        });
+        return;
+      }
+
+      // Add new optional feature to root level
+      if(ans.updateOption === updateProjectConst.ROOT_LEVEL) {
+        console.info(chalk.green.bold.underline('Logic to update root level optional features :)'));
+        return;
+      }
+
+      console.info(chalk.green.bold.underline('Nothing to update however :)'));
+
     });
   }
 } else {

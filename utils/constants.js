@@ -54,6 +54,12 @@ const universalReactStampData = {
     'This file is needed by universal-react app for future upgrades. Please do not delete this file.'
 };
 
+const updateProjectConst = {
+  APPS_LEVEL: 'APPS_LEVEL',
+  ROOT_LEVEL: 'ROOT_LEVEL',
+  ADD_NEW_APP: 'ADD_NEW_APP'
+}
+
 module.exports = {
   appTemplateFileExclusions,
   universalReactStampData,
@@ -61,5 +67,6 @@ module.exports = {
   appConstants,
   sourceDirs,
   destinationDirs,
-  commandTypes
+  commandTypes,
+  updateProjectConst
 };
