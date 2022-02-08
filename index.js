@@ -255,9 +255,9 @@ const addInfoToRootPackageJson = async (appType, appName, features, newProject) 
   let mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERSAL_REACT,
     [appConstants.UNIVERSAL_REACT]: {
-      appType,
       apps: [
         {
+          appType,
           appName,
           optionalFeatures: features?.length ? features : []
         }
@@ -564,7 +564,7 @@ if (existingProject) {
       console.error(chalk.red('Error: Invalid app type.'));
     } else {
       // only get the features that are not already added in the project
-      const features = getOptionalFeatures([]);
+      const features = optionalFeatures;
 
       if (features.length > 0) {
         const featureQuestion = [
