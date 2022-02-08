@@ -6,13 +6,18 @@
 // @flow
 
 // Node_Module Imports
-import React, { ComponentType } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 // Relative imports
 import styles, { AppContainer } from './Button.style';
+import { ButtonProps } from './types';
 
-const Button = ({ className, children }) => <AppContainer className={className} data-testid='AppContainer'>{children}</AppContainer>;
+const Button: React.FunctionComponent<ButtonProps> = ({ className, children }) => (
+  <AppContainer className={className} data-testid="AppContainer">
+    {children}
+  </AppContainer>
+);
 
 Button.defaultProps = {};
 
