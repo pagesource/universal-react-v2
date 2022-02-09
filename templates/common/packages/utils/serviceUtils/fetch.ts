@@ -1,5 +1,7 @@
 import Logger from '../Logger';
 import { FetchOptions } from './types';
+import { defaultLoggerOptions } from '../logger/helper';
+import { CustomError } from './helpers';
 
 const defaultHeaders = {
   'Content-Type': 'application/json'
@@ -14,7 +16,7 @@ const checkStatus = (response: any) => {
   if (response.ok) {
     return response;
   } else {
-    let error = new Error({ statusText: response.statusText, response: response.json() });
+    let error = new CustomError(response.statusText, response.json());
     return Promise.reject(error);
   }
 };
@@ -24,7 +26,7 @@ const checkStatus = (response: any) => {
  * @param {*} url - url returned from endpoints getContentServiceUrl  || getDataServiceUrl
  * @param {*} fetchOptions - other options like body or headers
  */
-async function fetchWrapper(url: string, fetchOptions: FetchOptions) {
+async function fetchWrapper(url: string, fetchOptions?: FetchOptions) {
   const {
     headers,
     isCredentialsForCrossOrigin,
@@ -49,7 +51,7 @@ async function fetchWrapper(url: string, fetchOptions: FetchOptions) {
     .then(checkStatus)
     .then((res) => res.json())
     .catch((err) => {
-      Logger.error({
+      Logger(defaultLoggerOptions).error({
         message: 'failed to fetch',
         error: {
           code: err.statusText,
