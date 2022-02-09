@@ -8,7 +8,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 const { createNpmDependenciesArray, mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
-const { arrayUnique, getOptionalFeatures, optionalFeatures } = require('./utils/helpers');
+const { arrayUnique, getOptionalFeatures, optionalFeatures, getFilteredFeatures, getRootFeatures } = require('./utils/helpers');
 const { createAppQuestions, featureQuestions, addAppQuestions, getUpdateProjectQuestions } = require('./utils/questions');
 const {
   appTemplateFileExclusions,
@@ -17,7 +17,8 @@ const {
   sourceDirs,
   destinationDirs,
   commandTypes,
-  updateProjectConst
+  updateProjectConst,
+  featureScope
 } = require('./utils/constants');
 const {
   createDir,
@@ -316,24 +317,32 @@ const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces,
  * @param {*} appType : unser passed app type [ssg, ssr, microApp]
  * @param {*} appName : user selected app name
  * @param {*} features : user selected list of optional features
+ * @param {*} isUpdateRootFeatures : boolean to check if updating root level optional features
  */
- const updateRootPackageJson = async (appType, appName, features, selecteProject) => {
+ const updateRootPackageJson = async (appType, appName, features, selecteProject, isUpdateRootFeatures) => {
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
   const universalAppsInfoObj = turboRepoPackageFile[appConstants.UNIVERSAL_REACT];
-  const updatedObj = universalAppsInfoObj.apps.map(app => {
-    if(app.appName === selecteProject) {
-      return {
-        appType: app.appType,
-        appName: app.appName,
-        optionalFeatures: [
-          ...app.optionalFeatures,
-          ...features
-        ]
+  if(!isUpdateRootFeatures) {
+    const updatedObj = universalAppsInfoObj.apps.map(app => {
+      if(app.appName === selecteProject) {
+        return {
+          appType: app.appType,
+          appName: app.appName,
+          optionalFeatures: [
+            ...app.optionalFeatures,
+            ...features
+          ]
+        }
       }
-    }
-    return app;
-  })
-  universalAppsInfoObj.apps = updatedObj;
+      return app;
+    })
+    universalAppsInfoObj.apps = updatedObj;
+  } else {
+    universalAppsInfoObj.root = [
+      ...universalAppsInfoObj.root,
+      ...features
+    ];
+  }
   turboRepoPackageFile[appConstants.UNIVERSAL_REACT] = universalAppsInfoObj;
   try {
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), turboRepoPackageFile);
@@ -483,7 +492,6 @@ const updateProject = async (appType, appName, features, selecteProject) => {
   microAppPath = path.join(cwd, 'apps', selecteProject);
   const features_found = await copyOptionalTemplates(features, cwd);
   await updateRootPackageJson(appType, appName, features_found, selecteProject);
-
   if (features_found.length > 0) {
     installDependencies(cwd, true);
   }
@@ -519,7 +527,7 @@ if (existingProject) {
   );
 
   // only get the features that are not already added in the project
-  let features = getOptionalFeatures(
+  const features = getOptionalFeatures(
     turboRepoPackageFile[appConstants.UNIVERSAL_REACT].apps || []
   );
 
@@ -527,23 +535,16 @@ if (existingProject) {
     const updateProjectQuestions = getUpdateProjectQuestions(projectsList);
 
     inquirer.prompt(updateProjectQuestions).then((ans) => {
-      const updateFeatureQuestion = [
-        {
-          when: (data) => ans.selectedProject !== null,
-          ...featureQuestions[0],
-          choices: features[ans.selectedProject]
-        }
-      ];
+      
 
       // Add new project under apps folder
       if(ans.updateOption === updateProjectConst.ADD_NEW_APP) {
         projectDir = path.join(cwd, destinationDirs.APPS_DIR);
         inquirer.prompt(addAppQuestions).then((answers) => {
-
           const featureQuestion = [
             {
               ...featureQuestions[0],
-              choices: optionalFeatures
+              choices: getFilteredFeatures(optionalFeatures, featureScope.APP)
             }
           ];
 
@@ -564,15 +565,41 @@ if (existingProject) {
 
       // Add new optional feature to each app level
       if(ans.updateOption === updateProjectConst.APPS_LEVEL && features[ans.selectedProject].length > 0) {
-        inquirer.prompt(updateFeatureQuestion).then((answers) => {
-          updateProject(appTypeMap[answers.appType], answers.appName, answers.features, ans.selectedProject);
-        });
+        const appFeatures = getFilteredFeatures(features[ans.selectedProject], featureScope.APP);
+        if(appFeatures.length) {
+          const updateFeatureQuestion = [
+            {
+              when: (data) => ans.selectedProject !== null,
+              ...featureQuestions[0],
+              choices: appFeatures
+            }
+          ];
+          
+          inquirer.prompt(updateFeatureQuestion).then((answers) => {
+            updateProject(appTypeMap[answers.appType], answers.appName, answers.features, ans.selectedProject);
+          });
+        }
+        console.info(chalk.green.bold('No optional features found to add.'));
         return;
       }
 
       // Add new optional feature to root level
       if(ans.updateOption === updateProjectConst.ROOT_LEVEL) {
-        console.info(chalk.green.bold.underline('Logic to update root level optional features :)'));
+        const rootFeatures = getRootFeatures(turboRepoPackageFile[appConstants.UNIVERSAL_REACT].root || []);
+        if(rootFeatures.length > 0) {
+          const updateFeatureQuestion = [
+            {
+              when: (data) => ans.selectedProject !== null,
+              ...featureQuestions[0],
+              choices: rootFeatures
+            }
+          ];
+          inquirer.prompt(updateFeatureQuestion).then((answers) => {
+            console.log({ans, answers});
+            updateRootPackageJson(null, null, answers.features, null, true);
+          });
+        }
+        console.info(chalk.green.bold('No optional features found to add.'));
         return;
       }
 

@@ -1,3 +1,5 @@
+const { featureScope } = require('./constants');
+
 function arrayUnique(array) {
   const a = array.concat();
   for (let i = 0; i < a.length; i = i + 1) {
@@ -14,11 +16,15 @@ function arrayUnique(array) {
 
 // setup assumes that a dir inside templates/optionalFeatures exists with the same name as the value below
 const optionalFeatures = [
-  { name: 'Add Test Cafe Setup', value: 'test-cafe', scope: 'root' },
-  { name: 'Add Service Workers setup and guide', value: 'service-worker', scope: 'app' },
-  { name: 'Add PWA setup guide', value: 'pwa', scope: 'app' },
-  { name: 'Add Mock Api setup', value: 'mock-api', scope: 'root' }
+  { name: 'Add Test Cafe Setup', value: 'test-cafe', scope: featureScope.ROOT },
+  { name: 'Add Service Workers setup and guide', value: 'service-worker', scope: featureScope.APP },
+  { name: 'Add PWA setup guide', value: 'pwa', scope: featureScope.APP },
+  { name: 'Add Mock Api setup', value: 'mock-api', scope: featureScope.ROOT }
 ];
+
+const getFilteredFeatures = (features, scope) => {
+  return features.filter(item => item.scope === scope);
+}
 
 const getOptionalFeatures = (features) => {
   const result = features.map(item => {
@@ -42,8 +48,18 @@ const getOptionalFeatures = (features) => {
   }, {});
 };
 
+const getRootFeatures = (rootFeatures) => {
+  const finalList = [];
+  const rootScopedFeatures = getFilteredFeatures(optionalFeatures, featureScope.ROOT);
+  return rootScopedFeatures.filter(item => {
+    return !rootFeatures.includes(item.value);
+  });
+}
+
 module.exports = {
   arrayUnique,
   getOptionalFeatures,
-  optionalFeatures
+  optionalFeatures,
+  getFilteredFeatures,
+  getRootFeatures
 };

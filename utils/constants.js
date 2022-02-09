@@ -60,6 +60,11 @@ const updateProjectConst = {
   ADD_NEW_APP: 'ADD_NEW_APP'
 }
 
+const featureScope = {
+  APP: 'app',
+  ROOT: 'root'
+}
+
 module.exports = {
   appTemplateFileExclusions,
   universalReactStampData,
@@ -68,5 +73,6 @@ module.exports = {
   sourceDirs,
   destinationDirs,
   commandTypes,
-  updateProjectConst
+  updateProjectConst,
+  featureScope
 };
