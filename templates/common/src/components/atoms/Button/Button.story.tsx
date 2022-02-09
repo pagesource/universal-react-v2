@@ -1,6 +1,4 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
-import { theme } from 'theme';
 
 import Button from './index';
 
@@ -12,9 +10,7 @@ export default {
     {
       title: 'Button Component',
       sectionFn: () => (
-        <ThemeProvider theme={theme}>
-          <Button>Click Me</Button>
-        </ThemeProvider>
+        <Button>Click Me</Button>
       )
     }
   ]
