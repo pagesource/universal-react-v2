@@ -12,7 +12,8 @@
         "react": "*",
         "react-dom": "*",
         "styled-components": "^5.3.1",
-        "themes": "*"
+        "themes": "*",
+        "services": "*"
     },
     "devDependencies": {
         "@xt-pagesource/generate-plop": "^0.1.2",
