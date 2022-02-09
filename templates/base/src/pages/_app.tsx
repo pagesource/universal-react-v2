@@ -1,29 +1,27 @@
+// node modules
 import React from 'react';
 import type { AppProps } from 'next/app';
-import { QueryClient, QueryClientProvider } from 'react-query'
-import { ReactQueryDevtools } from 'react-query/devtools';
-import GlobalContextProvider from 'essentials/stores/global/ContextProvider';
-
 import { ThemeProvider } from 'styled-components';
+
+// packages
 import { theme } from 'themes';
+import WithReactQuery from 'services';
+
+import GlobalContextProvider from '../stores/globalContext';
 
 // Will be called once for every metric that has to be reported.
 export function reportWebVitals(metric) {
   // These metrics can be sent to any analytics service
-  console.log(metric)
+  console.log(metric);
 }
-const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <QueryClientProvider client={queryClient}>
-    <ReactQueryDevtools initialIsOpen={false} />
     <ThemeProvider theme={theme}>
-     <GlobalContextProvider>
+      <GlobalContextProvider>
         <Component {...pageProps} />
       </GlobalContextProvider>
     </ThemeProvider>
-    </QueryClientProvider>
   );
 }
 
@@ -39,4 +37,4 @@ function MyApp({ Component, pageProps }: AppProps) {
 //   return { ...appProps }
 // }
 
-export default MyApp;
+export default WithReactQuery(MyApp, { devTools: true });
