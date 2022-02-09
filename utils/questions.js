@@ -64,14 +64,14 @@ const getUpdateProjectQuestions = (projectsList) => [
   {
     type: 'list',
     name: 'updateOption',
-    message: 'Select option to proced.',
+    message: 'Select an option to proceed.',
     choices: updateProjectOptions
   },
   {
     when: (data) => data.updateOption === updateProjectConst.APPS_LEVEL,
     type: 'list',
     name: 'selectedProject',
-    message: 'Select project you want to update.',
+    message: 'Select app you want to update.',
     choices: projectsList
   }
 ]
