@@ -1,3 +1,4 @@
+import { isCalledInBrowser } from './helper';
 import createDefaultLogger from './logger';
 import { LoggerConfigOptions, LoggerInstance, LoggerOptions } from './types';
 
@@ -8,10 +9,11 @@ const createLogger = (options: LoggerOptions): LoggerInstance => {
     landingLogs = true,
     handleExceptions = true
   } = options || {};
+  const isBrowser = isCalledInBrowser();
   const Log: LoggerInstance = createDefaultLogger(loggerConfig);
 
   if (landingLogs) {
-    if (!process.browser) {
+    if (!isBrowser) {
       console.error(
         'Invalid request: Landing logs utility not available outside browser.'
       );
@@ -39,7 +41,7 @@ const createLogger = (options: LoggerOptions): LoggerInstance => {
   }
 
   if (handleExceptions) {
-    if (!process.browser) {
+    if (!isBrowser) {
       console.error(
         'Invalid request: Browser error logs utility not available outside browser.'
       );

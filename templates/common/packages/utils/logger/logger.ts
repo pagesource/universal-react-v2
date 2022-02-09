@@ -1,4 +1,5 @@
 import { UAParser } from 'ua-parser-js';
+import { isCalledInBrowser } from './helper';
 import {
   LoggerCallbackParams,
   LoggerCallbackReturnType,
@@ -18,7 +19,7 @@ const logObject = ({ logLevel, logObj }: LoggerCallbackParams, server = false) =
       service,
       error
     } = logObj || {};
-    const isBrowser = process.browser;
+    const isBrowser = isCalledInBrowser();
     const localTimestamp = new Date();
     //const test_string = 'Mozilla/5.0 (Linux; U; Android 4.0.3; de-ch; HTC Sensation Build/IML74K) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30'
     const ua_result = new UAParser().getResult();
@@ -102,9 +103,8 @@ const postLogs = (logObj: any, remoteURL: string) => {
 
 const callLog = ({ logLevel, logObj, remoteURL }: LoggerCallbackParams) => {
   const isDev = process.env.NODE_ENV !== 'production';
-  const isServer = !process.browser;
+  const isServer = !isCalledInBrowser();
   let logged;
-
   if (isDev || isServer) {
     logged = logObject({ logLevel, logObj }, true);
     console[logLevel](logged);
@@ -126,13 +126,13 @@ const createDefaultLogger = (options: LoggerConfigOptions): LoggerInstance => {
     parseUserAgent = true,
     remoteDataAgregatorUrl: remoteURL
   } = options;
-  const logLevels: Record<LogLevelKeys, number> = {
-    error: 0,
-    info: 1,
-    warn: 2,
-    log: 3,
-    debug: 4
-  };
+  enum logLevels {
+    error = 0,
+    info = 1,
+    warn = 2,
+    log = 3,
+    debug = 4
+  }
 
   let loggingObj: Record<LogLevelKeys, Function | undefined> = {
     error: undefined,
