@@ -1,6 +1,5 @@
 {
     "scripts": {
-      "generate": "{commandType} generate-plop",
       "test:watch": "{commandType} test -- --watch",
       "test": "jest -c ./config/jest/jest.config.js",
       "bundlesize": "bundlesize --config ./config/bundlesize.json",
@@ -16,7 +15,6 @@
         "services": "*"
     },
     "devDependencies": {
-        "@xt-pagesource/generate-plop": "^0.1.2",
         "bundlesize": "0.18.1",
         "cross-env": "7.0.3",
         "prettier": "^2.4.1"

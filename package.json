@@ -20,7 +20,8 @@
     "lint": "node scripts/eslint",
     "lint:fix": "npm run lint -- --fix",
     "test": "node scripts/test",
-    "prepublishOnly": "npm run lint && npm test"
+    "prepublishOnly": "npm run lint && npm test",
+    "debug": "node index.js"
   },
   "files": [
     "src"
