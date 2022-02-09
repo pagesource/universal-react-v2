@@ -1,8 +1,4 @@
 module.exports = {
-  stories: [
-    "../../apps/**/**/*.story.js",
-    "../../packages/**/**/*.story.js"
-  ],
   addons: [
     "@storybook/addon-a11y",
     "@storybook/addon-actions",
@@ -12,4 +8,17 @@ module.exports = {
     "storybook-design-token",
     "@storybook/addon-viewport"
   ],
+  framework: "@storybook/react",
+  core: {
+    builder: "webpack5",
+  },
+  webpackFinal: async (config) => {
+    config.resolve.plugins = [
+      ...(config.resolve.plugins || []),
+      new TsconfigPathsPlugin({
+        extensions: config.resolve.extensions,
+      }),
+    ];
+    return config;
+  },
 };
