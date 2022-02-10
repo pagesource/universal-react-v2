@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "clean": "npx rimraf cucumber-json-reports",
+    "test": "gherkin-testcafe",
+    "report": "node utils/generateReport.js",
+    "test:local": "node local"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^7.3.1",
+    "gherkin-testcafe": "^5.1.0",
+    "multiple-cucumber-html-reporter": "^1.18.3",
+    "testcafe": "^1.17.1",
+    "testcafe-cucumber-steps": "^1.20.1",
+    "testcafe-reporter-cucumber-json": "^6.3.0"
+  }
+}
