@@ -16,7 +16,7 @@ function arrayUnique(array) {
 
 // setup assumes that a dir inside templates/optionalFeatures exists with the same name as the value below
 const optionalFeatures = [
-  { name: 'Add Test Cafe Setup', value: 'test-cafe', scope: featureScope.ROOT },
+  { name: 'Add Test Cafe Setup', value: 'testcafe', scope: featureScope.ROOT },
   { name: 'Add Service Workers setup and guide', value: 'service-worker', scope: featureScope.APP },
   { name: 'Add PWA setup guide', value: 'pwa', scope: featureScope.APP },
   { name: 'Add Mock Api setup', value: 'mock-api', scope: featureScope.ROOT }
