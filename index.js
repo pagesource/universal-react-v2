@@ -284,7 +284,7 @@ const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces,
           optionalFeatures: app?.length ? app : []
         }
       ],
-      root: root
+      rootOptionalFeatures: root
     }
   });
 
@@ -306,7 +306,7 @@ const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces,
 
   try {
     // Logging added project info
-    const rootFeatures = mergedJson[appConstants.UNIVERSAL_REACT].root;
+    const rootFeatures = mergedJson[appConstants.UNIVERSAL_REACT].rootOptionalFeatures;
     console.info(chalk.bold('Following app get created'));
     console.table(mergedJson[appConstants.UNIVERSAL_REACT].apps);
 
@@ -350,8 +350,8 @@ const updateRootPackageJson = async (appType, appName, features, selecteProject,
     })
     universalAppsInfoObj.apps = updatedObj;
   } else {
-    universalAppsInfoObj.root = [
-      ...universalAppsInfoObj.root,
+    universalAppsInfoObj.rootOptionalFeatures = [
+      ...universalAppsInfoObj.rootOptionalFeatures,
       ...features
     ];
   }
@@ -610,19 +610,17 @@ if (existingProject) {
 
           // skipping optional feature for micro apps for now.
           if(appTypeMap[answers.appType] === appTypes.MICRO_APP) {
-              inquirer.prompt(featureQuestion).then((answers_features) => {
-                addNewApp(
-                  appTypeMap[answers.appType],
-                  answers.appName,
-                  answers.customBasePath,
-                  false,
-                  [],
-                  false
-                );
-              });
+            addNewApp(
+              appTypeMap[answers.appType],
+              answers.appName,
+              answers.customBasePath,
+              false,
+              [],
+              false
+            );
           } else {
             inquirer.prompt(featureQuestion).then((answers_features) => {
-              initializeNewProject(
+              addNewApp(
                 appTypeMap[answers.appType],
                 answers.appName,
                 answers.customBasePath,
@@ -664,7 +662,7 @@ if (existingProject) {
 
       // Add new optional feature to root level
       if(ans.updateOption === updateProjectConst.ROOT_LEVEL) {
-        const rootFeatures = getRootFeatures(turboRepoPackageFile[appConstants.UNIVERSAL_REACT].root || []);
+        const rootFeatures = getRootFeatures(turboRepoPackageFile[appConstants.UNIVERSAL_REACT].rootOptionalFeatures || []);
         if(rootFeatures.length > 0) {
           const updateFeatureQuestion = [
             {
