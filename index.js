@@ -78,7 +78,7 @@ const createProjectDirectory = (appName, newProject) => {
     console.error(chalk.red(`Error: Project named [${appName}] already exist. Use different app name.`));
     process.exit(0);
   }
-  if(!dirFileExists(projectPath)) {
+  if(!dirFileExists(projectPath) && newProject) {
     createDir(projectPath);
   }
   if(!dirFileExists(optionalTemplatesDir)) {
