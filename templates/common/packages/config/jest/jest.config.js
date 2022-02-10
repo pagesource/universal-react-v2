@@ -1,6 +1,7 @@
 module.exports = {
     rootDir: '../../',
     moduleDirectories: ['node_modules'],
+    moduleFileExtensions: ['ts', 'tsx', 'js', 'json'],
     testEnvironment: 'jsdom',
     setupFiles: [
       "<rootDir>/config/jest/jest.setup.js"
@@ -16,6 +17,8 @@ module.exports = {
     collectCoverageFrom: [
       'src/**/*.js',
       'src/**/*.jsx',
+      'src/**/*.ts',
+      'src/**/*.tsx',
       'store/**/*.js', 
       '!**/*.mock.js',
       '!**/*.story.js',
@@ -34,7 +37,8 @@ module.exports = {
       }
     },
     transform: {
-      '\\.(js|jsx)?$': 'babel-jest'
+      '\\.(js|jsx)?$': 'babel-jest',
+      '^.+\\.(ts|tsx)$': 'ts-jest'
     }
   };
   
