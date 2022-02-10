@@ -18,7 +18,8 @@ const {
   destinationDirs,
   commandTypes,
   updateProjectConst,
-  featureScope
+  featureScope,
+  appTypes
 } = require('./utils/constants');
 const {
   createDir,
@@ -304,6 +305,17 @@ const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces,
   }
   
   try {
+    // Logging added project info
+    const rootFeatures = mergedJson[appConstants.UNIVERSAL_REACT].root;
+    console.info(chalk.bold('Following app get created'));
+    console.table(mergedJson[appConstants.UNIVERSAL_REACT].apps);
+
+    // Logging added root level optional features info
+    if(rootFeatures.length) {
+      console.info(chalk.bold('List of root optional features'));
+      const transformedRootFeatures = rootFeatures.map((item, index) => ({ optionalFeature: item }));
+      console.table(transformedRootFeatures);
+    }
     mergedJson = applyCommandType(mergedJson, getCommandType(rootDir).command);
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), mergedJson);
   } catch (e) {
@@ -514,22 +526,20 @@ if (dirFileExists(rootPackagePath)) {
 
 if (existingProject) {
   //update project
-  const projectsList = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps?.map(app => app.appName);
-  console.info(
-    chalk.bold(
-      [
-        'There are existing projects',
-        `[${projectsList.join(',')}]`,
-        'Current app type is',
-        `[${turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.appType?.toUpperCase()}]`
-      ].join(' ')
-    )
-  );
+  const uvApps = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps;
+  const projectsList = uvApps?.filter(item => item.appType !== appTypes.MICRO_APP)?.map(app => app.appName);
+  console.info(chalk.bold('List of apps already available in repo.'));
+  console.table(uvApps);
 
   // only get the features that are not already added in the project
   const features = getOptionalFeatures(
     turboRepoPackageFile[appConstants.UNIVERSAL_REACT].apps || []
   );
+
+  // if(!projectsList.length) {
+  //   console.warn(chalk.yellow.bold('No list of project found to update. Micro app are not applicable to add optional features.'));
+  //   return;
+  // }
 
   if (features && Object.keys(features).length > 0) {
     const updateProjectQuestions = getUpdateProjectQuestions(projectsList);
@@ -548,21 +558,38 @@ if (existingProject) {
             }
           ];
 
-          inquirer.prompt(featureQuestion).then((answers_features) => {
+          // skipping optional feature for micro apps for now.
+          if(appTypeMap[answers.appType] === appTypes.MICRO_APP) {
             initializeNewProject(
               appTypeMap[answers.appType],
               answers.appName,
               answers.customBasePath,
               false,
-              answers_features.features,
+              [],
               false
             );
-          });
+          } else {
+            inquirer.prompt(featureQuestion).then((answers_features) => {
+              initializeNewProject(
+                appTypeMap[answers.appType],
+                answers.appName,
+                answers.customBasePath,
+                false,
+                answers_features.features,
+                false
+              );
+            });
+          }
+          
           
         });
         return;
       }
 
+      if(!projectsList.length && ans.updateOption === updateProjectConst.APPS_LEVEL) {
+        console.warn(chalk.yellow.bold('No list of project found to update. MicroApp app types are not applicable to add optional features for now.'));
+        return;
+      }
       // Add new optional feature to each app level
       if(ans.updateOption === updateProjectConst.APPS_LEVEL && features[ans.selectedProject].length > 0) {
         const appFeatures = getFilteredFeatures(features[ans.selectedProject], featureScope.APP);
@@ -595,7 +622,6 @@ if (existingProject) {
             }
           ];
           inquirer.prompt(updateFeatureQuestion).then((answers) => {
-            console.log({ans, answers});
             updateRootPackageJson(null, null, answers.features, null, true);
           });
         }
@@ -610,8 +636,8 @@ if (existingProject) {
 } else {
   // create new project
   if (isEmptyDir(cwd)) {
-    console.log(chalk.bgYellow.bold.black('[:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.'));
-    console.log(chalk.green.underline('Setting up a new mono repo project using Turborepo.'));
+    console.info(chalk.bgYellow.bold.black('[:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.'));
+    console.info(chalk.green.underline('Setting up a new mono repo project using Turborepo.'));
     setupTurboRepoProject(cwd);
     rootDir = cwd;
     projectDir = path.join(cwd, destinationDirs.APPS_DIR);
@@ -646,7 +672,8 @@ if (existingProject) {
       // only get the features that are not already added in the project
       const features = optionalFeatures;
 
-      if (features.length > 0) {
+      // skipping optional feature for micro apps for now.
+      if (features.length > 0 && appTypeMap[answers.appType] !== appTypes.MICRO_APP) {
         const featureQuestion = [
           {
             ...featureQuestions[0],

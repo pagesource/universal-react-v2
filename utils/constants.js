@@ -1,5 +1,11 @@
 const appTemplateFileExclusions = [];
 
+const appTypes = {
+  MICRO_APP: 'microApp',
+  SSR_APP: 'ssr',
+  SSG_APP: 'ssg'
+}
+
 const appConstants = {
   UNIVERSAL_REACT: 'universal-react',
   PACKAGE_JSON: 'package.json',
@@ -22,7 +28,7 @@ const commandTypes = {
 
 const sourceDirs = {
   TEMPLATES_DIR: 'templates',
-  MICRO_APP: 'microApp',
+  MICRO_APP: appTypes.MICRO_APP,
   BASE_DIR: 'base',
   COMMON_DIR: 'common',
   ESSENTIALS_DIR: 'essentials',
@@ -40,9 +46,9 @@ const destinationDirs = {
 }
 
 const appTypeMap = {
-  'SSR(Server-side rendering)': 'ssr',
-  'SSG(Static site generation)': 'ssg',
-  'Micro-App': 'microApp'
+  'SSR(Server-side rendering)': appTypes.SSR_APP,
+  'SSG(Static site generation)': appTypes.SSG_APP,
+  'Micro-App': appTypes.MICRO_APP
 };
 
 const universalReactStampData = {
@@ -74,5 +80,6 @@ module.exports = {
   destinationDirs,
   commandTypes,
   updateProjectConst,
-  featureScope
+  featureScope,
+  appTypes
 };
