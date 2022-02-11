@@ -14,10 +14,12 @@ import NextLink from 'next/link';
 import type { Props } from './types';
 import styles from './Link.style';
 
-const Link: React.FunctionComponent<Props> = ({ children, href, ...props }) => (
-  <NextLink {...props} href={href} as={`${href}`}>
-    {children}
-  </NextLink>
+const Link: React.FunctionComponent<Props> = ({ children, href, ...props }: Props) => (
+  <>
+    <NextLink {...props} href={href} as={`${href}`}>
+      {children}
+    </NextLink>
+  </>
 );
 
 Link.defaultProps = {};
