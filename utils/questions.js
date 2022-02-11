@@ -1,9 +1,9 @@
-const { appTypeMap, updateProjectConst } = require('./constants');
+const { appTypeMap, updateProjectConst, appTypes } = require('./constants');
 const choices = Object.keys(appTypeMap);
 
 const updateProjectOptions = [
-  { name: 'Add additional features to the existing app', value: updateProjectConst.APPS_LEVEL },
-  { name: 'Add additional features to the root level under modules', value: updateProjectConst.ROOT_LEVEL },
+  { name: 'Add optional features to the existing apps', value: updateProjectConst.APPS_LEVEL },
+  { name: 'Add optional features to the root level', value: updateProjectConst.ROOT_LEVEL },
   { name: 'Add a new app to the project', value: updateProjectConst.ADD_NEW_APP }
 ];
 
@@ -15,6 +15,16 @@ const commonQuestionsProjectSetup = [
     choices: choices
   },
   {
+    when: (data) =>
+      appTypeMap[data.appType] === appTypes.MICRO_APP,
+    name: 'appName',
+    type: 'input',
+    message: 'Enter your app name?',
+    default: 'header',
+  },
+  {
+    when: (data) =>
+      appTypeMap[data.appType] === appTypes.SSR_APP || appTypeMap[data.appType] === appTypes.SSG_APP,
     name: 'appName',
     type: 'input',
     message: 'Enter your app name?',
@@ -22,7 +32,7 @@ const commonQuestionsProjectSetup = [
   },
   {
     when: (data) =>
-      appTypeMap[data.appType] === 'ssr' || appTypeMap[data.appType] === 'ssg',
+      appTypeMap[data.appType] === appTypes.SSR_APP || appTypeMap[data.appType] === appTypes.SSG_APP,
     name: 'basePath',
     type: 'confirm',
     message: 'Do you want to run your application from deep/base path?',
@@ -38,17 +48,11 @@ const commonQuestionsProjectSetup = [
 ];
 
 const createAppQuestions = [
-  ...commonQuestionsProjectSetup,
-  {
-    name: 'initializeGit',
-    type: 'confirm',
-    message: 'Do you want to initialize a git repo?',
-    default: true
-  }
+  ...commonQuestionsProjectSetup
 ];
 
 const addAppQuestions = [
-  ...commonQuestionsProjectSetup,
+  ...commonQuestionsProjectSetup
 ];
 
 const featureQuestions = [
@@ -68,7 +72,7 @@ const getUpdateProjectQuestions = (projectsList) => [
     choices: updateProjectOptions
   },
   {
-    when: (data) => data.updateOption === updateProjectConst.APPS_LEVEL,
+    when: (data) => (data.updateOption === updateProjectConst.APPS_LEVEL && projectsList.length),
     type: 'list',
     name: 'selectedProject',
     message: 'Select app you want to update.',
