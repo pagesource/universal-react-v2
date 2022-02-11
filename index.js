@@ -79,9 +79,7 @@ const createProjectDirectory = (appName, newProject) => {
     console.error(chalk.red(`Error: Project named [${appName}] already exist. Use different app name.`));
     process.exit(0);
   }
-  if(!dirFileExists(projectPath) && newProject) {
-    createDir(projectPath);
-  }
+  
   if(!dirFileExists(optionalTemplatesDir)) {
     createDir(optionalTemplatesDir);
   }
@@ -490,7 +488,7 @@ const initializeNewProject = async (
   }
 
   await installDependencies(rootDir, false);
-  if (initializeGit != false) {
+  if (initializeGit) {
     intializeGitRepo(rootDir);
   }
 };
@@ -732,7 +730,7 @@ if (existingProject) {
             appTypeMap[answers.appType],
             answers.appName,
             answers.customBasePath,
-            answers.initializeGit,
+            false,
             answers_features.features,
             true
           );
@@ -742,7 +740,7 @@ if (existingProject) {
           appTypeMap[answers.appType],
           answers.appName,
           answers.customBasePath,
-          answers.initializeGit,
+          false,
           [],
           true
         );

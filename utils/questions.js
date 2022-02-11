@@ -48,17 +48,11 @@ const commonQuestionsProjectSetup = [
 ];
 
 const createAppQuestions = [
-  ...commonQuestionsProjectSetup,
-  {
-    name: 'initializeGit',
-    type: 'confirm',
-    message: 'Do you want to initialize a git repo?',
-    default: true
-  }
+  ...commonQuestionsProjectSetup
 ];
 
 const addAppQuestions = [
-  ...commonQuestionsProjectSetup,
+  ...commonQuestionsProjectSetup
 ];
 
 const featureQuestions = [
