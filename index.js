@@ -223,6 +223,7 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
 const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) => {
   const root = [];
   const apps = [];
+  optionalTemplatesDir = path.join(rootDir, 'modules');
 
   const feat = optionalFeatures.filter(f => {
     if (features.includes(f.value)) {
@@ -666,6 +667,7 @@ if (existingProject) {
             }
           ];
           inquirer.prompt(updateFeatureQuestion).then((answers) => {
+            copyOptionalTemplatesNewProject(answers.features, null, rootDir);
             updateRootPackageJson(null, null, answers.features, null, true);
           });
         }
