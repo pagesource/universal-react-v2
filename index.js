@@ -120,7 +120,7 @@ const copyBaseDirectory = (appName, appType, newProject) => {
   packagesAppPath = path.join(rootDir, appConstants.PACKAGES_DIR);
   if(newProject) {
     copyStorybookDirectory();
-    // removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
+    removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
   }
 
   if(!newProject) {
@@ -128,12 +128,12 @@ const copyBaseDirectory = (appName, appType, newProject) => {
   }
 
   if (appType === sourceDirs.MICRO_APP) {
-    // removeDir(path.join(projectDir, destinationDirs.WEB_DIR));
+    removeDir(path.join(projectDir, destinationDirs.WEB_DIR));
     console.info(chalk.green(`Start creating ${appType}.`));
     copyDir(microAppTemplatePath, microAppPath, []);
     copyDir(essentialsTemplatePath, microAppPath, []);
   } else {
-    // renameSync(path.join(projectDir, destinationDirs.WEB_DIR), microAppPath);
+    renameSync(path.join(projectDir, destinationDirs.WEB_DIR), microAppPath);
     copyDir(baseTemplatePath, microAppPath, []);
     copyDir(essentialsTemplatePath, microAppPath, []);
     // removing pages folder gnerated by turboRepo
@@ -529,7 +529,6 @@ const addNewApp = async (appType, appName, basePath, initializeGit, features, ne
     process.exit(0);
   }
   createDir(projectPath);
-  copyDir(tempDirPath, microAppPath, []);
 
   if (appType === sourceDirs.MICRO_APP) {
     copyDir(microAppTemplatePath, microAppPath, []);
@@ -585,11 +584,6 @@ if (existingProject) {
   const features = getOptionalFeatures(
     turboRepoPackageFile[appConstants.UNIVERSAL_REACT].apps || []
   );
-
-  // if(!projectsList.length) {
-  //   console.warn(chalk.yellow.bold('No list of project found to update. Micro app are not applicable to add optional features.'));
-  //   return;
-  // }
 
   if (features && Object.keys(features).length > 0) {
     const updateProjectQuestions = getUpdateProjectQuestions(projectsList);
