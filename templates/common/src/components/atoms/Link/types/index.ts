@@ -5,4 +5,5 @@ import { LinkProps } from 'next/link';
 
 export type Props = LinkProps & {
   children?: ReactNode;
+  href: string;
 };
