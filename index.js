@@ -449,6 +449,7 @@ const initializeNewProject = async (
   let packageFile = mergeJsons(basePackage, appPackage);
 
   if(appType === sourceDirs.MICRO_APP) {
+    packageFile.name = appName;
     packageFile.scripts = {
       ...appPackage.scripts,
       ...commonPackage.scripts
@@ -483,8 +484,8 @@ const initializeNewProject = async (
     const { root, apps } = await copyOptionalTemplatesNewProject(features, appName, rootDir);
     addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
   } else {
-    const features_found = await copyOptionalTemplates(features, rootDir);
-    await addInfoToRootPackageJson(appType, appName, features_found, [], workspaces, newProject);
+    const { root, apps } = await copyOptionalTemplatesNewProject(features, appName, rootDir);
+    addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
   }
 
   await installDependencies(rootDir, false);
@@ -517,7 +518,10 @@ const updateExistingAppProject = async (appType, appName, features, selecteProje
   installDependencies(cwd, true);
 };
 
-
+/*  TODOs: Logic of [addNewApp] method need to revisit. As lot of logic is missing to merging package.json files from different source.
+    using [initializeNewProject] method for now as skipping operation on newProject flag.
+    So we don't need to update same logic at two places.
+*/
 const addNewApp = async (appType, appName, basePath, initializeGit, features, newProject) => {
   const projectPath = path.join(projectDir, appName);
   microAppPath = path.join(projectDir, appName);
@@ -575,6 +579,9 @@ if (dirFileExists(rootPackagePath)) {
 if (existingProject) {
   //update project
   const uvApps = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps;
+
+  //TODOs: filtering MICRO_APP for now. Need to remove this filtering and get all list of projects
+  //TODOs: add write another logic to find whic optional feature are applicable for Micro Apps.
   const projectsList = uvApps?.filter(item => item.appType !== appTypes.MICRO_APP)?.map(app => app.appName);
   console.info(chalk.bold('List of apps already available in repo.'));
   console.table(uvApps);
@@ -603,7 +610,7 @@ if (existingProject) {
 
           // skipping optional feature for micro apps for now.
           if(appTypeMap[answers.appType] === appTypes.MICRO_APP) {
-            addNewApp(
+            initializeNewProject(
               appTypeMap[answers.appType],
               answers.appName,
               answers.customBasePath,
@@ -613,7 +620,7 @@ if (existingProject) {
             );
           } else {
             inquirer.prompt(featureQuestion).then((answers_features) => {
-              addNewApp(
+              initializeNewProject(
                 appTypeMap[answers.appType],
                 answers.appName,
                 answers.customBasePath,
@@ -630,7 +637,9 @@ if (existingProject) {
       }
 
       if(!projectsList.length && ans.updateOption === updateProjectConst.APPS_LEVEL) {
-        console.warn(chalk.yellow.bold('No list of project found to update. MicroApp app types are not applicable to add optional features for now.'));
+        console.warn(chalk.yellow.bold('No list of project found to update.'));
+        console.warn(chalk.yellow.bold('MicroApp app types are not applicable to add optional features for now.'));
+        console.warn(chalk.yellow.bold('Add new app or add optional feature to root level.'));
         return;
       }
       // Add new optional feature to each app level
@@ -648,8 +657,9 @@ if (existingProject) {
           inquirer.prompt(updateFeatureQuestion).then((answers) => {
             updateExistingAppProject(appTypeMap[answers.appType], answers.appName, answers.features, ans.selectedProject);
           });
+          return;
         }
-        console.info(chalk.green.bold('No optional features found to add.'));
+        console.info(chalk.green.bold(`No optional features found to add for app -> [${ans.selectedProject}]`));
         return;
       }
 
@@ -669,7 +679,7 @@ if (existingProject) {
             updateRootPackageJson(null, null, answers.features, null, true);
           });
         }
-        console.info(chalk.green.bold('No optional features found to add.'));
+        console.info(chalk.green.bold('No optional features found to add at root level.'));
         return;
       }
 
