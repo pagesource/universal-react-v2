@@ -1,4 +1,7 @@
 {
+  "name": "micro-app",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
     "dev": "webpack serve --open --mode development",
     "bundle": "webpack --mode production",
