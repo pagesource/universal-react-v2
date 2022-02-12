@@ -15,6 +15,9 @@
         "services": "*"
     },
     "devDependencies": {
+        "@types/react": "^17.0.39",
+        "@types/react-dom": "^17.0.11",
+        "@types/styled-components": "^5.1.22",
         "bundlesize": "0.18.1",
         "cross-env": "7.0.3",
         "prettier": "^2.4.1"
