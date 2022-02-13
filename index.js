@@ -371,7 +371,7 @@ const updateRootPackageJson = async (appType, appName, features, selecteProject,
 const installDependencies = async (installLocation, isUpdate) => {
   const { command, fileName } = getCommandType(installLocation);
   if(!isUpdate) {
-    console.info(chalk.yellow('Removing existing lock file and node_module folder.'));
+    console.info(chalk.yellow('Removing existing lock file and node_module folder. Please wait...'));
     try {
       removeDir(path.join(rootDir, appConstants.NODE_MODULES));
       removeDir(path.join(rootDir, fileName));

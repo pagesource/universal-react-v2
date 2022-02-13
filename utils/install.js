@@ -8,7 +8,7 @@ const { exec } = cp;
  * @param {*} commandType : user input command types [npm, yarn, pnpm]
  */
 function installPackages(commandType) {
-  console.info(chalk.yellow(`Please Wait. Installing dependencies using ${commandType}...`));
+  console.info(chalk.yellow(`Installing dependencies using ${commandType}. Please wait...`));
   exec(`${commandType} install`, (err, stdout, stderr) => {
     if (err) {
       console.error(chalk.red(`Error: Failed to install packages. Please run [${commandType} install] manually on root directory.`));
