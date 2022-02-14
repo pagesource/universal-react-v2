@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "11.1.2",
-    "@babel/plugin-transform-runtime": "7.15.0"
+    "@babel/plugin-transform-runtime": "7.15.0",
+    "next-transpile-modules": "9.0.0"
   }
 }
