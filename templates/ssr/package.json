@@ -2,8 +2,18 @@
     "scripts": {
       "build": "{commandType} env-var && {commandType} bundle"
   },
-    "dependencies": {
-      "express": "4.17.1",
-      "helmet": "4.6.0"
-    }
+  "dependencies": {
+    "express": "4.17.1",
+    "helmet": "4.6.0",
+    "next": "*"
+  },
+  "devDependencies": {
+    "config": "*",
+    "eslint": "7.32.0",
+    "next-transpile-modules": "9.0.0",
+    "tsconfig": "*",
+    "@types/node": "^17.0.12",
+    "@types/react": "17.0.37",
+    "typescript": "^4.5.3"
   }
+}

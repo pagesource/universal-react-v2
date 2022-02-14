@@ -8,6 +8,6 @@
   ],
   "dependencies": {
     "react-query": "^3.34.14",
-    "react": "^17.0.2"
+    "react": "*"
   }
 }

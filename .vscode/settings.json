@@ -3,5 +3,7 @@
   "javascript.validate.enable": false,
   "editor.formatOnSave": true,
   "javascript.autoClosingTags": true,
-  "javascript.suggestionActions.enabled": true
+  "javascript.suggestionActions.enabled": true,
+  "editor.bracketPairColorization.enabled": true,
+  "editor.guides.bracketPairs": "active"
 }

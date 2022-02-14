@@ -1,4 +1,7 @@
 const { featureScope } = require('./constants');
+const { format } = require('date-and-time');
+
+const currentDateTime = (date) => format(date, 'MM/DD/YYYY HH:mm:ssA [GMT]Z');
 
 function arrayUnique(array) {
   const a = array.concat();
@@ -61,5 +64,6 @@ module.exports = {
   getOptionalFeatures,
   optionalFeatures,
   getFilteredFeatures,
-  getRootFeatures
+  getRootFeatures,
+  currentDateTime
 };
