@@ -6,6 +6,10 @@ const appTypes = {
   SSG_APP: 'ssg'
 }
 
+const reservedDir = {
+  MODULES: 'modules'
+}
+
 const appConstants = {
   UNIVERSAL_REACT: 'universal-react',
   PACKAGE_JSON: 'package.json',
@@ -81,5 +85,6 @@ module.exports = {
   commandTypes,
   updateProjectConst,
   featureScope,
-  appTypes
+  appTypes,
+  reservedDir
 };

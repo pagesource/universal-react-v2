@@ -8,7 +8,7 @@ const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 
 const { createNpmDependenciesArray, mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
-const { arrayUnique, getOptionalFeatures, optionalFeatures, getFilteredFeatures, getRootFeatures, currentDateTime } = require('./utils/helpers');
+const { arrayUnique, getOptionalFeatures, optionalFeatures, getFilteredFeatures, getRootFeatures, currentDateTime, inRservedDirs } = require('./utils/helpers');
 const { createAppQuestions, featureQuestions, addAppQuestions, getUpdateProjectQuestions } = require('./utils/questions');
 const {
   appTemplateFileExclusions,
@@ -19,7 +19,8 @@ const {
   commandTypes,
   updateProjectConst,
   featureScope,
-  appTypes
+  appTypes,
+  reservedDir
 } = require('./utils/constants');
 const {
   createDir,
@@ -74,7 +75,7 @@ const intializeGitRepo = async (dir) => {
  */
 const createProjectDirectory = (appName, newProject) => {
   const projectPath = path.join(projectDir, appName);
-  optionalTemplatesDir = path.join(rootDir, 'modules');
+  optionalTemplatesDir = path.join(rootDir, reservedDir.MODULES);
   if(dirFileExists(projectPath)) {
     console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Project named [${appName}] already exist. Use different app name.`));
     process.exit(0);
@@ -221,7 +222,7 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
 const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) => {
   const root = [];
   const apps = [];
-  optionalTemplatesDir = path.join(rootDir, 'modules');
+  optionalTemplatesDir = path.join(rootDir, reservedDir.MODULES);
 
   const feat = optionalFeatures.filter(f => {
     if (features.includes(f.value)) {
@@ -366,19 +367,49 @@ const updateRootPackageJson = async (appType, appName, features, selecteProject,
 /**
  * @description : method to install depencies of project using [yarn | pnpm | npm]
  * @param {*} installLocation : location of root where dependencies need to install
- * @param {*} isUpdate : boolean
+ * @param {*} newProject : boolean
  */
-const installDependencies = async (installLocation, isUpdate) => {
-  const { command, fileName } = getCommandType(installLocation);
-  if(!isUpdate) {
+const installDependencies = async (installLocation, newProject) => {
+  
+  let { command, fileName } = getCommandType(installLocation);
+  const cmdType = (command === 'npm' ? 'npm run' : command);
+  if(newProject) {
     console.info(chalk.yellow(`[${currentDateTime(new Date())}] - Removing existing lock file and node_module folder. Please wait...`));
     try {
-      removeDir(path.join(rootDir, appConstants.NODE_MODULES));
-      removeDir(path.join(rootDir, fileName));
+      removeDir(path.join(installLocation, appConstants.NODE_MODULES));
+      removeDir(path.join(installLocation, fileName));
     } catch (err) {
       console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Failed to delete node_module and lock file/folder from root`), err);
     }
   }
+
+  if(newProject) {
+    const recentDir = getMostRecentDirectory(cwd);
+    if (recentDir && !inRservedDirs(recentDir)) {
+      console.info(chalk.green.bold(`[${currentDateTime(new Date())}] - Found [${recentDir}] directory created.`));
+      const stepIn = `cd ${recentDir}`
+      command = `${stepIn} && ${command}`
+
+      console.info(`
+
+      >>>> We suggest that you begin by typing:
+
+      ${chalk.cyan.bold(stepIn)}
+      `);
+    };
+    console.info(`
+      Inside directory, you can run following commands:
+      ${chalk.cyan.bold(cmdType)} dev
+      - Starts the development server.
+      
+      ${chalk.cyan.bold(cmdType)} build
+      - Builds the app for production.
+      
+      ${chalk.cyan.bold(cmdType)} generate
+        - Generate new components.
+    `);
+  }
+
   installPackages(command);
 };
 
@@ -478,17 +509,16 @@ const initializeNewProject = async (
   packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
   await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
 
-  const workspaces = ["modules/*"];
+  const workspaces = [`${reservedDir.MODULES}/*`];
 
   if(newProject) {
     const { root, apps } = await copyOptionalTemplatesNewProject(features, appName, rootDir);
-    addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
+    await addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
   } else {
     const { root, apps } = await copyOptionalTemplatesNewProject(features, appName, rootDir);
-    addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
+    await addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
   }
-
-  await installDependencies(rootDir, false);
+  await installDependencies(rootDir, newProject);
   if (initializeGit) {
     intializeGitRepo(rootDir);
   }
@@ -501,7 +531,7 @@ const initializeNewProject = async (
  * @param {*} features : user selected list of optional features
  */
 const updateExistingAppProject = async (appType, appName, features, selecteProject) => {
-  optionalTemplatesDir = path.join(rootDir, 'modules');
+  optionalTemplatesDir = path.join(rootDir, reservedDir.MODULES);
   const { root, apps } = await copyOptionalTemplatesNewProject(features, selecteProject);
   const turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
   const node = turboRepoPackageFile[appConstants.UNIVERSAL_REACT];
@@ -515,13 +545,16 @@ const updateExistingAppProject = async (appType, appName, features, selecteProje
   });
 
   writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), turboRepoPackageFile);
-  installDependencies(cwd, true);
+  installDependencies(cwd, false);
 };
 
 /*  TODOs: Logic of [addNewApp] method need to revisit. As lot of logic is missing to merging package.json files from different source.
     using [initializeNewProject] method for now as skipping operation on newProject flag.
     So we don't need to update same logic at two places.
 */
+/**
+ * @deprecated : Not using for now
+ */
 const addNewApp = async (appType, appName, basePath, initializeGit, features, newProject) => {
   const projectPath = path.join(projectDir, appName);
   microAppPath = path.join(projectDir, appName);
@@ -548,7 +581,7 @@ const addNewApp = async (appType, appName, basePath, initializeGit, features, ne
 
   copyTemplateDirectory(appType);
 
-  optionalTemplatesDir = path.join(rootDir, 'modules');
+  optionalTemplatesDir = path.join(rootDir, reservedDir.MODULES);
   const { root, apps } = await copyOptionalTemplatesNewProject(features, appName);
   const turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
   const node = turboRepoPackageFile[appConstants.UNIVERSAL_REACT];
