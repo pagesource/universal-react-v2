@@ -28,7 +28,7 @@
     "lint:fix": "npm run lint -- --fix",
     "test": "node scripts/test",
     "prepublishOnly": "npm run lint && npm test",
-    "release": "changeset publish"
+    "release": "changeset publish",
     "debug": "node index.js"
   },
   "files": [
