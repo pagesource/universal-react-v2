@@ -1,25 +1,32 @@
 # Universal React App Generator
 
-### Installation
+An React accelerator for generating universal applications with Next.js and React. 
 
-- npm install
-- npm link
+This React accelerator is a command line tool for generating SSR, SSG & Micro-App type of applications. This allows you to setup a working Micro Frontend architecture development ecosystem with essential tooling for great dev experience and delivery quality.  
 
-This will install the module globally on your system. You can then simply type the name of the application from shell/command-prompt from any working directory and the app will execute.
+## Uses
 
-### Running
+- npx create-universal-react
 
-To create a new app, run the command
+This will run the universal-react CLI, then you can then simply interacct with command-prompt to generate 3 diffrent kind of applications in a Monorepo structure.
 
-- universal-react
+## Main Features
 
-### Troubleshooting
+1. Generate SSG, SSR and Micro-App
+2. Monorepo setup
+3. Design System Integration
+4. Quality Control 
+5. Component Generator 
+6. State Management 
+6. Markdown-to-JSX
+7. API Mocking
+8. Localization
+9. Independent Doc-site
+10. Module Federation
+11. Micro-App & Web Component Loader
+12. Custom Logger
+13. E2E Automation
+14. PWA
 
-| Issue                                  | possible fix                                                     |
-| -------------------------------------- | ---------------------------------------------------------------- |
-| Python not found                       | Install python - https://www.python.org/downloads/               |
-| msvs_version not set from command line | npm install --global windows-build-tools (using elevated rights) |
 
-### License
-
-MIT
+## Doc
