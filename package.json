@@ -1,16 +1,16 @@
 {
-  "name": "universal-react-v2",
-  "version": "2.0.0",
-  "description": "Universal React App Generator",
+  "name": "universal-react",
+  "version": "0.0.0",
+  "description": "A React accelerator to generate SSR, SSG & Micro-App architecture types essential tooling.",
   "license": "MIT",
   "main": "index.js",
   "bin": {
-    "universal-react-v2": "index.js"
+    "universal-react": "index.js"
   },
-  "repository": "/universal-react/",
+  "repository": "https://github.com/pagesource/universal-react-v2",
   "author": {
     "name": "PageSource",
-    "email": "",
+    "email": "vinodloha@gmail.com",
     "url": "https://github.com/pagesource"
   },
   "engines": {
@@ -27,8 +27,13 @@
     "src"
   ],
   "keywords": [
-    "react-app-generator",
-    "react-universal"
+    "React",
+    "Architecture",
+    "Generator",
+    "Micro-App",
+    "Micro-Frontend",
+    "Framework",
+    "Accelerator"
   ],
   "dependencies": {
     "chalk": "4.1.2",

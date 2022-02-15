@@ -11,7 +11,7 @@ This will install the module globally on your system. You can then simply type t
 
 To create a new app, run the command
 
-- universal-react-v2
+- universal-react
 
 ### Troubleshooting
 

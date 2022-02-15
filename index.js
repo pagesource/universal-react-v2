@@ -328,7 +328,7 @@ const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces,
   } catch (e) {
     console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Failed to updating root package.json file`), e);
   }
-  console.info(chalk.green(`[${currentDateTime(new Date())}] - Root package.json updated by universal-react-v2`));
+  console.info(chalk.green(`[${currentDateTime(new Date())}] - Root package.json updated by universal-react`));
 };
 
 /**
@@ -368,7 +368,7 @@ const updateRootPackageJson = async (appType, appName, features, selecteProject,
   } catch (e) {
     console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Failed updating root package.json file`), e);
   }
-  console.info(chalk.yellow(`[${currentDateTime(new Date())}] - Success: Root package.json updated by universal-react-v2`));
+  console.info(chalk.yellow(`[${currentDateTime(new Date())}] - Success: Root package.json updated by universal-react`));
 };
 
 /**
