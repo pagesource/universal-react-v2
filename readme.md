@@ -1,6 +1,6 @@
 # Universal React App Generator
 
-A accelerator for generating frontend applications with Next.js and React.
+An accelerator for generating frontend applications with Next.js and React.
 
 This accelerator is a command line tool for generating SSR, SSG & Micro-App type of applications. This enables you to setup a working Micro Frontend or SPA development ecosystem with essential tooling for great dev experience and delivery quality.
 
