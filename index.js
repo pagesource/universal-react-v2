@@ -6,6 +6,7 @@ const chalk = require('chalk');
 const inquirer = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const args = process.argv.slice(2);
 
 const { createNpmDependenciesArray, mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
 const { arrayUnique, getOptionalFeatures, optionalFeatures, getFilteredFeatures, getRootFeatures, currentDateTime, inRservedDirs } = require('./utils/helpers');
@@ -234,7 +235,13 @@ const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) =
         copyDir(source, dest, []);
         root.push(f.value);
       } else {
-        const dest = path.join(projectDir, appName);
+        let dest = path.join(projectDir, appName);
+        if(['service-worker', 'pwa'].includes(f.value)) {
+          dest = path.join(projectDir, appName, 'pwa');
+          if(!dirFileExists(dest)) {
+            createDir(dest);
+          }
+        }
         copyDir(source, dest, [appConstants.PACKAGE_JSON]);
 
         const optPackageFilePath = path.join(source, appConstants.PACKAGE_JSON);
@@ -612,6 +619,21 @@ if (dirFileExists(rootPackagePath)) {
 if (existingProject) {
   //update project
   const uvApps = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps;
+  const rootFeatures = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.rootOptionalFeatures;
+
+  // Showing list of existing apps
+  if(args.includes('--list')) {
+    console.info(chalk.bold(`[${currentDateTime(new Date())}] - List of existing apps.`));
+    console.table(uvApps);
+    process.exit(1);
+  }
+
+  // Showing list of root level optional features
+  if(args.includes('--list-root')) {
+    console.info(chalk.bold(`[${currentDateTime(new Date())}] - List of root level optional features.`));
+    console.table(rootFeatures);
+    process.exit(1);
+  }
 
   //TODOs: filtering MICRO_APP for now. Need to remove this filtering and get all list of projects
   //TODOs: add write another logic to find whic optional feature are applicable for Micro Apps.
@@ -721,21 +743,20 @@ if (existingProject) {
     });
   }
 } else {
-  // create new project
-  if (isEmptyDir(cwd)) {
-    console.info(chalk.bgYellow.bold.black('[:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.'));
-    console.info(chalk.green.underline(`[${currentDateTime(new Date())}] - Setting up a new mono repo project using Turborepo.`));
-    setupTurboRepoProject(cwd);
-    rootDir = cwd;
-    projectDir = path.join(cwd, destinationDirs.APPS_DIR);
-  } else {
+  if(!isEmptyDir(cwd)) {
     console.error(
       chalk.red(
         `[${currentDateTime(new Date())}] - Current working directory is not empty. Please use a clean directory to setup the project`
       )
     );
     process.exit(1);
-  }
+  };
+
+  console.info(chalk.bgYellow.bold.black('[:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.'));
+  console.info(chalk.green.underline(`[${currentDateTime(new Date())}] - Setting up a new mono repo project using Turborepo.`));
+  setupTurboRepoProject(cwd);
+  rootDir = cwd;
+  projectDir = path.join(cwd, destinationDirs.APPS_DIR);
 
   // determine the project directory path
   if (dirFileExists(path.join(cwd, appConstants.PACKAGE_JSON))) {
