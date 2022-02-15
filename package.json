@@ -1,11 +1,11 @@
 {
-  "name": "universal-react",
+  "name": "create-universal-react",
   "version": "0.0.0",
   "description": "A React accelerator to generate SSR, SSG & Micro-App architecture types essential tooling.",
   "license": "MIT",
   "main": "index.js",
   "bin": {
-    "universal-react": "index.js"
+    "create-universal-react": "index.js"
   },
   "repository": "https://github.com/pagesource/universal-react-v2",
   "author": {
