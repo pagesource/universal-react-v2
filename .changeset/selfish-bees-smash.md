@@ -1,5 +1,5 @@
 ---
-'universal-react-v2': minor
+'create-universal-react': minor
 ---
 
 Add changeset to automate version bump and release summary
