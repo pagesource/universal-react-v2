@@ -1,12 +1,12 @@
-
-# Custom Browser and Server Logger 
+# Custom Browser and Server Logger
 
 This logger collect logs based on different levels and structures them
 
-1. Transport logs to an API end-point at browser side 
+1. Transport logs to an API end-point at browser side
 2. Writes logs to server console at server side
 
 ## Log structure:
+
 ```javascript
 {
   appName,
@@ -38,13 +38,15 @@ This logger collect logs based on different levels and structures them
 ```
 
 This logger module provides a logger initializer:
+
 - `createLogger`: A utility logger init function that returns a logger which follows the above structure along with some auto-logging features:
   - `landingLogs`: takes a boolean value that sets wheather landing logs to be automatically logged or not on url change. Adds an event listener to actively check for url changes.
-  - `handleExceptions`: takes a boolean value that sets wheather unhandled syntax/runtime errors/exceptions to be automatically logged or not. Adds an event listener to actively check for such errors.      
+  - `handleExceptions`: takes a boolean value that sets wheather unhandled syntax/runtime errors/exceptions to be automatically logged or not. Adds an event listener to actively check for such errors.
 
-## Usage 
+## Usage
 
 createLogger:
+
 ```javascript
 import createLogger from '../utils/Logger';
 
@@ -52,7 +54,7 @@ const loggerConfig = {
   appName: 'application name to be shown in the logs',
   level: 'info',  // lowest allowed level of log
   parseUserAgent: true, // return device, browser and os details if true; returns user-agent string if false
-  remoteDataAgregatorUrl: 'http://localhost:4000'  // remote API end-point to post the logs 
+  remoteDataAgregatorUrl: 'http://localhost:4000'  // remote API end-point to post the logs
 }
 
 const user = {
@@ -67,7 +69,7 @@ const Logger = createLogger({
   handleExceptions: true
 });
 
-Logger.error({ 
+Logger.error({
   logInfo: {
     component: 'Home',
     subComponent: 'UserCard'

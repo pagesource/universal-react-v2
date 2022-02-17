@@ -4,11 +4,11 @@ const appTypes = {
   MICRO_APP: 'microApp',
   SSR_APP: 'ssr',
   SSG_APP: 'ssg'
-}
+};
 
 const reservedDir = {
   MODULES: 'modules'
-}
+};
 
 const appConstants = {
   UNIVERSAL_REACT: 'universal-react',
@@ -22,13 +22,13 @@ const appConstants = {
   PACKAGE_LOCK: 'package-lock.json',
   PNPM_LOCK: 'pnpm-lock.yaml',
   NODE_MODULES: 'node_modules'
-}
+};
 
 const commandTypes = {
   NPM: 'npm',
   YARN: 'yarn',
   PNPM: 'pnpm'
-}
+};
 
 const sourceDirs = {
   TEMPLATES_DIR: 'templates',
@@ -39,15 +39,15 @@ const sourceDirs = {
   SRC_DIR: 'src',
   STORYBOOK_DIR: 'storybook',
   OPTIONAL_FEATURES_DIR: 'optionalFeatures',
-  TEMP_DIR: 'temp',
-}
+  TEMP_DIR: 'temp'
+};
 
 const destinationDirs = {
   DOCS_DIR: 'docs',
   WEB_DIR: 'web',
   APPS_DIR: 'apps',
   PAGES_DIR: 'pages'
-}
+};
 
 const appTypeMap = {
   'SSR(Server-side rendering)': appTypes.SSR_APP,
@@ -68,12 +68,12 @@ const updateProjectConst = {
   APPS_LEVEL: 'APPS_LEVEL',
   ROOT_LEVEL: 'ROOT_LEVEL',
   ADD_NEW_APP: 'ADD_NEW_APP'
-}
+};
 
 const featureScope = {
   APP: 'app',
   ROOT: 'root'
-}
+};
 
 module.exports = {
   appTemplateFileExclusions,

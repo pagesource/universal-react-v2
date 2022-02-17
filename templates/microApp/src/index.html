@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= app_name %></title>
-</head>
-<body>
-  <div id="app" data-app=<%= app_name %>></div>
-  <script>
-    window.onload = () => {
-      const el = document.getElementById('app')
-      const APP_NAME = el.dataset.app
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= app_name %></title>
+  </head>
+  <body>
+    <div id="app" data-app="<%" ="app_name" %>></div>
+    <script>
+      window.onload = () => {
+        const el = document.getElementById('app');
+        const APP_NAME = el.dataset.app;
 
-      const { render } = window[APP_NAME]
-      const props = {}
+        const { render } = window[APP_NAME];
+        const props = {};
 
-      render(el, { props, shadowROOT: false })
-    }
-  </script>
-</body>
+        render(el, { props, shadowROOT: false });
+      };
+    </script>
+  </body>
 </html>

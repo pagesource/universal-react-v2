@@ -9,10 +9,12 @@ function createNpmDependenciesArray(packageFilePath) {
   const p = require(packageFilePath);
 
   const deps = [];
+  // eslint-disable-next-line
   for (const mod in p.dependencies) {
     deps.push(`${mod}@${p.dependencies[mod]}`);
   }
 
+  // eslint-disable-next-line
   for (const mod in p.devDependencies) {
     deps.push(`${mod}@${p.devDependencies[mod]}`);
   }
@@ -27,7 +29,7 @@ function createNpmDependenciesArray(packageFilePath) {
  * @returns : Object
  */
 function mergeJsons(masterJson, slaveJson) {
-  const json = deepmerge(Object.assign({}, masterJson), slaveJson);
+  const json = deepmerge({ ...masterJson }, slaveJson);
   return json;
 }
 
@@ -39,14 +41,14 @@ function mergeJsons(masterJson, slaveJson) {
  */
 function applyCommandType(obj, commandType) {
   const packageString = JSON.stringify(obj);
-  const regex = new RegExp('{commandType}', 'gi');
+  const regex = /{commandType}/gi;
 
   let str = packageString.replace(regex, commandType);
 
-  if(commandType === 'npm') {
+  if (commandType === 'npm') {
     str = packageString.replace(regex, `${commandType} run`);
   }
-  
+
   return JSON.parse(str);
 }
 
@@ -59,7 +61,7 @@ function applyCommandType(obj, commandType) {
  */
 function replaceString(obj, regexStr, replacedStr = '') {
   const regex = new RegExp(regexStr, 'gi');
-  let str = JSON.stringify(obj).replace(regex, replacedStr);
+  const str = JSON.stringify(obj).replace(regex, replacedStr);
   return JSON.parse(str);
 }
 

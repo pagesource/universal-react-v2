@@ -1,0 +1,29 @@
+{
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "env": {
+    "browser": true,
+    "es6": true,
+    "node": true
+  },
+  "extends": ["airbnb", "prettier"],
+  "overrides": [
+    {
+      "files": ["scripts/*.js"],
+      "rules": {
+        "no-console": "off"
+      }
+    },
+    {
+      "files": ["scripts/test.js"],
+      "rules": {
+        "jest/no-jest-import": "off"
+      }
+    }
+  ],
+  "rules": {
+    "import/no-dynamic-require": "off",
+    "global-require": "off"
+  }
+}

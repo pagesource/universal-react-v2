@@ -9,9 +9,7 @@ export default {
   sections: [
     {
       title: 'Button Component',
-      sectionFn: () => (
-        <Button>Click Me</Button>
-      )
+      sectionFn: () => <Button>Click Me</Button>
     }
   ]
 };

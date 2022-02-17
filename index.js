@@ -1,16 +1,30 @@
 #!/usr/bin/env node
-'use strict';
 
 const path = require('path');
 const chalk = require('chalk');
 const inquirer = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+
 const args = process.argv.slice(2);
 
-const { createNpmDependenciesArray, mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
-const { arrayUnique, getOptionalFeatures, optionalFeatures, getFilteredFeatures, getRootFeatures, currentDateTime, inRservedDirs } = require('./utils/helpers');
-const { createAppQuestions, featureQuestions, addAppQuestions, getUpdateProjectQuestions } = require('./utils/questions');
+const { mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
+
+const {
+  getOptionalFeatures,
+  optionalFeatures,
+  getFilteredFeatures,
+  getRootFeatures,
+  currentDateTime,
+  inRservedDirs
+} = require('./utils/helpers');
+
+const {
+  createAppQuestions,
+  featureQuestions,
+  addAppQuestions,
+  getUpdateProjectQuestions
+} = require('./utils/questions');
 const {
   appTemplateFileExclusions,
   appTypeMap,
@@ -35,7 +49,7 @@ const {
 } = require('./utils/fileDirOps');
 const { installPackages } = require('./utils/install');
 const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
-const optionalFeatureHelpers = require('./utils/optionalFeature');
+// const optionalFeatureHelpers = require('./utils/optionalFeature');
 
 const templatesPath = path.join(__dirname, sourceDirs.TEMPLATES_DIR);
 const microAppTemplatePath = path.join(templatesPath, sourceDirs.MICRO_APP);
@@ -57,6 +71,55 @@ let turboRepoPackageFile = ''; // root folder package.json file path
 const cwd = process.cwd(); // current working directory
 let optionalTemplatesDir = '';
 
+const getNextPort = () => {
+  const basePort = 4000;
+  const rootPackageFile = require(path.join(rootDir, 'package.json'));
+  const microApps = rootPackageFile['universal-react'].apps.filter(
+    (a) => a.appType === 'microApp'
+  );
+  return basePort + microApps.length;
+};
+
+/**
+ * @description : method to identify which command type need to use
+ * @param {*} installLocation : localtion of lock files
+ * @returns command type
+ */
+const getCommandType = (installLocation) => {
+  const packageLock = path.join(installLocation, appConstants.PACKAGE_LOCK);
+  const pnpmLock = path.join(installLocation, appConstants.PNPM_LOCK);
+  const yarnLock = path.join(installLocation, appConstants.YARN_LOCK);
+
+  if (dirFileExists(yarnLock)) {
+    return {
+      command: commandTypes.YARN,
+      fileName: appConstants.YARN_LOCK
+    };
+    // return commandTypes.YARN;
+  }
+
+  if (dirFileExists(pnpmLock)) {
+    return {
+      command: commandTypes.PNPM,
+      fileName: appConstants.PNPM_LOCK
+    };
+    // return commandTypes.PNPM;
+  }
+
+  if (dirFileExists(packageLock)) {
+    return {
+      command: commandTypes.NPM,
+      fileName: appConstants.PACKAGE_LOCK
+    };
+    // return commandTypes.NPM
+  }
+
+  return {
+    command: commandTypes.YARN,
+    fileName: appConstants.YARN_LOCK
+  };
+};
+
 /**
  * @description : method to initialize git repositiy
  * @param {*} dir : path of directory
@@ -64,7 +127,11 @@ let optionalTemplatesDir = '';
 const intializeGitRepo = async (dir) => {
   const cmd = `cd ${dir} && git init`;
   const { stdout } = await exec(cmd).catch((err) => {
-    console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Failed to intialized git repo. ${err}`));
+    console.error(
+      chalk.red(
+        `[${currentDateTime(new Date())}] - Error: Failed to intialized git repo. ${err}`
+      )
+    );
     process.exit(0);
   });
   console.info(`${stdout}`);
@@ -78,7 +145,13 @@ const createProjectDirectory = (appName, newProject) => {
   const projectPath = path.join(projectDir, appName);
   optionalTemplatesDir = path.join(rootDir, reservedDir.MODULES);
   if (dirFileExists(projectPath)) {
-    console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Project named [${appName}] already exist. Use different app name.`));
+    console.error(
+      chalk.red(
+        `[${currentDateTime(
+          new Date()
+        )}] - Error: Project named [${appName}] already exist. Use different app name.`
+      )
+    );
     process.exit(0);
   }
 
@@ -102,13 +175,22 @@ const copyStorybookDirectory = async () => {
   if (dirFileExists(storyBookPackagePath)) {
     try {
       let storyBookPackage = require(path.join(storybookDir, appConstants.PACKAGE_JSON));
-      storyBookPackage = applyCommandType(storyBookPackage, getCommandType(rootDir).command);
+      storyBookPackage = applyCommandType(
+        storyBookPackage,
+        getCommandType(rootDir).command
+      );
       await writeJsonFile(storyBookPackagePath, storyBookPackage);
     } catch (e) {
-      console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Failed to updating storybook package.json file`), e);
+      console.error(
+        chalk.red(
+          `[${currentDateTime(
+            new Date()
+          )}] - Error: Failed to updating storybook package.json file`
+        ),
+        e
+      );
     }
   }
-
 };
 
 /**
@@ -129,7 +211,9 @@ const copyBaseDirectory = (appName, appType, newProject) => {
 
   if (appType === sourceDirs.MICRO_APP) {
     removeDir(path.join(projectDir, destinationDirs.WEB_DIR));
-    console.info(chalk.green(`[${currentDateTime(new Date())}] - Start creating ${appType}.`));
+    console.info(
+      chalk.green(`[${currentDateTime(new Date())}] - Start creating ${appType}.`)
+    );
     copyDir(microAppTemplatePath, microAppPath, []);
     copyDir(essentialsTemplatePath, microAppPath, []);
   } else {
@@ -166,7 +250,9 @@ const copyTemplateDirectory = (appType) => {
  * @param {*} _path path for project directory
  * @returns list of optional features
  */
-const copyOptionalTemplates = async (features, _path = cwd) => {
+
+/**
+ const copyOptionalTemplates = async (features, _path = cwd) => {
   const projectPackage = require(path.join(microAppPath, appConstants.PACKAGE_JSON));
   const done = [];
   const skipInlineExecution = [appConstants.SERVICE_WORKER, appConstants.PWA];
@@ -196,36 +282,51 @@ const copyOptionalTemplates = async (features, _path = cwd) => {
             path.join(microAppPath, appConstants.PACKAGE_JSON),
             packageFile
           );
-          console.info(`[${currentDateTime(new Date())}] - ${_feature} added to package.json`);
+          console.info(
+            `[${currentDateTime(new Date())}] - ${_feature} added to package.json`
+          );
           done.push(_feature);
         } else {
           console.error(
             chalk.red(
-              `[${currentDateTime(new Date())}] - ${_feature}/package.json missing. could not find feature dependencies.`
+              `[${currentDateTime(
+                new Date()
+              )}] - ${_feature}/package.json missing. could not find feature dependencies.`
             )
           );
           console.info(chalk.red(`skipping ${_feature}...`));
         }
       } else {
-        console.error(chalk.red(`[${currentDateTime(new Date())}] - ${_feature} missing. feature not found.`));
-        console.error(chalk.red(`[${currentDateTime(new Date())}] - Skipping ${_feature}...`));
+        console.error(
+          chalk.red(
+            `[${currentDateTime(new Date())}] - ${_feature} missing. feature not found.`
+          )
+        );
+        console.error(
+          chalk.red(`[${currentDateTime(new Date())}] - Skipping ${_feature}...`)
+        );
       }
     }
   }
   if (done.length > 0) {
     console.info(
-      chalk.green(`[${currentDateTime(new Date())}] - Optional Features Validated. Ready to install Dependencies...`)
+      chalk.green(
+        `[${currentDateTime(
+          new Date()
+        )}] - Optional Features Validated. Ready to install Dependencies...`
+      )
     );
   }
   return done;
 };
+ */
 
-const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) => {
+const copyOptionalTemplatesNewProject = async (features, appName) => {
   const root = [];
   const apps = [];
   optionalTemplatesDir = path.join(rootDir, reservedDir.MODULES);
 
-  const feat = optionalFeatures.filter(f => {
+  optionalFeatures.forEach((f) => {
     if (features.includes(f.value)) {
       const source = path.join(templatesPath, sourceDirs.OPTIONAL_FEATURES_DIR, f.value);
 
@@ -268,14 +369,21 @@ const copyOptionalTemplatesNewProject = async (features, appName, _path = cwd) =
  * @param {*} appType : unser passed app type [ssg, ssr, microApp]
  * @param {*} appName : user selected app name
  */
-const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces, newProject) => {
-  const universalReactPackageFile = require(path.join(
-    __dirname,
-    appConstants.PACKAGE_JSON
-  ));
+const addInfoToRootPackageJson = async (
+  appType,
+  appName,
+  app,
+  root,
+  workspaces,
+  newProject
+) => {
+  // const universalReactPackageFile = require(path.join(
+  //   __dirname,
+  //   appConstants.PACKAGE_JSON
+  // ));
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
 
-  workspaces.forEach(ws => {
+  workspaces.forEach((ws) => {
     if (!turboRepoPackageFile.workspaces.includes(ws)) {
       turboRepoPackageFile.workspaces.push(ws);
     }
@@ -314,21 +422,44 @@ const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces,
   try {
     // Logging added project info
     const rootFeatures = mergedJson[appConstants.UNIVERSAL_REACT].rootOptionalFeatures;
-    console.info(chalk.bold(`[${currentDateTime(new Date())}] - Following apps created successfully.`));
+    console.info(
+      chalk.bold(
+        `[${currentDateTime(new Date())}] - Following apps created successfully.`
+      )
+    );
     console.table(mergedJson[appConstants.UNIVERSAL_REACT].apps);
 
     // Logging added root level optional features info
     if (rootFeatures.length) {
-      console.info(chalk.bold(`[${currentDateTime(new Date())}] - Found ${rootFeatures.length} optional feature.`));
-      const transformedRootFeatures = rootFeatures.map((item, index) => ({ optionalFeature: item }));
+      console.info(
+        chalk.bold(
+          `[${currentDateTime(new Date())}] - Found ${
+            rootFeatures.length
+          } optional feature.`
+        )
+      );
+      const transformedRootFeatures = rootFeatures.map((item) => ({
+        optionalFeature: item
+      }));
       console.table(transformedRootFeatures);
     }
     mergedJson = applyCommandType(mergedJson, getCommandType(rootDir).command);
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), mergedJson);
   } catch (e) {
-    console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Failed to updating root package.json file`), e);
+    console.error(
+      chalk.red(
+        `[${currentDateTime(
+          new Date()
+        )}] - Error: Failed to updating root package.json file`
+      ),
+      e
+    );
   }
-  console.info(chalk.green(`[${currentDateTime(new Date())}] - Root package.json updated by universal-react`));
+  console.info(
+    chalk.green(
+      `[${currentDateTime(new Date())}] - Root package.json updated by universal-react`
+    )
+  );
 };
 
 /**
@@ -338,23 +469,26 @@ const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces,
  * @param {*} features : user selected list of optional features
  * @param {*} isUpdateRootFeatures : boolean to check if updating root level optional features
  */
-const updateRootPackageJson = async (appType, appName, features, selecteProject, isUpdateRootFeatures) => {
+const updateRootPackageJson = async (
+  appType,
+  appName,
+  features,
+  selectedProject,
+  isUpdateRootFeatures
+) => {
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
   const universalAppsInfoObj = turboRepoPackageFile[appConstants.UNIVERSAL_REACT];
   if (!isUpdateRootFeatures) {
-    const updatedObj = universalAppsInfoObj.apps.map(app => {
-      if (app.appName === selecteProject) {
+    const updatedObj = universalAppsInfoObj.apps.map((app) => {
+      if (app.appName === selectedProject) {
         return {
           appType: app.appType,
           appName: app.appName,
-          optionalFeatures: [
-            ...app.optionalFeatures,
-            ...features
-          ]
-        }
+          optionalFeatures: [...app.optionalFeatures, ...features]
+        };
       }
       return app;
-    })
+    });
     universalAppsInfoObj.apps = updatedObj;
   } else {
     universalAppsInfoObj.rootOptionalFeatures = [
@@ -364,11 +498,25 @@ const updateRootPackageJson = async (appType, appName, features, selecteProject,
   }
   turboRepoPackageFile[appConstants.UNIVERSAL_REACT] = universalAppsInfoObj;
   try {
-    await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), turboRepoPackageFile);
+    await writeJsonFile(
+      path.join(rootDir, appConstants.PACKAGE_JSON),
+      turboRepoPackageFile
+    );
   } catch (e) {
-    console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Failed updating root package.json file`), e);
+    console.error(
+      chalk.red(
+        `[${currentDateTime(new Date())}] - Error: Failed updating root package.json file`
+      ),
+      e
+    );
   }
-  console.info(chalk.yellow(`[${currentDateTime(new Date())}] - Success: Root package.json updated by universal-react`));
+  console.info(
+    chalk.yellow(
+      `[${currentDateTime(
+        new Date()
+      )}] - Success: Root package.json updated by universal-react`
+    )
+  );
 };
 
 /**
@@ -377,25 +525,43 @@ const updateRootPackageJson = async (appType, appName, features, selecteProject,
  * @param {*} newProject : boolean
  */
 const installDependencies = async (installLocation, newProject) => {
+  const { command: cmd, fileName } = getCommandType(installLocation);
+  let command = cmd;
+  const cmdType = command === 'npm' ? 'npm run' : command;
 
-  let { command, fileName } = getCommandType(installLocation);
-  const cmdType = (command === 'npm' ? 'npm run' : command);
   if (newProject) {
-    console.info(chalk.yellow(`[${currentDateTime(new Date())}] - Removing existing lock file and node_module folder. Please wait...`));
+    console.info(
+      chalk.yellow(
+        `[${currentDateTime(
+          new Date()
+        )}] - Removing existing lock file and node_module folder. Please wait...`
+      )
+    );
     try {
       removeDir(path.join(installLocation, appConstants.NODE_MODULES));
       removeDir(path.join(installLocation, fileName));
     } catch (err) {
-      console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Failed to delete node_module and lock file/folder from root`), err);
+      console.error(
+        chalk.red(
+          `[${currentDateTime(
+            new Date()
+          )}] - Error: Failed to delete node_module and lock file/folder from root`
+        ),
+        err
+      );
     }
   }
 
   if (newProject) {
     const recentDir = getMostRecentDirectory(cwd);
     if (recentDir && !inRservedDirs(recentDir)) {
-      console.info(chalk.green.bold(`[${currentDateTime(new Date())}] - Found [${recentDir}] directory created.`));
-      const stepIn = `cd ${recentDir}`
-      command = `${stepIn} && ${command}`
+      console.info(
+        chalk.green.bold(
+          `[${currentDateTime(new Date())}] - Found [${recentDir}] directory created.`
+        )
+      );
+      const stepIn = `cd ${recentDir}`;
+      command = `${stepIn} && ${command}`;
 
       console.info(`
 
@@ -403,7 +569,7 @@ const installDependencies = async (installLocation, newProject) => {
 
       ${chalk.cyan.bold(stepIn)}
       `);
-    };
+    }
     console.info(`
       Inside directory, you can run following commands:
       ${chalk.cyan.bold(cmdType)} dev
@@ -419,46 +585,6 @@ const installDependencies = async (installLocation, newProject) => {
 
   installPackages(command);
 };
-
-/**
- * @description : method to identify which command type need to use
- * @param {*} installLocation : localtion of lock files
- * @returns command type
- */
-const getCommandType = (installLocation) => {
-  const packageLock = path.join(installLocation, appConstants.PACKAGE_LOCK);
-  const pnpmLock = path.join(installLocation, appConstants.PNPM_LOCK);
-  const yarnLock = path.join(installLocation, appConstants.YARN_LOCK);
-
-  if (dirFileExists(yarnLock)) {
-    return {
-      command: commandTypes.YARN,
-      fileName: appConstants.YARN_LOCK
-    };
-    // return commandTypes.YARN;
-  }
-
-  if (dirFileExists(pnpmLock)) {
-    return {
-      command: commandTypes.PNPM,
-      fileName: appConstants.PNPM_LOCK
-    };
-    // return commandTypes.PNPM;
-  }
-
-  if (dirFileExists(packageLock)) {
-    return {
-      command: commandTypes.NPM,
-      fileName: appConstants.PACKAGE_LOCK
-    };
-    // return commandTypes.NPM
-  }
-
-  return {
-    command: commandTypes.YARN,
-    fileName: appConstants.YARN_LOCK
-  };
-}
 
 /**
  * @description : method to initialize new project
@@ -479,7 +605,9 @@ const initializeNewProject = async (
   createProjectDirectory(appName, newProject);
   copyBaseDirectory(appName, appType, newProject);
   copyTemplateDirectory(appType);
-  console.info(chalk.green(`[${currentDateTime(new Date())}] - Project Created Successfully`));
+  console.info(
+    chalk.green(`[${currentDateTime(new Date())}] - Project Created Successfully`)
+  );
 
   const basePackage = require(path.join(baseTemplatePath, appConstants.PACKAGE_JSON));
   const appPackage = require(path.join(appTemplatePath, appConstants.PACKAGE_JSON));
@@ -500,6 +628,7 @@ const initializeNewProject = async (
       ...appPackage.devDependencies,
       ...commonPackage.devDependencies
     };
+    packageFile = replaceString(packageFile, '{PORT}', getNextPort());
   } else {
     packageFile = mergeJsons(packageFile, commonPackage);
   }
@@ -519,11 +648,19 @@ const initializeNewProject = async (
   const workspaces = [`${reservedDir.MODULES}/*`];
 
   if (newProject) {
-    const { root, apps } = await copyOptionalTemplatesNewProject(features, appName, rootDir);
-    await addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
+    const { root, apps } = await copyOptionalTemplatesNewProject(
+      features,
+      appName,
+      rootDir
+    );
+    await addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject);
   } else {
-    const { root, apps } = await copyOptionalTemplatesNewProject(features, appName, rootDir);
-    await addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject)
+    const { root, apps } = await copyOptionalTemplatesNewProject(
+      features,
+      appName,
+      rootDir
+    );
+    await addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject);
   }
   await installDependencies(rootDir, newProject);
   if (initializeGit) {
@@ -537,16 +674,17 @@ const initializeNewProject = async (
  * @param {*} appName : user selected app name
  * @param {*} features : user selected list of optional features
  */
-const updateExistingAppProject = async (appType, appName, features, selecteProject) => {
+const updateExistingAppProject = async (appType, appName, features, selectedProject) => {
   optionalTemplatesDir = path.join(rootDir, reservedDir.MODULES);
-  const { root, apps } = await copyOptionalTemplatesNewProject(features, selecteProject);
-  const turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
-  const node = turboRepoPackageFile[appConstants.UNIVERSAL_REACT];
-  const appNode = node.apps.filter(n => n.appName === selecteProject)[0];
+  await copyOptionalTemplatesNewProject(features, selectedProject);
+  const turboRepoPkg = require(path.join(rootDir, appConstants.PACKAGE_JSON));
+  const node = turboRepoPkg[appConstants.UNIVERSAL_REACT];
+  const appNode = node.apps.filter((n) => n.appName === selectedProject)[0];
   appNode.optionalFeatures = appNode.optionalFeatures.concat(features);
 
-  node.apps.forEach(n => {
-    if (n.appName === selecteProject) {
+  node.apps.forEach((n) => {
+    if (n.appName === selectedProject) {
+      // eslint-disable-next-line
       n.optionalFeatures = appNode.optionalFeatures;
     }
   });
@@ -562,7 +700,9 @@ const updateExistingAppProject = async (appType, appName, features, selecteProje
 /**
  * @deprecated : Not using for now
  */
-const addNewApp = async (appType, appName, basePath, initializeGit, features, newProject) => {
+
+/**
+ const addNewApp = async (appType, appName, basePath, initializeGit, features, newProject) => {
   const projectPath = path.join(projectDir, appName);
   microAppPath = path.join(projectDir, appName);
   packagesAppPath = path.join(rootDir, appConstants.PACKAGES_DIR);
@@ -589,7 +729,7 @@ const addNewApp = async (appType, appName, basePath, initializeGit, features, ne
   copyTemplateDirectory(appType);
 
   optionalTemplatesDir = path.join(rootDir, reservedDir.MODULES);
-  const { root, apps } = await copyOptionalTemplatesNewProject(features, appName);
+  await copyOptionalTemplatesNewProject(features, appName);
   const turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
   const node = turboRepoPackageFile[appConstants.UNIVERSAL_REACT];
   node.apps.push({
@@ -601,7 +741,10 @@ const addNewApp = async (appType, appName, basePath, initializeGit, features, ne
   installDependencies(cwd, true);
 };
 
-/************************************** Execution starts ******************************************/
+ */
+
+/* ************ Execution starts ************ */
+
 let existingProject = false;
 const rootPackagePath = path.join(cwd, appConstants.PACKAGE_JSON);
 
@@ -609,7 +752,7 @@ if (dirFileExists(rootPackagePath)) {
   rootDir = cwd;
   turboRepoPackageFile = require(rootPackagePath);
   if (
-    turboRepoPackageFile['name'] === appConstants.UNIVERSAL_REACT &&
+    turboRepoPackageFile.name === appConstants.UNIVERSAL_REACT &&
     turboRepoPackageFile[appConstants.UNIVERSAL_REACT]
   ) {
     existingProject = true;
@@ -617,9 +760,10 @@ if (dirFileExists(rootPackagePath)) {
 }
 
 if (existingProject) {
-  //update project
+  // update project
   const uvApps = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps;
-  const rootFeatures = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.rootOptionalFeatures;
+  const rootFeatures =
+    turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.rootOptionalFeatures;
 
   // Showing list of existing apps
   if (args.includes('--list')) {
@@ -630,15 +774,25 @@ if (existingProject) {
 
   // Showing list of root level optional features
   if (args.includes('--list-root')) {
-    console.info(chalk.bold(`[${currentDateTime(new Date())}] - List of root level optional features.`));
+    console.info(
+      chalk.bold(
+        `[${currentDateTime(new Date())}] - List of root level optional features.`
+      )
+    );
     console.table(rootFeatures);
     process.exit(1);
   }
 
-  //TODOs: filtering MICRO_APP for now. Need to remove this filtering and get all list of projects
-  //TODOs: add write another logic to find whic optional feature are applicable for Micro Apps.
-  const projectsList = uvApps?.filter(item => item.appType !== appTypes.MICRO_APP)?.map(app => app.appName);
-  console.info(chalk.bold(`[${currentDateTime(new Date())}] - List of apps already available in repo.`));
+  // TODOs: filtering MICRO_APP for now. Need to remove this filtering and get all list of projects
+  // TODOs: add write another logic to find whic optional feature are applicable for Micro Apps.
+  const projectsList = uvApps
+    ?.filter((item) => item.appType !== appTypes.MICRO_APP)
+    ?.map((app) => app.appName);
+  console.info(
+    chalk.bold(
+      `[${currentDateTime(new Date())}] - List of apps already available in repo.`
+    )
+  );
   console.table(uvApps);
 
   // only get the features that are not already added in the project
@@ -650,8 +804,6 @@ if (existingProject) {
     const updateProjectQuestions = getUpdateProjectQuestions(projectsList);
 
     inquirer.prompt(updateProjectQuestions).then((ans) => {
-
-
       // Add new project under apps folder
       if (ans.updateOption === updateProjectConst.ADD_NEW_APP) {
         projectDir = path.join(cwd, destinationDirs.APPS_DIR);
@@ -674,59 +826,92 @@ if (existingProject) {
               false
             );
           } else {
-            inquirer.prompt(featureQuestion).then((answers_features) => {
+            inquirer.prompt(featureQuestion).then((res) => {
               initializeNewProject(
                 appTypeMap[answers.appType],
                 answers.appName,
                 answers.customBasePath,
                 false,
-                answers_features.features,
+                res.features,
                 false
               );
             });
           }
-
-
         });
         return;
       }
 
       if (!projectsList.length && ans.updateOption === updateProjectConst.APPS_LEVEL) {
-        console.warn(chalk.yellow.bold(`[${currentDateTime(new Date())}] - No list of project found to update.`));
-        console.warn(chalk.yellow.bold(`[${currentDateTime(new Date())}] - MicroApp app types are not applicable to add optional features for now.`));
-        console.warn(chalk.yellow.bold(`[${currentDateTime(new Date())}] - Add new app or add optional feature to root level.`));
+        console.warn(
+          chalk.yellow.bold(
+            `[${currentDateTime(new Date())}] - No list of project found to update.`
+          )
+        );
+        console.warn(
+          chalk.yellow.bold(
+            `[${currentDateTime(
+              new Date()
+            )}] - MicroApp app types are not applicable to add optional features for now.`
+          )
+        );
+        console.warn(
+          chalk.yellow.bold(
+            `[${currentDateTime(
+              new Date()
+            )}] - Add new app or add optional feature to root level.`
+          )
+        );
         return;
       }
       // Add new optional feature to each app level
-      if (ans.updateOption === updateProjectConst.APPS_LEVEL && features[ans.selectedProject].length > 0) {
-        const appFeatures = getFilteredFeatures(features[ans.selectedProject], featureScope.APP);
+      if (
+        ans.updateOption === updateProjectConst.APPS_LEVEL &&
+        features[ans.selectedProject].length > 0
+      ) {
+        const appFeatures = getFilteredFeatures(
+          features[ans.selectedProject],
+          featureScope.APP
+        );
         if (appFeatures.length) {
           const updateFeatureQuestion = [
             {
-              when: (data) => ans.selectedProject !== null,
+              when: () => ans.selectedProject !== null,
               ...featureQuestions[0],
               choices: appFeatures
             }
           ];
           projectDir = path.join(cwd, destinationDirs.APPS_DIR);
           inquirer.prompt(updateFeatureQuestion).then((answers) => {
-            updateExistingAppProject(appTypeMap[answers.appType], answers.appName, answers.features, ans.selectedProject);
+            updateExistingAppProject(
+              appTypeMap[answers.appType],
+              answers.appName,
+              answers.features,
+              ans.selectedProject
+            );
           });
           return;
         }
-        console.info(chalk.green.bold(`[${currentDateTime(new Date())}] - No optional features found to add for app -> [${ans.selectedProject}]`));
+        console.info(
+          chalk.green.bold(
+            `[${currentDateTime(
+              new Date()
+            )}] - No optional features found to add for app -> [${ans.selectedProject}]`
+          )
+        );
         return;
       }
 
       // Add new optional feature to root level
       if (ans.updateOption === updateProjectConst.ROOT_LEVEL) {
-        const rootFeatures = getRootFeatures(turboRepoPackageFile[appConstants.UNIVERSAL_REACT].rootOptionalFeatures || []);
-        if (rootFeatures.length > 0) {
+        const rootFeaturesList = getRootFeatures(
+          turboRepoPackageFile[appConstants.UNIVERSAL_REACT].rootOptionalFeatures || []
+        );
+        if (rootFeaturesList.length > 0) {
           const updateFeatureQuestion = [
             {
-              when: (data) => ans.selectedProject !== null,
+              when: () => ans.selectedProject !== null,
               ...featureQuestions[0],
-              choices: rootFeatures
+              choices: rootFeaturesList
             }
           ];
           inquirer.prompt(updateFeatureQuestion).then((answers) => {
@@ -734,26 +919,47 @@ if (existingProject) {
             updateRootPackageJson(null, null, answers.features, null, true);
           });
         }
-        console.info(chalk.green.bold(`[${currentDateTime(new Date())}] - No optional features found to add at root level.`));
+        console.info(
+          chalk.green.bold(
+            `[${currentDateTime(
+              new Date()
+            )}] - No optional features found to add at root level.`
+          )
+        );
         return;
       }
 
-      console.info(chalk.green.bold.underline(`[${currentDateTime(new Date())}] - Nothing to update however :)`));
-
+      console.info(
+        chalk.green.bold.underline(
+          `[${currentDateTime(new Date())}] - Nothing to update however :)`
+        )
+      );
     });
   }
 } else {
   if (!isEmptyDir(cwd)) {
     console.error(
       chalk.red(
-        `[${currentDateTime(new Date())}] - Current working directory is not empty. Please use a clean directory to setup the project`
+        `[${currentDateTime(
+          new Date()
+        )}] - Current working directory is not empty. Please use a clean directory to setup the project`
       )
     );
     process.exit(1);
-  };
+  }
 
-  console.info(chalk.bgYellow.bold.black('[:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.'));
-  console.info(chalk.green.underline(`[${currentDateTime(new Date())}] - Setting up a new mono repo project using Turborepo.`));
+  console.info(
+    chalk.bgYellow.bold.black(
+      '[:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.'
+    )
+  );
+  console.info(
+    chalk.green.underline(
+      `[${currentDateTime(
+        new Date()
+      )}] - Setting up a new mono repo project using Turborepo.`
+    )
+  );
   setupTurboRepoProject(cwd);
   rootDir = cwd;
   projectDir = path.join(cwd, destinationDirs.APPS_DIR);
@@ -764,7 +970,9 @@ if (existingProject) {
   } else {
     const recentDir = getMostRecentDirectory(cwd);
     if (!recentDir) {
-      console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: An unexpected error occured`));
+      console.error(
+        chalk.red(`[${currentDateTime(new Date())}] - Error: An unexpected error occured`)
+      );
       process.exit(1);
     }
 
@@ -775,7 +983,9 @@ if (existingProject) {
 
   inquirer.prompt(createAppQuestions).then((answers) => {
     if (appTypeMap[answers.appType] === undefined) {
-      console.error(chalk.red(`[${currentDateTime(new Date())}] - Error: Invalid app type.`));
+      console.error(
+        chalk.red(`[${currentDateTime(new Date())}] - Error: Invalid app type.`)
+      );
     } else {
       // only get the features that are not already added in the project
       const features = optionalFeatures;
@@ -789,13 +999,13 @@ if (existingProject) {
           }
         ];
 
-        inquirer.prompt(featureQuestion).then((answers_features) => {
+        inquirer.prompt(featureQuestion).then((res) => {
           initializeNewProject(
             appTypeMap[answers.appType],
             answers.appName,
             answers.customBasePath,
             false,
-            answers_features.features,
+            res.features,
             true
           );
         });
