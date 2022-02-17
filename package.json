@@ -26,7 +26,7 @@
   "scripts": {
     "lint": "eslint --ignore-path .gitignore **/*.js",
     "lint:fix": "eslint --fix --ignore-path .gitignore **/*.js",
-    "prettify": "prettier --ignore-path .gitignore --write .",
+    "prettify": "prettier --ignore-path .gitignore --write \"**/*.(js|jsx|ts|tsx)\"",
     "test": "echo no tests found",
     "stopPrepublishOnly": "npm run lint && npm test",
     "release": "changeset publish",
