@@ -1,6 +1,6 @@
 {
-  "projectName": "create-universal-react",
-  "projectOwner": "create-universal-react",
+  "projectName": "universal-react-v2",
+  "projectOwner": "pagesource",
   "repoType": "github",
   "repoHost": "https://github.com",
   "files": [
@@ -162,7 +162,18 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "kgauravsh",
+      "name": "Kumar Gaurav",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44981333?v=4",
+      "profile": "https://github.com/kgauravsh",
+      "contributions": [
+        "code",
+        "doc"
+      ]
     }
   ],
-  "contributorsPerLine": 7
+  "contributorsPerLine": 7,
+  "skipCi": true
 }
