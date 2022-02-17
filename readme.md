@@ -1,6 +1,6 @@
 # Universal React App Generator
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-17-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 An accelerator for generating frontend applications with Next.js and React.
@@ -64,6 +64,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   <tr>
     <td align="center"><a href="https://github.com/rahultagra"><img src="https://avatars.githubusercontent.com/u/26215752?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Rahul Tagra</b></sub></a><br /><a href="https://github.com/create-universal-react/create-universal-react/commits?author=rahultagra" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/salilkapoor"><img src="https://avatars.githubusercontent.com/u/49902237?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Salil Kapoor</b></sub></a><br /><a href="https://github.com/create-universal-react/create-universal-react/commits?author=salilkapoor" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/khus29"><img src="https://avatars.githubusercontent.com/u/13497771?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Khushboo Kumari</b></sub></a><br /><a href="https://github.com/create-universal-react/create-universal-react/commits?author=khus29" title="Code">💻</a></td>
   </tr>
 </table>
 
