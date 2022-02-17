@@ -25,6 +25,5 @@
   "rules": {
     "import/no-dynamic-require": "off",
     "global-require": "off"
-  },
-  "ignorePatterns": ["templates"]
+  }
 }
