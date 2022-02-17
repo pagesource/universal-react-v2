@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {fetchWrapper} from 'utils';
+import { fetchWrapper } from 'utils';
 import type { FetchOptions } from 'utils';
 import { getCacheKey, getLanguageFromLocalStorage } from './helper';
 

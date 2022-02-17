@@ -1,6 +1,6 @@
 # Mock server to mock all api calls
 
-  - we are using json-server package for mocking rest apis and json-graphql-server for mocking graphql calls.
+- we are using json-server package for mocking rest apis and json-graphql-server for mocking graphql calls.
 
 ### Installation
 
@@ -30,6 +30,3 @@ For detailed usage with different scenarios please refer to below links:
 
 - https://github.com/typicode/json-server
 - https://github.com/marmelab/json-graphql-server
-
-
-

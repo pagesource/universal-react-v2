@@ -9,8 +9,8 @@ const copydir = require('copy-dir');
  * @param {*} path : path of file
  * @returns : return ture if file exists else return false
  */
-function dirFileExists(path) {
-  return fs.existsSync(path);
+function dirFileExists(p) {
+  return fs.existsSync(p);
 }
 
 /**
@@ -18,7 +18,7 @@ function dirFileExists(path) {
  * @param {*} currPath : current directory or filename
  * @param {*} newPath : new directory or filename
  */
- function renameSync(currPath, newPath) {
+function renameSync(currPath, newPath) {
   try {
     fs.renameSync(currPath, newPath);
   } catch (e) {
@@ -46,7 +46,7 @@ function removeDir(dirPath) {
  */
 function deleteFile(filePath) {
   try {
-    fs.unlinkSync(filePath)
+    fs.unlinkSync(filePath);
   } catch (e) {
     console.error(chalk.red('error removing file'));
     throw e;
@@ -80,11 +80,11 @@ function copyDir(sourcePath, destPath, exclusions) {
       mode: true, // keep file mode
       cover: true, // cover file when exists, default is true
 
-      filter: function (stat, filepath, filename) {
-        const _filename = path.parse(filepath).base;
+      filter(stat, filepath, filename) {
+        const fName = path.parse(filepath).base;
 
         // do not want copy files
-        if (stat === 'file' && exclusions.includes(_filename)) {
+        if (stat === 'file' && exclusions.includes(fName)) {
           return false;
         }
 
@@ -96,7 +96,7 @@ function copyDir(sourcePath, destPath, exclusions) {
         return true;
       }
     },
-    function (err) {
+    (err) => {
       if (err) {
         throw err;
       }
@@ -151,7 +151,7 @@ function getMostRecentDirectory(directoryPath) {
   let latestDir = null;
   try {
     const files = fs.readdirSync(directoryPath);
-    files.forEach(f => {
+    files.forEach((f) => {
       const stats = fs.statSync(path.join(directoryPath, f));
       if (stats.isDirectory()) {
         const birthtime = new Date(stats.birthtime);
@@ -164,10 +164,10 @@ function getMostRecentDirectory(directoryPath) {
 
     return latestDir;
   } catch (e) {
-    console.log(e)
+    console.log(e);
     return null;
   }
-};
+}
 
 module.exports = {
   dirFileExists,

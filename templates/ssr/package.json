@@ -1,6 +1,6 @@
 {
-    "scripts": {
-      "build": "{commandType} env-var && {commandType} bundle"
+  "scripts": {
+    "build": "{commandType} env-var && {commandType} bundle"
   },
   "dependencies": {
     "express": "4.17.1",

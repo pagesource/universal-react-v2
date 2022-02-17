@@ -6,7 +6,7 @@ export const endpoints = {
   apiGee: {
     todo: 'todos/1',
     users: 'profile',
-    account: 'account',
+    account: 'account'
   }
 };
 
@@ -22,7 +22,7 @@ export const apiGeeDomainMockGraphQL = 'http://localhost:5004/';
 /** getContentServiceUrl - return content service url to be passed to fetch api
  * (key, isMock) - > key - get url from endpoints ;  isMock - serve data from public folder
  */
- export const getContentServiceUrl = (key, isMock = false) => {
+export const getContentServiceUrl = (key, isMock = false) => {
   const url = endpoints.content[key];
   return isMock ? `/static/mock/${url}.json` : `${contentDomain}${url}`;
 };
@@ -32,10 +32,14 @@ export const apiGeeDomainMockGraphQL = 'http://localhost:5004/';
  */
 export const getDataServiceUrl = (key, isMock = false) => {
   const url = endpoints.apiGee[key];
-  return sessionStorage.getItem('serveMock') === 'true' || isMock ? `${apiGeeDomainMockRest}${url}` : `${apiGeeDomain}${url}`;
+  return sessionStorage.getItem('serveMock') === 'true' || isMock
+    ? `${apiGeeDomainMockRest}${url}`
+    : `${apiGeeDomain}${url}`;
 };
 
 export const getGraphQlServiceUrl = (key, isMock = false) => {
   const url = endpoints.apiGee[key];
-  return sessionStorage.getItem('serveMock') === 'true' || isMock ? `${apiGeeDomainMockGraphQL}${url}` : `${apiGeeDomain}${url}`;
+  return sessionStorage.getItem('serveMock') === 'true' || isMock
+    ? `${apiGeeDomainMockGraphQL}${url}`
+    : `${apiGeeDomain}${url}`;
 };
