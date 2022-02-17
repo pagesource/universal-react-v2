@@ -303,7 +303,7 @@ const addInfoToRootPackageJson = async (appType, appName, app, root, workspaces,
     mergedJson = mergeJsons(mergedJson, {
       scripts: {
         ...srcStorybookPackageFile.scripts,
-        generate: 'generate'
+        generate: 'generate && {commandType} format'
       },
       devDependencies: {
         '@xt-pagesource/generate-plop': '^1.1.0'
