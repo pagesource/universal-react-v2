@@ -72,6 +72,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "pras9",
+      "name": "pras",
+      "avatar_url": "https://avatars.githubusercontent.com/u/2662487?v=4",
+      "profile": "http://www.prasun.net/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7
