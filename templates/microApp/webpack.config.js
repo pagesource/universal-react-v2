@@ -3,10 +3,10 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const PACKAGE_JSON = require('./package.json');
 
 const WP = require('webpack');
 const path = require('path');
+const PACKAGE_JSON = require('./package.json');
 
 /**
  * HTMLTemplate: Used to run dev build
@@ -96,11 +96,11 @@ module.exports = (env, argv) => {
 
   /** Add styles to custom object instead of adding to Head */
   function addStylesToWindow(el) {
-    const _window = typeof window !== 'undefined' ? window : {};
-    if (!_window.customElStyles) {
-      _window.customElStyles = [];
+    const windowRef = typeof window !== 'undefined' ? window : {};
+    if (!windowRef.customElStyles) {
+      windowRef.customElStyles = [];
     }
-    _window.customElStyles.push(el);
+    windowRef.customElStyles.push(el);
   }
 
   const config = {
@@ -135,7 +135,7 @@ module.exports = (env, argv) => {
             {
               loader: 'style-loader',
               options: {
-                insert: isDev ? 'head' : addStylesToWindow
+                insert: addStylesToWindow
               }
             },
             'css-loader'

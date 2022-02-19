@@ -10,20 +10,15 @@
   "extends": ["airbnb", "prettier"],
   "overrides": [
     {
-      "files": ["scripts/*.js"],
+      "files": ["templates/**/*"],
       "rules": {
-        "no-console": "off"
-      }
-    },
-    {
-      "files": ["scripts/test.js"],
-      "rules": {
-        "jest/no-jest-import": "off"
+        "import/no-unresolved": "off"
       }
     }
   ],
   "rules": {
     "import/no-dynamic-require": "off",
-    "global-require": "off"
+    "global-require": "off",
+    "no-console": "off"
   }
 }
