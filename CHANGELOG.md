@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.4.0
+
+### Minor Changes
+
+- 5ca3010: Fixed micro app generation error and also now we can add multiple microp apps and run them parallelly.
+
 ## 0.3.0
 
 ### Minor Changes
