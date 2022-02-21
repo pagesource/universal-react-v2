@@ -13,6 +13,18 @@ module.exports = withBundleAnalyzer(
     basePath: isAssetPrefix,
     env: {
       BASE_PATH: isAssetPrefix
+    },
+    webpack: (config, options) => {
+      const { ModuleFederationPlugin } = options.webpack.container;
+
+      config.plugins.push(
+        new ModuleFederationPlugin({
+          remotes: {},
+          shared: []
+        })
+      );
+
+      return config;
     }
   })
 );
