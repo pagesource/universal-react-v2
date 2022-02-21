@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.3.0
+
+### Minor Changes
+
+- da0a001: fix lint error
+
 ## 0.2.0
 
 ### Minor Changes
