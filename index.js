@@ -71,13 +71,12 @@ let turboRepoPackageFile = ''; // root folder package.json file path
 const cwd = process.cwd(); // current working directory
 let optionalTemplatesDir = '';
 
-const getNextPort = () => {
+const getNextPort = (rootPacakgeJson) => {
   const basePort = 4000;
-  const rootPackageFile = require(path.join(rootDir, 'package.json'));
-  const microApps = rootPackageFile['universal-react'].apps.filter(
-    (a) => a.appType === 'microApp'
+  const microApps = rootPacakgeJson[appConstants.UNIVERSAL_REACT]?.apps.filter(
+    (a) => a.appType === appTypes.MICRO_APP
   );
-  return basePort + microApps.length;
+  return microApps?.length ? basePort + microApps.length : basePort;
 };
 
 /**
@@ -132,7 +131,7 @@ const intializeGitRepo = async (dir) => {
         `[${currentDateTime(new Date())}] - Error: Failed to intialized git repo. ${err}`
       )
     );
-    process.exit(0);
+    process.exit(1);
   });
   console.info(`${stdout}`);
 };
@@ -152,7 +151,7 @@ const createProjectDirectory = (appName, newProject) => {
         )}] - Error: Project named [${appName}] already exist. Use different app name.`
       )
     );
-    process.exit(0);
+    process.exit(1);
   }
 
   if (!dirFileExists(optionalTemplatesDir)) {
@@ -197,42 +196,51 @@ const copyStorybookDirectory = async () => {
  * @description: method to create project directory with base template.
  */
 const copyBaseDirectory = (appName, appType, newProject) => {
-  // path of app need to be created inside root director -> apps folder
-  microAppPath = path.join(projectDir, appName);
-  packagesAppPath = path.join(rootDir, appConstants.PACKAGES_DIR);
-  if (newProject) {
-    copyStorybookDirectory();
-    removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
-  }
+  try {
+    // path of app need to be created inside root director -> apps folder
+    microAppPath = path.join(projectDir, appName);
+    packagesAppPath = path.join(rootDir, appConstants.PACKAGES_DIR);
+    if (newProject) {
+      copyStorybookDirectory();
+      removeDir(path.join(projectDir, destinationDirs.DOCS_DIR));
+    }
 
-  if (!newProject) {
-    copyDir(tempDirPath, projectDir, []);
-  }
+    if (!newProject) {
+      copyDir(tempDirPath, projectDir, []);
+    }
 
-  if (appType === sourceDirs.MICRO_APP) {
-    removeDir(path.join(projectDir, destinationDirs.WEB_DIR));
-    console.info(
-      chalk.green(`[${currentDateTime(new Date())}] - Start creating ${appType}.`)
+    if (appType === sourceDirs.MICRO_APP) {
+      removeDir(path.join(projectDir, destinationDirs.WEB_DIR));
+      console.info(
+        chalk.green(`[${currentDateTime(new Date())}] - Start creating ${appType}.`)
+      );
+      copyDir(microAppTemplatePath, microAppPath, []);
+      copyDir(essentialsTemplatePath, microAppPath, []);
+    } else {
+      renameSync(path.join(projectDir, destinationDirs.WEB_DIR), microAppPath);
+      copyDir(baseTemplatePath, microAppPath, []);
+      copyDir(essentialsTemplatePath, microAppPath, []);
+      // removing pages folder gnerated by turboRepo
+      removeDir(path.join(microAppPath, destinationDirs.PAGES_DIR));
+    }
+    copyDir(sourcePackagesPath, packagesAppPath, []);
+
+    copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [
+      appConstants.PACKAGE_JSON
+    ]);
+    copyDir(
+      path.join(__dirname, appConstants.VSCODE_DIR),
+      path.join(rootDir, appConstants.VSCODE_DIR),
+      []
     );
-    copyDir(microAppTemplatePath, microAppPath, []);
-    copyDir(essentialsTemplatePath, microAppPath, []);
-  } else {
-    renameSync(path.join(projectDir, destinationDirs.WEB_DIR), microAppPath);
-    copyDir(baseTemplatePath, microAppPath, []);
-    copyDir(essentialsTemplatePath, microAppPath, []);
-    // removing pages folder gnerated by turboRepo
-    removeDir(path.join(microAppPath, destinationDirs.PAGES_DIR));
+  } catch (err) {
+    console.error(
+      chalk.red(
+        `[${currentDateTime(new Date())}] - Errors: Failed to copy template.  ${err}`
+      )
+    );
+    process.exit(1);
   }
-  copyDir(sourcePackagesPath, packagesAppPath, []);
-
-  copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [
-    appConstants.PACKAGE_JSON
-  ]);
-  copyDir(
-    path.join(__dirname, appConstants.VSCODE_DIR),
-    path.join(rootDir, appConstants.VSCODE_DIR),
-    []
-  );
 };
 
 /**
@@ -450,16 +458,15 @@ const addInfoToRootPackageJson = async (
       chalk.red(
         `[${currentDateTime(
           new Date()
-        )}] - Error: Failed to updating root package.json file`
+        )}] - Error: Failed to updating root package.json file.`
       ),
       e
     );
   }
   console.info(
-    chalk.green(
-      `[${currentDateTime(new Date())}] - Root package.json updated by universal-react`
-    )
+    chalk.green(`[${currentDateTime(new Date())}] - Updated root level package.json.`)
   );
+  return mergedJson;
 };
 
 /**
@@ -609,62 +616,89 @@ const initializeNewProject = async (
     chalk.green(`[${currentDateTime(new Date())}] - Project Created Successfully`)
   );
 
-  const basePackage = require(path.join(baseTemplatePath, appConstants.PACKAGE_JSON));
-  const appPackage = require(path.join(appTemplatePath, appConstants.PACKAGE_JSON));
-  const commonPackage = require(path.join(commonDirPath, appConstants.PACKAGE_JSON));
-  let packageFile = mergeJsons(basePackage, appPackage);
+  try {
+    const basePackage = require(path.join(baseTemplatePath, appConstants.PACKAGE_JSON));
+    const appPackage = require(path.join(appTemplatePath, appConstants.PACKAGE_JSON));
+    const commonPackage = require(path.join(commonDirPath, appConstants.PACKAGE_JSON));
+    let packageFile = mergeJsons(basePackage, appPackage);
 
-  if (appType === sourceDirs.MICRO_APP) {
-    packageFile.name = appName;
-    packageFile.scripts = {
-      ...appPackage.scripts,
-      ...commonPackage.scripts
-    };
-    packageFile.dependencies = {
-      ...appPackage.dependencies,
-      ...commonPackage.dependencies
-    };
-    packageFile.devDependencies = {
-      ...appPackage.devDependencies,
-      ...commonPackage.devDependencies
-    };
-    packageFile = replaceString(packageFile, '{PORT}', getNextPort());
-  } else {
-    packageFile = mergeJsons(packageFile, commonPackage);
-  }
-  packageFile = mergeJsons(packageFile, { name: appName });
-  if (basePath !== undefined) {
-    packageFile = mergeJsons(packageFile, {
-      scripts: {
-        'env-var': `cross-env BASE_PATH=${basePath}`
-      }
-    });
-  } else {
-    packageFile = replaceString(packageFile, '{commandType} env-var && ');
-  }
-  packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
-  await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
+    if (appType === sourceDirs.MICRO_APP) {
+      packageFile.name = appName;
+      packageFile.scripts = {
+        ...appPackage.scripts,
+        ...commonPackage.scripts
+      };
+      packageFile.dependencies = {
+        ...appPackage.dependencies,
+        ...commonPackage.dependencies
+      };
+      packageFile.devDependencies = {
+        ...appPackage.devDependencies,
+        ...commonPackage.devDependencies
+      };
+    } else {
+      packageFile = mergeJsons(packageFile, commonPackage);
+    }
+    packageFile = mergeJsons(packageFile, { name: appName });
+    if (basePath !== undefined) {
+      packageFile = mergeJsons(packageFile, {
+        scripts: {
+          'env-var': `cross-env BASE_PATH=${basePath}`
+        }
+      });
+    } else {
+      packageFile = replaceString(packageFile, '{commandType} env-var && ');
+    }
 
-  const workspaces = [`${reservedDir.MODULES}/*`];
+    const workspaces = [`${reservedDir.MODULES}/*`];
+    let rootPacakgeJson;
+    if (newProject) {
+      const { root, apps } = await copyOptionalTemplatesNewProject(
+        features,
+        appName,
+        rootDir
+      );
+      rootPacakgeJson = await addInfoToRootPackageJson(
+        appType,
+        appName,
+        apps,
+        root,
+        workspaces,
+        newProject
+      );
+    } else {
+      const { root, apps } = await copyOptionalTemplatesNewProject(
+        features,
+        appName,
+        rootDir
+      );
+      rootPacakgeJson = await addInfoToRootPackageJson(
+        appType,
+        appName,
+        apps,
+        root,
+        workspaces,
+        newProject
+      );
+    }
 
-  if (newProject) {
-    const { root, apps } = await copyOptionalTemplatesNewProject(
-      features,
-      appName,
-      rootDir
-    );
-    await addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject);
-  } else {
-    const { root, apps } = await copyOptionalTemplatesNewProject(
-      features,
-      appName,
-      rootDir
-    );
-    await addInfoToRootPackageJson(appType, appName, apps, root, workspaces, newProject);
-  }
-  await installDependencies(rootDir, newProject);
-  if (initializeGit) {
-    intializeGitRepo(rootDir);
+    if (appType === sourceDirs.MICRO_APP) {
+      packageFile = replaceString(
+        packageFile,
+        '{PORT}',
+        `${getNextPort(rootPacakgeJson)}`
+      );
+    }
+    packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
+    await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
+
+    await installDependencies(rootDir, newProject);
+    if (initializeGit) {
+      intializeGitRepo(rootDir);
+    }
+  } catch (err) {
+    console.error(chalk.red(`[${currentDateTime(new Date())}] - Errors: ${err}`));
+    process.exit(1);
   }
 };
 
