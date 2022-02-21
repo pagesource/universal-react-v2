@@ -1,3 +1,6 @@
+/* eslint-disable func-names */
+/* eslint-disable object-shorthand */
+/* eslint-disable no-unused-vars */
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true'
 });
