@@ -6,7 +6,7 @@
     "dev": "next dev",
     "bundle": "next build",
     "build": "{commandType} env-var && {commandType} bundle",
-    "start": "next start dev"
+    "start": "next start"
   },
   "browserslist": [
     "> 0.25%",
