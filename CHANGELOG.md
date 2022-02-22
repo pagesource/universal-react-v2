@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.4.1
+
+### Patch Changes
+
+- 5ff6afe: Fixed error while build and export ssg and ssr apps
+
 ## 0.4.0
 
 ### Minor Changes
