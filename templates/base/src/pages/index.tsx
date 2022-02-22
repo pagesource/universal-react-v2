@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import Button from '../components/atoms/Button';
 
 export default function Home() {
@@ -53,7 +54,7 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by <img src="/vercel.svg" alt="Vercel Logo" className="logo" />
+          Powered by <Image src="/vercel.svg" alt="Vercel Logo" className="logo" />
         </a>
       </footer>
 
