@@ -1,16 +1,17 @@
+/* eslint-disable import/newline-after-import */
 const chalk = require('chalk');
 const cp = require('child_process');
 const { Spinner } = require('cli-spinner');
 const spinners = require('./spinners.json');
 
-const { exec } = cp;
+const { spawn } = cp;
 const { currentDateTime } = require('./helpers');
 
 const spinner = new Spinner('%s');
 
 /**
  * @description : method to execute install package command.
- * @param {*} commandType : user input command types [npm, yarn, pnpm]
+ * @param {*} commandType : user input command types [npm run, yarn, pnpm]
  */
 function installPackages(commandType) {
   console.info(
@@ -20,30 +21,37 @@ function installPackages(commandType) {
       } as package manager.`
     )
   );
-  spinner
-    .setSpinnerString(spinners[3])
-    .setSpinnerTitle('Installing dependencies. Please wait...');
+  console.info(
+    chalk.bold(`[${currentDateTime(new Date())}] - Start Installing dependencies.`)
+  );
+  spinner.setSpinnerString(spinners[3]).setSpinnerTitle(' : ');
   spinner.start();
-  exec(`${commandType} install`, (err, stdout, stderr) => {
-    if (err) {
-      console.error(
-        chalk.red(
-          `[${currentDateTime(
-            new Date()
-          )}] - Error: Failed to install packages. Please run [${commandType} install] manually on root directory.`
-        )
-      );
-      console.error(
-        `[${currentDateTime(new Date())}] - Error ${commandType} install: ${err}`
-      );
-      console.error(`[${currentDateTime(new Date())}] - stdout: ${stderr}`);
-    }
 
-    // the *entire* stdout and stderr (buffered)
-    console.info(`[${currentDateTime(new Date())}] - stdout: ${stdout}`);
-    if (stdout) {
-      spinner.stop();
+  const installDependencies = spawn(`${commandType}`, ['install']);
+
+  installDependencies.stdout.on('data', (data) => {
+    console.info(`[${chalk.green(currentDateTime(new Date()))}] - ${data}`);
+  });
+
+  installDependencies.stderr.on('data', (data) => {
+    if (data.includes('warning')) {
+      console.error(
+        `[${chalk.yellow(currentDateTime(new Date()))}] - ${chalk.yellow(data)}`
+      );
+    } else {
+      console.error(
+        `[${chalk.yellow(currentDateTime(new Date()))}] - ${chalk.red(data)}`
+      );
     }
+  });
+
+  installDependencies.on('exit', () => {
+    console.info(
+      `[${chalk.green(
+        currentDateTime(new Date())
+      )}] - Exit. Installing dependencies completed.`
+    );
+    spinner.stop();
   });
 }
 
