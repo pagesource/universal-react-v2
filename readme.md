@@ -33,6 +33,8 @@ This will run the universal-react CLI, then you can then simply interact with co
 13. Custom Logger
 14. E2E Automation
 15. PWA
+16. React Query
+17. Dockerised 
 
 ## Doc
 
