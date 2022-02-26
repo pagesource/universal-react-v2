@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 const copydir = require('copy-dir');
+const { currentDateTime } = require('./helpers');
 
 /**
  * @description : method to check file exists or not
@@ -122,7 +123,11 @@ function writeJsonFile(jsonFilePath, json) {
   try {
     writeFile(jsonFilePath, JSON.stringify(json, null, 2) + os.EOL);
   } catch (e) {
-    console.error(chalk.red(`error copying file ${jsonFilePath}`));
+    console.error(
+      chalk.red(
+        `[${currentDateTime(new Date())}] - Error copying file ${jsonFilePath}. ${e}`
+      )
+    );
     throw e;
   }
 }

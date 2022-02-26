@@ -5,10 +5,18 @@ const chalk = require('chalk');
 const inquirer = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
+const axios = require('axios');
+const { spinnerInit } = require('./utils/spinner');
+const { setPackageVersion, getPackageVersion } = require('./utils/packagesInfo');
 
 const args = process.argv.slice(2);
 
-const { mergeJsons, applyCommandType, replaceString } = require('./utils/jsonHelper');
+const {
+  mergeJsons,
+  applyCommandType,
+  replaceString,
+  applyVersion
+} = require('./utils/jsonHelper');
 
 const {
   getOptionalFeatures,
@@ -16,7 +24,8 @@ const {
   getFilteredFeatures,
   getRootFeatures,
   currentDateTime,
-  inRservedDirs
+  inRservedDirs,
+  isPnpm
 } = require('./utils/helpers');
 
 const {
@@ -35,7 +44,8 @@ const {
   updateProjectConst,
   featureScope,
   appTypes,
-  reservedDir
+  reservedDir,
+  apiEndpoints
 } = require('./utils/constants');
 const {
   createDir,
@@ -49,7 +59,6 @@ const {
 } = require('./utils/fileDirOps');
 const { installPackages } = require('./utils/install');
 const { setupTurboRepoProject } = require('./utils/turboRepoSetup');
-// const optionalFeatureHelpers = require('./utils/optionalFeature');
 
 const templatesPath = path.join(__dirname, sourceDirs.TEMPLATES_DIR);
 const microAppTemplatePath = path.join(templatesPath, sourceDirs.MICRO_APP);
@@ -70,6 +79,33 @@ let packagesAppPath = ''; // packages folder on the same level of ./apps
 let turboRepoPackageFile = ''; // root folder package.json file path
 const cwd = process.cwd(); // current working directory
 let optionalTemplatesDir = '';
+
+const fetchPackageVersion = async () => {
+  try {
+    spinnerInit.start();
+    console.info(
+      chalk.green(
+        `[${currentDateTime(new Date())}] - Updating packages version. Please wait...`
+      )
+    );
+    const reactRes = await axios.get(apiEndpoints.reactLatest);
+    const reactLatestVersion = reactRes?.data?.objects[0]?.package.version;
+    setPackageVersion('react', reactLatestVersion);
+    setPackageVersion('react-dom', reactLatestVersion);
+
+    const nextRes = await axios.get(apiEndpoints.nextLatest);
+    setPackageVersion('next', nextRes?.data?.objects[0]?.package.version);
+
+    spinnerInit.stop();
+  } catch (err) {
+    console.error(
+      chalk.red(
+        `[${currentDateTime(new Date())}] - Error: Failed to get package version. ${err}`
+      )
+    );
+    process.exit(1);
+  }
+};
 
 const getNextPort = (rootPacakgeJson) => {
   const basePort = 4000;
@@ -117,6 +153,31 @@ const getCommandType = (installLocation) => {
     command: commandTypes.YARN,
     fileName: appConstants.YARN_LOCK
   };
+};
+
+const settingPackagesVersion = async (appName, commandName) => {
+  const workspaceVersion = isPnpm(commandName) ? 'workspace:*' : '*';
+  const reactVersion = isPnpm(commandName) ? getPackageVersion('react') : '*';
+  const hooksDir = path.join(rootDir, 'packages', 'hooks');
+  const serviceDir = path.join(rootDir, 'packages', 'services');
+  const hooksPackageJson = require(path.join(hooksDir, appConstants.PACKAGE_JSON));
+  const servicesPackageJson = require(path.join(serviceDir, appConstants.PACKAGE_JSON));
+
+  const finalHooksPackage = replaceString(
+    hooksPackageJson,
+    '{workspacePrefix}',
+    workspaceVersion
+  );
+  const finalServicePackage = replaceString(
+    servicesPackageJson,
+    '{reactVersion}',
+    reactVersion
+  );
+  await writeJsonFile(path.join(hooksDir, appConstants.PACKAGE_JSON), finalHooksPackage);
+  await writeJsonFile(
+    path.join(serviceDir, appConstants.PACKAGE_JSON),
+    finalServicePackage
+  );
 };
 
 /**
@@ -385,10 +446,7 @@ const addInfoToRootPackageJson = async (
   workspaces,
   newProject
 ) => {
-  // const universalReactPackageFile = require(path.join(
-  //   __dirname,
-  //   appConstants.PACKAGE_JSON
-  // ));
+  const commandName = getCommandType(rootDir).command;
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
 
   workspaces.forEach((ws) => {
@@ -431,7 +489,7 @@ const addInfoToRootPackageJson = async (
     // Logging added project info
     const rootFeatures = mergedJson[appConstants.UNIVERSAL_REACT].rootOptionalFeatures;
     console.info(
-      chalk.bold(
+      chalk.green(
         `[${currentDateTime(new Date())}] - Following apps created successfully.`
       )
     );
@@ -440,10 +498,10 @@ const addInfoToRootPackageJson = async (
     // Logging added root level optional features info
     if (rootFeatures.length) {
       console.info(
-        chalk.bold(
+        chalk.green(
           `[${currentDateTime(new Date())}] - Found ${
             rootFeatures.length
-          } optional feature.`
+          } root level optional feature.`
         )
       );
       const transformedRootFeatures = rootFeatures.map((item) => ({
@@ -451,7 +509,7 @@ const addInfoToRootPackageJson = async (
       }));
       console.table(transformedRootFeatures);
     }
-    mergedJson = applyCommandType(mergedJson, getCommandType(rootDir).command);
+    mergedJson = applyCommandType(mergedJson, commandName);
     await writeJsonFile(path.join(rootDir, appConstants.PACKAGE_JSON), mergedJson);
   } catch (e) {
     console.error(
@@ -609,6 +667,8 @@ const initializeNewProject = async (
   features,
   newProject
 ) => {
+  const commandName = getCommandType(rootDir).command;
+
   createProjectDirectory(appName, newProject);
   copyBaseDirectory(appName, appType, newProject);
   copyTemplateDirectory(appType);
@@ -650,6 +710,15 @@ const initializeNewProject = async (
       packageFile = replaceString(packageFile, '{commandType} env-var && ');
     }
 
+    try {
+      if (isPnpm(commandName)) {
+        await fetchPackageVersion();
+      }
+      await settingPackagesVersion(appName, commandName);
+    } catch (err) {
+      console.error(chalk.red(`[${currentDateTime(new Date())}] - Errors: ${err}`));
+    }
+
     const workspaces = [`${reservedDir.MODULES}/*`];
     let rootPacakgeJson;
     if (newProject) {
@@ -689,7 +758,8 @@ const initializeNewProject = async (
         `${getNextPort(rootPacakgeJson)}`
       );
     }
-    packageFile = applyCommandType(packageFile, getCommandType(rootDir).command);
+    packageFile = applyCommandType(packageFile, commandName);
+    packageFile = applyVersion(packageFile, commandName);
     await writeJsonFile(path.join(microAppPath, appConstants.PACKAGE_JSON), packageFile);
 
     await installDependencies(rootDir, newProject);
@@ -793,36 +863,62 @@ if (dirFileExists(rootPackagePath)) {
   }
 }
 
+// Showing current version of [create-universal-react ]
+if (args.includes('--version') || args.includes('-v')) {
+  const uvPackage = require(path.join(__dirname, appConstants.PACKAGE_JSON));
+  console.info(`v${uvPackage.version}`);
+  process.exit(1);
+}
+
+// handle help command
+if (args.includes('--help') || args.includes('-h')) {
+  console.info(`
+  Usage: create-universal-react     : to setup new project, add apps and optional features
+
+  Options:
+
+  --list, -l                        : get the list of apps in existing project dir
+  --list-root, -lr                  : get the list of optional features added on root level in existing project dir
+  --version, -v                     : get version of [create-universal-react]
+  `);
+  process.exit(1);
+}
+
+// Handle if wrong argument passed
+if (args.length && !existingProject) {
+  console.info(
+    chalk.bold(`[${currentDateTime(new Date())}] - Invalid argument [${args}]`)
+  );
+  console.info(`
+  Usage:
+    - create-universal-react                : to setup new project, add apps and optional features
+    - create-universal-react [argument]     : to get info
+
+  where [agrument] is on of:
+    --list, -l, --list-root, -lr, --help, -h
+  
+  Options:
+
+    --list, -l                        : get the list of apps in existing project dir
+    --list-root, -lr                  : get the list of optional features added on root level in existing project dir
+    --version, -v                     : get version of [create-universal-react]
+  
+  create-universal-react -h       : quick help on [argument]
+  `);
+  process.exit(1);
+}
+
 if (existingProject) {
   // update project
   const uvApps = turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.apps;
   const rootFeatures =
     turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.rootOptionalFeatures;
 
-  // handle help command
-  if (args.includes('--help') || args.includes('-h')) {
-    console.info(`
-    Usage: create-universal-react     : to setup new project, add apps and optional features
-
-    Options:
-
-    --list, -l                        : get the list of apps
-    --list-root, -lr                  : get the list of optional features added on root level
-    --version, -v                     : get version of [create-universal-react]
-    `);
-    process.exit(1);
-  }
-
-  // Showing current version of [create-universal-react ]
-  if (args.includes('--version') || args.includes('-v')) {
-    const uvPackage = require(path.join(__dirname, appConstants.PACKAGE_JSON));
-    console.info(`v${uvPackage.version}`);
-    process.exit(1);
-  }
-
   // Showing list of existing apps
   if (args.includes('--list') || args.includes('-l')) {
-    console.info(chalk.bold(`[${currentDateTime(new Date())}] - List of existing apps.`));
+    console.info(
+      chalk.green(`[${currentDateTime(new Date())}] - List of existing apps.`)
+    );
     console.table(uvApps);
     process.exit(1);
   }
@@ -831,7 +927,7 @@ if (existingProject) {
   if (args.includes('--list-root') || args.includes('-lr')) {
     if (rootFeatures.length) {
       console.info(
-        chalk.bold(
+        chalk.green(
           `[${currentDateTime(new Date())}] - List of root level optional features.`
         )
       );
@@ -846,24 +942,6 @@ if (existingProject) {
       );
     }
 
-    process.exit(1);
-  }
-
-  // Handle if wrong argument passed
-  if (args.length) {
-    console.info(
-      chalk.bold(`[${currentDateTime(new Date())}] - Invalid argument [${args}]`)
-    );
-    console.info(`
-    Usage:
-      - create-universal-react                : to setup new project, add apps and optional features
-      - create-universal-react [argument]     : to get info
-
-    where [agrument] is on of:
-      --list, -l, --list-root, -lr, --help, -h
-    
-    create-universal-react -h       : quick help on [argument]
-    `);
     process.exit(1);
   }
 

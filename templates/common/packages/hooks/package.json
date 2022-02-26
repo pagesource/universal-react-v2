@@ -8,6 +8,6 @@
     "./localization/useLocalizedContent.ts"
   ],
   "dependencies": {
-    "utils": "*"
+    "utils": "{workspacePrefix}"
   }
 }

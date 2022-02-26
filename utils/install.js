@@ -1,13 +1,10 @@
 /* eslint-disable import/newline-after-import */
 const chalk = require('chalk');
 const cp = require('child_process');
-const { Spinner } = require('cli-spinner');
-const spinners = require('./spinners.json');
+const { spinnerInit } = require('./spinner');
 
 const { spawn } = cp;
 const { currentDateTime } = require('./helpers');
-
-const spinner = new Spinner('%s');
 
 /**
  * @description : method to execute install package command.
@@ -16,16 +13,15 @@ const spinner = new Spinner('%s');
 function installPackages(commandType) {
   console.info(
     chalk.bold(
-      `[${currentDateTime(new Date())}] - Using ${
-        commandType.split(' ')[0]
-      } as package manager.`
+      `[${currentDateTime(new Date())}] - Using [${commandType
+        .split(' ')[0]
+        .toUpperCase()}] as package manager.`
     )
   );
   console.info(
     chalk.bold(`[${currentDateTime(new Date())}] - Start Installing dependencies.`)
   );
-  spinner.setSpinnerString(spinners[3]).setSpinnerTitle(' : ');
-  spinner.start();
+  spinnerInit.start();
 
   const installDependencies = spawn(`${commandType}`, ['install']);
 
@@ -51,7 +47,7 @@ function installPackages(commandType) {
         currentDateTime(new Date())
       )}] - Exit. Installing dependencies completed.`
     );
-    spinner.stop();
+    spinnerInit.stop();
   });
 }
 

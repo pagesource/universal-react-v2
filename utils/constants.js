@@ -1,5 +1,10 @@
 const appTemplateFileExclusions = [];
 
+const apiEndpoints = {
+  reactLatest: 'https://registry.npmjs.org/-/v1/search?text=react&size=1',
+  nextLatest: 'https://registry.npmjs.org/-/v1/search?text=next&size=1'
+};
+
 const appTypes = {
   MICRO_APP: 'microApp',
   SSR_APP: 'ssr',
@@ -86,5 +91,6 @@ module.exports = {
   updateProjectConst,
   featureScope,
   appTypes,
-  reservedDir
+  reservedDir,
+  apiEndpoints
 };
