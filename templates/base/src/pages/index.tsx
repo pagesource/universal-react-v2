@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 import React from 'react';
 import Image from 'next/image';
 import Button from '../components/atoms/Button';
