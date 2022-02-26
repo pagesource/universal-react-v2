@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import React from 'react';
 import Image from 'next/image';
 import Button from '../components/atoms/Button';
@@ -54,7 +55,14 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by <Image src="/vercel.svg" alt="Vercel Logo" className="logo" />
+          Powered by{' '}
+          <Image
+            src="/vercel.svg"
+            alt="Vercel Logo"
+            width="100px"
+            height="15px"
+            className="logo"
+          />
         </a>
       </footer>
 

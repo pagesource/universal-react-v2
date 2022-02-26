@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 // node modules
 import React from 'react';
 import type { AppProps } from 'next/app';

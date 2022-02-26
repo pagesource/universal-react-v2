@@ -799,21 +799,71 @@ if (existingProject) {
   const rootFeatures =
     turboRepoPackageFile[appConstants.UNIVERSAL_REACT]?.rootOptionalFeatures;
 
+  // handle help command
+  if (args.includes('--help') || args.includes('-h')) {
+    console.info(`
+    Usage: create-universal-react     : to setup new project, add apps and optional features
+
+    Options:
+
+    --list, -l                        : get the list of apps
+    --list-root, -lr                  : get the list of optional features added on root level
+    --version, -v                     : get version of [create-universal-react]
+    `);
+    process.exit(1);
+  }
+
+  // Showing current version of [create-universal-react ]
+  if (args.includes('--version') || args.includes('-v')) {
+    const uvPackage = require(path.join(__dirname, appConstants.PACKAGE_JSON));
+    console.info(`v${uvPackage.version}`);
+    process.exit(1);
+  }
+
   // Showing list of existing apps
-  if (args.includes('--list')) {
+  if (args.includes('--list') || args.includes('-l')) {
     console.info(chalk.bold(`[${currentDateTime(new Date())}] - List of existing apps.`));
     console.table(uvApps);
     process.exit(1);
   }
 
   // Showing list of root level optional features
-  if (args.includes('--list-root')) {
+  if (args.includes('--list-root') || args.includes('-lr')) {
+    if (rootFeatures.length) {
+      console.info(
+        chalk.bold(
+          `[${currentDateTime(new Date())}] - List of root level optional features.`
+        )
+      );
+      console.table(rootFeatures);
+    } else {
+      console.info(
+        chalk.bold(
+          `[${currentDateTime(
+            new Date()
+          )}] - No optional features found. Use [create-universal-react] again to add.`
+        )
+      );
+    }
+
+    process.exit(1);
+  }
+
+  // Handle if wrong argument passed
+  if (args.length) {
     console.info(
-      chalk.bold(
-        `[${currentDateTime(new Date())}] - List of root level optional features.`
-      )
+      chalk.bold(`[${currentDateTime(new Date())}] - Invalid argument [${args}]`)
     );
-    console.table(rootFeatures);
+    console.info(`
+    Usage:
+      - create-universal-react                : to setup new project, add apps and optional features
+      - create-universal-react [argument]     : to get info
+
+    where [agrument] is on of:
+      --list, -l, --list-root, -lr, --help, -h
+    
+    create-universal-react -h       : quick help on [argument]
+    `);
     process.exit(1);
   }
 
@@ -973,7 +1023,7 @@ if (existingProject) {
 } else {
   if (!isEmptyDir(cwd)) {
     console.error(
-      chalk.red(
+      chalk.bold(
         `[${currentDateTime(
           new Date()
         )}] - Current working directory is not empty. Please use a clean directory to setup the project`
