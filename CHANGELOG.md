@@ -1,5 +1,13 @@
 # create-universal-react
 
+## 0.5.0
+
+### Minor Changes
+
+- a08aadf: - Fixed packege.json file for all arch types if using PNPM as command type.
+  - Added few arguments to get info [--help, --version]
+  - using spawn instead of exec command to install dependencies.
+
 ## 0.4.1
 
 ### Patch Changes
