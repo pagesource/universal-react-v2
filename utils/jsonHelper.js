@@ -1,4 +1,6 @@
 const deepmerge = require('deepmerge');
+const { isPnpm } = require('./helpers');
+const { getPackageVersion } = require('./packagesInfo');
 
 /**
  * @description : method to create list of dependencies with version
@@ -52,6 +54,22 @@ function applyCommandType(obj, commandType) {
   return JSON.parse(str);
 }
 
+function applyVersion(obj, commandType) {
+  const packageString = JSON.stringify(obj);
+  const nextRegex = /{nextVersion}/gi;
+  const reactRegex = /{reactVersion}/gi;
+  const workspaceRegex = /{workspacePrefix}/gi;
+  const workSpaceVersion = isPnpm(commandType) ? 'workspace:*' : '*';
+  const ractVersion = isPnpm(commandType) ? getPackageVersion('react') : '*';
+  const nextVersion = isPnpm(commandType) ? getPackageVersion('next') : '*';
+
+  let str = packageString.replace(nextRegex, nextVersion);
+  str = str.replace(reactRegex, ractVersion);
+  str = str.replace(workspaceRegex, workSpaceVersion);
+
+  return JSON.parse(str);
+}
+
 /**
  * @description : method to replace string from object
  * @param {*} obj : Object type
@@ -69,5 +87,6 @@ module.exports = {
   createNpmDependenciesArray,
   mergeJsons,
   applyCommandType,
-  replaceString
+  replaceString,
+  applyVersion
 };

@@ -8,6 +8,6 @@
   ],
   "dependencies": {
     "react-query": "^3.34.14",
-    "react": "*"
+    "react": "{reactVersion}"
   }
 }

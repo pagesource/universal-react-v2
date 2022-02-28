@@ -5,13 +5,13 @@
   "dependencies": {
     "express": "4.17.1",
     "helmet": "4.6.0",
-    "next": "*"
+    "next": "{nextVersion}"
   },
   "devDependencies": {
-    "config": "*",
+    "config": "{workspacePrefix}",
     "eslint": "7.32.0",
     "next-transpile-modules": "9.0.0",
-    "tsconfig": "*",
+    "tsconfig": "{workspacePrefix}",
     "@types/node": "^17.0.12",
     "@types/react": "17.0.37",
     "typescript": "^4.5.3"

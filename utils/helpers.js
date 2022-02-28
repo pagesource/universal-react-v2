@@ -3,6 +3,8 @@ const { featureScope, reservedDir } = require('./constants');
 
 const currentDateTime = (date) => format(date, 'MM/DD/YYYY HH:mm:ssA [GMT]Z');
 
+const isPnpm = (commandName) => commandName && commandName === 'pnpm';
+
 function arrayUnique(array) {
   const a = array.concat();
   for (let i = 0; i < a.length; i += 1) {
@@ -63,5 +65,6 @@ module.exports = {
   getFilteredFeatures,
   getRootFeatures,
   currentDateTime,
-  inRservedDirs
+  inRservedDirs,
+  isPnpm
 };

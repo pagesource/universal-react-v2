@@ -54,7 +54,14 @@ export default function Home() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          Powered by <Image src="/vercel.svg" alt="Vercel Logo" className="logo" />
+          Powered by{' '}
+          <Image
+            src="/vercel.svg"
+            alt="Vercel Logo"
+            width="100px"
+            height="15px"
+            className="logo"
+          />
         </a>
       </footer>
 
