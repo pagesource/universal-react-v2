@@ -6,7 +6,7 @@
     "dev": "webpack serve --open --mode development --port {PORT}",
     "bundle": "webpack --mode production",
     "build": "{commandType} env-var && {commandType} bundle",
-    "start": "cd dist && cross-env PORT={PORT} serve --cors"
+    "start": "cd build && cross-env PORT={PORT} serve --cors"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",

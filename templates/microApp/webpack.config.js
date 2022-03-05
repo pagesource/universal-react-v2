@@ -90,7 +90,7 @@ module.exports = (env, argv) => {
   };
 
   const cleanupDist = () => {
-    const instance = new CleanWebpackPlugin();
+    const instance = new CleanWebpackPlugin({ verbose: true });
     return instance;
   };
 
@@ -107,7 +107,7 @@ module.exports = (env, argv) => {
     entry: ENTRY_PATH,
 
     output: {
-      path: path.join(__dirname, '/dist'),
+      path: path.join(__dirname, '/build'),
       filename: '[name]-[hash].js',
       library: APP_NAME
     },
