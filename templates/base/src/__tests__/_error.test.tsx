@@ -4,7 +4,7 @@ import '@testing-library/jest-dom/extend-expect';
 import Error from '../pages/_error';
 
 test('ErrorPage ', () => {
-  let { getByText, rerender } = render(<Error statusCode={500} />);
+  const { getByText, rerender } = render(<Error statusCode={500} />);
   expect(getByText('An error 500 occurred on server')).toBeInTheDocument();
   // Change props
   rerender(<Error />);

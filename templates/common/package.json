@@ -1,5 +1,7 @@
 {
   "scripts": {
+    "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
+    "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
     "test:watch": "{commandType} test -- --watch",
     "test": "jest -c ./config/jest/jest.config.js",
     "bundlesize": "bundlesize --config ./config/bundlesize.json",
@@ -14,7 +16,8 @@
     "styled-components": "^5.3.1",
     "themes": "{workspacePrefix}",
     "services": "{workspacePrefix}",
-    "ui": "{workspacePrefix}"
+    "ui": "{workspacePrefix}",
+    "smart-context": "^2.1.2"
   },
   "devDependencies": {
     "@types/react": "^17.0.39",
@@ -24,6 +27,7 @@
     "@testing-library/react-hooks": "7.0.2",
     "bundlesize": "0.18.1",
     "cross-env": "7.0.3",
-    "prettier": "^2.4.1"
+    "lintconfig": "{workspacePrefix}",
+    "tsconfig": "{workspacePrefix}"
   }
 }

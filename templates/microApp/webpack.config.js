@@ -3,6 +3,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPlugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlReplaceWebpackPlugin = require('html-replace-webpack-plugin');
 
 const WP = require('webpack');
 const path = require('path');
@@ -80,6 +81,13 @@ module.exports = (env, argv) => {
     return instance;
   };
 
+  const addHTMLReplace = () => new HtmlReplaceWebpackPlugin([
+      {
+        pattern: '@@app_name',
+        replacement: APP_NAME
+      }
+    ]);
+
   const addBuildManifest = () => {
     const instance = new WebpackManifestPlugin({
       basePath: '',
@@ -107,7 +115,7 @@ module.exports = (env, argv) => {
     entry: ENTRY_PATH,
 
     output: {
-      path: path.join(__dirname, '/build'),
+      path: path.join(__dirname, 'build'),
       filename: '[name]-[hash].js',
       library: APP_NAME
     },
@@ -156,6 +164,7 @@ module.exports = (env, argv) => {
       addDefinePlugin(),
       addModuleFederation(),
       addHTMLTemplate(),
+      addHTMLReplace(),
       addBuildManifest()
     ]
   };

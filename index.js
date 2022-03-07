@@ -470,17 +470,23 @@ const addInfoToRootPackageJson = async (
   });
 
   if (newProject) {
+    const turboRootTemplate = path.join(templatesPath, 'root');
+    copyDir(turboRootTemplate, rootDir, [appConstants.PACKAGE_JSON]);
+
+    const turboTemplatePkg = require(path.join(
+      turboRootTemplate,
+      appConstants.PACKAGE_JSON
+    ));
+
     const srcStorybookPackageFile = require(path.join(
       storybookDir,
       appConstants.PACKAGE_JSON
     ));
+
+    mergedJson = mergeJsons(mergedJson, turboTemplatePkg);
     mergedJson = mergeJsons(mergedJson, {
       scripts: {
-        ...srcStorybookPackageFile.scripts,
-        generate: 'generate && {commandType} format'
-      },
-      devDependencies: {
-        '@xt-pagesource/generate-plop': '^1.1.0'
+        ...srcStorybookPackageFile.scripts
       }
     });
   }
