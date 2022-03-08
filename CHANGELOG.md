@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.7.0
+
+### Minor Changes
+
+- 99ba70b: Fixed missing files in published npm package
+
 ## 0.6.0
 
 ### Minor Changes
