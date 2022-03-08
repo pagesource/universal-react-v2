@@ -5,6 +5,7 @@
   "main": "./index.js",
   "license": "MIT",
   "files": [
+    "*",
     "./logger/index.ts",
     "./serviceUtils/index.ts",
     "./testUtils/testUtils.ts"
