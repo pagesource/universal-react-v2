@@ -33,7 +33,8 @@
     "debug": "node index.js"
   },
   "files": [
-    "*"
+    "*",
+    "*/**/*"
   ],
   "bugs": {
     "url": "https://github.com/pagesource/universal-react-v2/issues"
