@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.6.0
+
+### Minor Changes
+
+- 07e7df1: fixed missing files in published version of create-universal-react
+
 ## 0.5.0
 
 ### Minor Changes
