@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.8.0
+
+### Minor Changes
+
+- 9dfa72d: linting setup for apps
+
 ## 0.7.0
 
 ### Minor Changes
