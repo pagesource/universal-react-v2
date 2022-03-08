@@ -6,12 +6,13 @@
     "dev": "webpack serve --open --mode development --port {PORT}",
     "bundle": "webpack --mode production",
     "build": "{commandType} env-var && {commandType} bundle",
-    "start": "cd dist && cross-env PORT={PORT} serve --cors"
+    "start": "cd build && cross-env PORT={PORT} serve --cors"
   },
   "devDependencies": {
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^5.2.1",
     "html-webpack-plugin": "^5.3.1",
+    "html-replace-webpack-plugin": "^2.6.0",
     "serve": "^13.0.2",
     "style-loader": "2.0.0",
     "typescript": "^4.5.5",

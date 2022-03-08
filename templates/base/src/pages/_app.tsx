@@ -10,7 +10,7 @@ import WithReactQuery from 'services';
 import GlobalContextProvider from '../stores/globalContext';
 
 // Will be called once for every metric that has to be reported.
-export function reportWebVitals(metric) {
+export function reportWebVitals(metric: any) {
   // These metrics can be sent to any analytics service
   console.log(metric);
 }

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
@@ -17,13 +19,13 @@ export const render = (el: HTMLElement, config: IAppConfig = {}) => {
       return;
     }
 
-    const styleTags = window['customElStyles'] || [];
+    const styleTags: any = window['customElStyles'] || [];
 
     if (shadowROOT) {
       ROOT.attachShadow({ mode: 'open' });
-      const appRoot = document.createElement('div');
+      const appRoot: any = document.createElement('div');
       ReactDOM.render(<App {...props} />, appRoot);
-      ROOT.shadowRoot.append(...styleTags, appRoot);
+      ROOT.shadowRoot?.append(...styleTags, appRoot);
     } else {
       ReactDOM.render(<App {...props} />, ROOT);
       document.head.append(...styleTags);

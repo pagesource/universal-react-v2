@@ -3,4 +3,6 @@
  * Note: This is not a best practice to put global styles
  */
 
- export const globalStyle = {};
+export const globalStyle = {};
+
+export default globalStyle;
