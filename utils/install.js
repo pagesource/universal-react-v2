@@ -23,7 +23,7 @@ function installPackages(commandType) {
   );
   spinnerInit.start();
 
-  const installDependencies = spawn(`${commandType}`, ['install']);
+  const installDependencies = spawn(`${commandType}`, ['install'], { shell: true });
 
   installDependencies.stdout.on('data', (data) => {
     console.info(`[${chalk.green(currentDateTime(new Date()))}] - ${data}`);
