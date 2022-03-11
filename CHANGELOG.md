@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.9.0
+
+### Minor Changes
+
+- 0a2e33e: Fixed error coming on window machine while create new project or add new app in exisiting project
+
 ## 0.8.0
 
 ### Minor Changes
