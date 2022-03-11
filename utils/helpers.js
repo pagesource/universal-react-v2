@@ -1,5 +1,5 @@
 const { format } = require('date-and-time');
-const { featureScope, reservedDir } = require('./constants');
+const { featureScope, ignoreDirs } = require('./constants');
 
 const currentDateTime = (date) => format(date, 'MM/DD/YYYY HH:mm:ssA [GMT]Z');
 
@@ -19,7 +19,7 @@ function arrayUnique(array) {
   return a;
 }
 
-const inRservedDirs = (dir) => Object.values(reservedDir).includes(dir);
+const inRservedDirs = (dir) => ignoreDirs.includes(dir);
 
 // setup assumes that a dir inside templates/optionalFeatures exists with the same name as the value below
 const optionalFeatures = [

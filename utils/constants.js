@@ -15,6 +15,8 @@ const reservedDir = {
   MODULES: 'modules'
 };
 
+const ignoreDirs = ['modules', '.vscode'];
+
 const appConstants = {
   UNIVERSAL_REACT: 'universal-react',
   PACKAGE_JSON: 'package.json',
@@ -92,5 +94,6 @@ module.exports = {
   featureScope,
   appTypes,
   reservedDir,
-  apiEndpoints
+  apiEndpoints,
+  ignoreDirs
 };
