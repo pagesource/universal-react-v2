@@ -1,6 +1,8 @@
 /* eslint-disable import/newline-after-import */
 const chalk = require('chalk');
 const cp = require('child_process');
+const emoji = require('node-emoji');
+
 const { spinnerInit } = require('./spinner');
 
 const { spawn } = cp;
@@ -29,9 +31,9 @@ function getCmdType(commandType, stepIn) {
 function runCommand(commandType, args) {
   const argsInput = Array.isArray(args) ? [...args] : [args];
   console.info(
-    `[${chalk.green(
-      currentDateTime(new Date())
-    )}] - Executing: ${commandType} ${argsInput.join(' ')}`
+    `[${chalk.green(currentDateTime(new Date()))}] - ${emoji.get(
+      'rocket'
+    )} Executing: ${commandType} ${argsInput.join(' ')}`
   );
   const execCommand = spawn(`${commandType}`, argsInput, { shell: true });
 
@@ -49,7 +51,9 @@ function runCommand(commandType, args) {
 
   execCommand.on('exit', () => {
     console.info(
-      `[${chalk.green(currentDateTime(new Date()))}] - Command execution completed.`
+      `[${chalk.green(currentDateTime(new Date()))}] - ${emoji.get(
+        'tada'
+      )} Command execution completed.`
     );
     spinnerInit.stop();
   });
@@ -62,12 +66,18 @@ function runCommand(commandType, args) {
 function installPackages(commandType, newProject, stepIn, isRecentDir) {
   const { commandName, cmdType } = getCmdType(commandType, stepIn);
   console.info(
-    chalk.bold(
-      `[${currentDateTime(new Date())}] - Using [${commandName}] as package manager.`
+    chalk.cyan.bold(
+      `[${currentDateTime(new Date())}] - ${emoji.get(
+        'bulb'
+      )} Using [${commandName}] as package manager.`
     )
   );
   console.info(
-    chalk.bold(`[${currentDateTime(new Date())}] - Start Installing dependencies.`)
+    chalk.cyan.bold(
+      `[${currentDateTime(new Date())}] - ${emoji.get(
+        'rocket'
+      )} Start Installing dependencies.`
+    )
   );
   spinnerInit.start();
 
@@ -92,14 +102,16 @@ function installPackages(commandType, newProject, stepIn, isRecentDir) {
   installDependencies.on('exit', () => {
     runCommand(commandType, 'format', newProject, stepIn);
     console.info(
-      `[${chalk.green(currentDateTime(new Date()))}] - Installing dependencies completed.`
+      `[${chalk.green(currentDateTime(new Date()))}] - ${emoji.get(
+        'tada'
+      )} Installing dependencies completed.`
     );
 
     if (newProject) {
       console.info(
-        `[${chalk.green(currentDateTime(new Date()))}] - ${chalk.cyan.bold(
-          '>>>> Success!'
-        )}. Your new project setup is ready.`
+        `[${chalk.green(currentDateTime(new Date()))}] - ${emoji.get('+1')} ${emoji.get(
+          'clap'
+        )} ${chalk.cyan.bold('>>>> Success! Your new project setup is ready.')}`
       );
 
       if (isRecentDir) {
