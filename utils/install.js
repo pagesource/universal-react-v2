@@ -10,12 +10,15 @@ const { currentDateTime } = require('./helpers');
  * @description : method to execute install package command.
  * @param {*} commandType : user input command types [npm run, yarn, pnpm]
  */
-function installPackages(commandType) {
+function installPackages(commandType, newProject, stepIn, isRecentDir) {
+  const cmdType = commandType === 'npm' ? 'npm run' : commandType;
+  let commandName = commandType.split(' ')[0].toUpperCase();
+  if (stepIn) {
+    commandName = commandType.split('&&')[1].trim().toUpperCase();
+  }
   console.info(
     chalk.bold(
-      `[${currentDateTime(new Date())}] - Using [${commandType
-        .split(' ')[0]
-        .toUpperCase()}] as package manager.`
+      `[${currentDateTime(new Date())}] - Using [${commandName}] as package manager.`
     )
   );
   console.info(
@@ -45,8 +48,36 @@ function installPackages(commandType) {
     console.info(
       `[${chalk.green(
         currentDateTime(new Date())
-      )}] - Exit. Installing dependencies completed.`
+      )}] - Exit - Installing dependencies completed.`
     );
+
+    if (newProject) {
+      console.info(
+        `[${chalk.green(currentDateTime(new Date()))}] - ${chalk.cyan.bold(
+          '>>>> Success!'
+        )}. Your new project setup is ready.`
+      );
+
+      if (isRecentDir) {
+        console.info(`
+  
+        >>>> We suggest that you begin by typing:
+        ${chalk.cyan.bold(stepIn)}
+        `);
+      }
+      console.info(`
+        Inside directory, you can run following commands:
+
+        ${chalk.cyan.bold(cmdType)} dev
+          - Starts the development server.
+        
+        ${chalk.cyan.bold(cmdType)} build
+          - Builds the app for production.
+        
+        ${chalk.cyan.bold(cmdType)} generate
+          - Generate new components.
+      `);
+    }
     spinnerInit.stop();
   });
 }

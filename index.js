@@ -598,7 +598,6 @@ const updateRootPackageJson = async (
 const installDependencies = async (installLocation, newProject) => {
   const { command: cmd, fileName } = getCommandType(installLocation);
   let command = cmd;
-  const cmdType = command === 'npm' ? 'npm run' : command;
 
   if (newProject) {
     console.info(
@@ -622,39 +621,24 @@ const installDependencies = async (installLocation, newProject) => {
       );
     }
   }
-
+  let stepIn;
+  let isRecentDir;
   if (newProject) {
     const recentDir = getMostRecentDirectory(cwd);
-    if (recentDir && !inRservedDirs(recentDir)) {
+    isRecentDir = recentDir && !inRservedDirs(recentDir);
+
+    if (isRecentDir) {
       console.info(
         chalk.green.bold(
           `[${currentDateTime(new Date())}] - Found [${recentDir}] directory created.`
         )
       );
-      const stepIn = `cd ${recentDir}`;
+      stepIn = `cd ${recentDir}`;
       command = `${stepIn} && ${command}`;
-
-      console.info(`
-
-      >>>> We suggest that you begin by typing:
-
-      ${chalk.cyan.bold(stepIn)}
-      `);
     }
-    console.info(`
-      Inside directory, you can run following commands:
-      ${chalk.cyan.bold(cmdType)} dev
-      - Starts the development server.
-      
-      ${chalk.cyan.bold(cmdType)} build
-      - Builds the app for production.
-      
-      ${chalk.cyan.bold(cmdType)} generate
-        - Generate new components.
-    `);
   }
 
-  installPackages(command);
+  installPackages(command, newProject, stepIn, isRecentDir);
 };
 
 /**
