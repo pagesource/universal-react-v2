@@ -470,8 +470,12 @@ const addInfoToRootPackageJson = async (
   });
 
   if (newProject) {
-    const turboRootTemplate = path.join(templatesPath, 'root');
+    const turboRootTemplate = path.join(templatesPath, appConstants.ROOT);
     copyDir(turboRootTemplate, rootDir, [appConstants.PACKAGE_JSON]);
+    let rootHuskyJson = require(path.join(rootDir, appConstants.HUSKY_RC));
+
+    rootHuskyJson = applyCommandType(rootHuskyJson, commandName);
+    await writeJsonFile(path.join(rootDir, appConstants.HUSKY_RC), rootHuskyJson);
 
     const turboTemplatePkg = require(path.join(
       turboRootTemplate,
