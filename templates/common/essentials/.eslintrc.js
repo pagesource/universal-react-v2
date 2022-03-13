@@ -1,2 +1,2 @@
 /* eslint-disable */
-module.exports = require('lintconfig/base');
+module.exports = require('config/eslint-preset');
