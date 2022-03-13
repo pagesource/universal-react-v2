@@ -4,7 +4,7 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-An accelerator for generating frontend applications with Next.js and React.
+An accelerator for setting-up scalable frontend architecture with Next.js and React.
 
 This accelerator is a command line tool for generating SSR, SSG & Micro-App type of applications. This enables you to setup a working Micro Frontend or SPA development ecosystem with essential tooling for great dev experience and delivery quality.
 
@@ -14,7 +14,7 @@ This accelerator is a command line tool for generating SSR, SSG & Micro-App type
 npx create-universal-react
 ```
 
-This will run the universal-react CLI, then you can then simply interact with command-prompt to generate 3 different kind of applications in a Monorepo structure.
+This will run the universal-react CLI, then you can simply interact with command-prompt to generate 3 different kind of applications in a Monorepo structure.
 
 ## Main Features
 
