@@ -1,5 +1,14 @@
 # create-universal-react
 
+## 0.10.0
+
+### Minor Changes
+
+- cbd8a4a: - [x] Fixed .gitignore file
+  - [x] Fixed command type in .huskyrc.json
+  - [x] running format command after installing all dependencies
+  - [x] Fixed Prop did not match. when using styled components
+
 ## 0.9.0
 
 ### Minor Changes
