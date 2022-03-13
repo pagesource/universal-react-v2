@@ -103,13 +103,13 @@ function installPackages(commandType, newProject, stepIn, isRecentDir) {
     runCommand(commandType, 'format', newProject, stepIn);
     console.info(
       `[${chalk.green(currentDateTime(new Date()))}] - ${emoji.get(
-        'tada'
+        '+1'
       )} Installing dependencies completed.`
     );
 
     if (newProject) {
       console.info(
-        `[${chalk.green(currentDateTime(new Date()))}] - ${emoji.get('+1')} ${emoji.get(
+        `[${chalk.green(currentDateTime(new Date()))}] - ${emoji.get('tada')} ${emoji.get(
           'clap'
         )} ${chalk.cyan.bold('>>>> Success! Your new project setup is ready.')}`
       );
