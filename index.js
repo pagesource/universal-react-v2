@@ -6,6 +6,8 @@ const inquirer = require('inquirer');
 const util = require('util');
 const exec = util.promisify(require('child_process').exec);
 const axios = require('axios');
+const emoji = require('node-emoji');
+
 const { spinnerInit } = require('./utils/spinner');
 const { setPackageVersion, getPackageVersion } = require('./utils/packagesInfo');
 
@@ -85,7 +87,9 @@ const fetchPackageVersion = async () => {
     spinnerInit.start();
     console.info(
       chalk.green(
-        `[${currentDateTime(new Date())}] - Updating packages version. Please wait...`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'pizza'
+        )} Updating packages version. Please wait...`
       )
     );
     const reactRes = await axios.get(apiEndpoints.reactLatest);
@@ -100,7 +104,9 @@ const fetchPackageVersion = async () => {
   } catch (err) {
     console.error(
       chalk.red(
-        `[${currentDateTime(new Date())}] - Error: Failed to get package version. ${err}`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'fire'
+        )} Error: Failed to get package version. ${err}`
       )
     );
     process.exit(1);
@@ -189,7 +195,9 @@ const intializeGitRepo = async (dir) => {
   const { stdout } = await exec(cmd).catch((err) => {
     console.error(
       chalk.red(
-        `[${currentDateTime(new Date())}] - Error: Failed to intialized git repo. ${err}`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'fire'
+        )} Error: Failed to intialized git repo. ${err}`
       )
     );
     process.exit(1);
@@ -207,9 +215,9 @@ const createProjectDirectory = (appName, newProject) => {
   if (dirFileExists(projectPath)) {
     console.error(
       chalk.red(
-        `[${currentDateTime(
-          new Date()
-        )}] - Error: Project named [${appName}] already exist. Use different app name.`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'fire'
+        )} Error: Project named [${appName}] already exist. Use different app name.`
       )
     );
     process.exit(1);
@@ -243,9 +251,9 @@ const copyStorybookDirectory = async () => {
     } catch (e) {
       console.error(
         chalk.red(
-          `[${currentDateTime(
-            new Date()
-          )}] - Error: Failed to updating storybook package.json file`
+          `[${currentDateTime(new Date())}] - ${emoji.get(
+            'fire'
+          )} Error: Failed to updating storybook package.json file`
         ),
         e
       );
@@ -273,7 +281,11 @@ const copyBaseDirectory = (appName, appType, newProject) => {
     if (appType === sourceDirs.MICRO_APP) {
       removeDir(path.join(projectDir, destinationDirs.WEB_DIR));
       console.info(
-        chalk.green(`[${currentDateTime(new Date())}] - Start creating ${appType}.`)
+        chalk.green(
+          `[${currentDateTime(new Date())}] - ${emoji.get(
+            'rocket'
+          )} Start creating ${appType}.`
+        )
       );
       copyDir(microAppTemplatePath, microAppPath, []);
       copyDir(essentialsTemplatePath, microAppPath, []);
@@ -297,7 +309,9 @@ const copyBaseDirectory = (appName, appType, newProject) => {
   } catch (err) {
     console.error(
       chalk.red(
-        `[${currentDateTime(new Date())}] - Errors: Failed to copy template.  ${err}`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'fire'
+        )} Errors: Failed to copy template.  ${err}`
       )
     );
     process.exit(1);
@@ -470,8 +484,12 @@ const addInfoToRootPackageJson = async (
   });
 
   if (newProject) {
-    const turboRootTemplate = path.join(templatesPath, 'root');
+    const turboRootTemplate = path.join(templatesPath, appConstants.ROOT);
     copyDir(turboRootTemplate, rootDir, [appConstants.PACKAGE_JSON]);
+    let rootHuskyJson = require(path.join(rootDir, appConstants.HUSKY_RC));
+
+    rootHuskyJson = applyCommandType(rootHuskyJson, commandName);
+    await writeJsonFile(path.join(rootDir, appConstants.HUSKY_RC), rootHuskyJson);
 
     const turboTemplatePkg = require(path.join(
       turboRootTemplate,
@@ -496,7 +514,9 @@ const addInfoToRootPackageJson = async (
     const rootFeatures = mergedJson[appConstants.UNIVERSAL_REACT].rootOptionalFeatures;
     console.info(
       chalk.green(
-        `[${currentDateTime(new Date())}] - Following apps created successfully.`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'point_down'
+        )} List of apps got created.`
       )
     );
     console.table(mergedJson[appConstants.UNIVERSAL_REACT].apps);
@@ -505,7 +525,7 @@ const addInfoToRootPackageJson = async (
     if (rootFeatures.length) {
       console.info(
         chalk.green(
-          `[${currentDateTime(new Date())}] - Found ${
+          `[${currentDateTime(new Date())}] - ${emoji.get('mag_right')} Found ${
             rootFeatures.length
           } root level optional feature.`
         )
@@ -520,15 +540,19 @@ const addInfoToRootPackageJson = async (
   } catch (e) {
     console.error(
       chalk.red(
-        `[${currentDateTime(
-          new Date()
-        )}] - Error: Failed to updating root package.json file.`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'fire'
+        )} Error: Failed to updating root package.json file.`
       ),
       e
     );
   }
   console.info(
-    chalk.green(`[${currentDateTime(new Date())}] - Updated root level package.json.`)
+    chalk.green(
+      `[${currentDateTime(new Date())}] - ${emoji.get(
+        '+1'
+      )} Updated root level package.json.`
+    )
   );
   return mergedJson;
 };
@@ -576,16 +600,18 @@ const updateRootPackageJson = async (
   } catch (e) {
     console.error(
       chalk.red(
-        `[${currentDateTime(new Date())}] - Error: Failed updating root package.json file`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'fire'
+        )} Error: Failed updating root package.json file`
       ),
       e
     );
   }
   console.info(
     chalk.yellow(
-      `[${currentDateTime(
-        new Date()
-      )}] - Success: Root package.json updated by universal-react`
+      `[${currentDateTime(new Date())}] - ${emoji.get(
+        '+1'
+      )} Success: Root package.json updated by universal-react`
     )
   );
 };
@@ -598,14 +624,13 @@ const updateRootPackageJson = async (
 const installDependencies = async (installLocation, newProject) => {
   const { command: cmd, fileName } = getCommandType(installLocation);
   let command = cmd;
-  const cmdType = command === 'npm' ? 'npm run' : command;
 
   if (newProject) {
     console.info(
       chalk.yellow(
-        `[${currentDateTime(
-          new Date()
-        )}] - Removing existing lock file and node_module folder. Please wait...`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'pizza'
+        )} Removing existing lock file and node_module folder. Please wait...`
       )
     );
     try {
@@ -614,47 +639,32 @@ const installDependencies = async (installLocation, newProject) => {
     } catch (err) {
       console.error(
         chalk.red(
-          `[${currentDateTime(
-            new Date()
-          )}] - Error: Failed to delete node_module and lock file/folder from root`
+          `[${currentDateTime(new Date())}] - ${emoji.get(
+            'fire'
+          )} Error: Failed to delete node_module and lock file/folder from root`
         ),
         err
       );
     }
   }
-
+  let stepIn;
+  let isRecentDir;
   if (newProject) {
     const recentDir = getMostRecentDirectory(cwd);
-    if (recentDir && !inRservedDirs(recentDir)) {
+    isRecentDir = recentDir && !inRservedDirs(recentDir);
+
+    if (isRecentDir) {
       console.info(
         chalk.green.bold(
           `[${currentDateTime(new Date())}] - Found [${recentDir}] directory created.`
         )
       );
-      const stepIn = `cd ${recentDir}`;
+      stepIn = `cd ${recentDir}`;
       command = `${stepIn} && ${command}`;
-
-      console.info(`
-
-      >>>> We suggest that you begin by typing:
-
-      ${chalk.cyan.bold(stepIn)}
-      `);
     }
-    console.info(`
-      Inside directory, you can run following commands:
-      ${chalk.cyan.bold(cmdType)} dev
-      - Starts the development server.
-      
-      ${chalk.cyan.bold(cmdType)} build
-      - Builds the app for production.
-      
-      ${chalk.cyan.bold(cmdType)} generate
-        - Generate new components.
-    `);
   }
 
-  installPackages(command);
+  installPackages(command, newProject, stepIn, isRecentDir);
 };
 
 /**
@@ -679,7 +689,11 @@ const initializeNewProject = async (
   copyBaseDirectory(appName, appType, newProject);
   copyTemplateDirectory(appType);
   console.info(
-    chalk.green(`[${currentDateTime(new Date())}] - Project Created Successfully`)
+    chalk.green(
+      `[${currentDateTime(new Date())}] - ${emoji.get(
+        'tada'
+      )} Project Created Successfully`
+    )
   );
 
   try {
@@ -722,7 +736,11 @@ const initializeNewProject = async (
       }
       await settingPackagesVersion(appName, commandName);
     } catch (err) {
-      console.error(chalk.red(`[${currentDateTime(new Date())}] - Errors: ${err}`));
+      console.error(
+        chalk.red(
+          `[${currentDateTime(new Date())}] - ${emoji.get('fire')} Errors: ${err}`
+        )
+      );
     }
 
     const workspaces = [`${reservedDir.MODULES}/*`];
@@ -773,7 +791,9 @@ const initializeNewProject = async (
       intializeGitRepo(rootDir);
     }
   } catch (err) {
-    console.error(chalk.red(`[${currentDateTime(new Date())}] - Errors: ${err}`));
+    console.error(
+      chalk.red(`[${currentDateTime(new Date())}] - ${emoji.get('fire')} Errors: ${err}`)
+    );
     process.exit(1);
   }
 };
@@ -893,7 +913,11 @@ if (args.includes('--help') || args.includes('-h')) {
 // Handle if wrong argument passed
 if (args.length && !existingProject) {
   console.info(
-    chalk.bold(`[${currentDateTime(new Date())}] - Invalid argument [${args}]`)
+    chalk.bold(
+      `[${currentDateTime(new Date())}] - ${emoji.get(
+        'no_entry_sign'
+      )} Invalid argument [${args}]`
+    )
   );
   console.info(`
   Usage:
@@ -923,7 +947,11 @@ if (existingProject) {
   // Showing list of existing apps
   if (args.includes('--list') || args.includes('-l')) {
     console.info(
-      chalk.green(`[${currentDateTime(new Date())}] - List of existing apps.`)
+      chalk.green(
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'point_down'
+        )} List of existing apps.`
+      )
     );
     console.table(uvApps);
     process.exit(1);
@@ -934,16 +962,18 @@ if (existingProject) {
     if (rootFeatures.length) {
       console.info(
         chalk.green(
-          `[${currentDateTime(new Date())}] - List of root level optional features.`
+          `[${currentDateTime(new Date())}] - ${emoji.get(
+            'point_down'
+          )} List of root level optional features.`
         )
       );
       console.table(rootFeatures);
     } else {
       console.info(
         chalk.bold(
-          `[${currentDateTime(
-            new Date()
-          )}] - No optional features found. Use [create-universal-react] again to add.`
+          `[${currentDateTime(new Date())}] - ${emoji.get(
+            'mag_right'
+          )} No optional features found. Use [create-universal-react] again to add.`
         )
       );
     }
@@ -958,7 +988,9 @@ if (existingProject) {
     ?.map((app) => app.appName);
   console.info(
     chalk.bold(
-      `[${currentDateTime(new Date())}] - List of apps already available in repo.`
+      `[${currentDateTime(new Date())}] - ${emoji.get(
+        'point_down'
+      )} List of apps already available in repo.`
     )
   );
   console.table(uvApps);
@@ -1012,7 +1044,9 @@ if (existingProject) {
       if (!projectsList.length && ans.updateOption === updateProjectConst.APPS_LEVEL) {
         console.warn(
           chalk.yellow.bold(
-            `[${currentDateTime(new Date())}] - No list of project found to update.`
+            `[${currentDateTime(new Date())}] - ${emoji.get(
+              'mag_right'
+            )} No list of project found to update.`
           )
         );
         console.warn(
@@ -1061,9 +1095,9 @@ if (existingProject) {
         }
         console.info(
           chalk.green.bold(
-            `[${currentDateTime(
-              new Date()
-            )}] - No optional features found to add for app -> [${ans.selectedProject}]`
+            `[${currentDateTime(new Date())}] - ${emoji.get(
+              'mag_right'
+            )} No optional features found to add for app -> [${ans.selectedProject}]`
           )
         );
         return;
@@ -1089,9 +1123,9 @@ if (existingProject) {
         }
         console.info(
           chalk.green.bold(
-            `[${currentDateTime(
-              new Date()
-            )}] - No optional features found to add at root level.`
+            `[${currentDateTime(new Date())}] - ${emoji.get(
+              'mag_right'
+            )} No optional features found to add at root level.`
           )
         );
         return;
@@ -1099,7 +1133,9 @@ if (existingProject) {
 
       console.info(
         chalk.green.bold.underline(
-          `[${currentDateTime(new Date())}] - Nothing to update however :)`
+          `[${currentDateTime(new Date())}] - ${emoji.get(
+            'pizza'
+          )} Nothing to update however :)`
         )
       );
     });
@@ -1108,9 +1144,9 @@ if (existingProject) {
   if (!isEmptyDir(cwd)) {
     console.error(
       chalk.bold(
-        `[${currentDateTime(
-          new Date()
-        )}] - Current working directory is not empty. Please use a clean directory to setup the project`
+        `[${currentDateTime(new Date())}] - ${emoji.get(
+          'raised_hand'
+        )} Current working directory is not empty. Please use a clean directory to setup the project`
       )
     );
     process.exit(1);
@@ -1118,7 +1154,9 @@ if (existingProject) {
 
   console.info(
     chalk.bgYellow.bold.black(
-      '[:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.'
+      `${emoji.get(
+        'rocket'
+      )} [:: RECOMMEND PACKAGE MANAGER ::] :- Choose [YARN or PNPM] As Package Manager.`
     )
   );
   console.info(
@@ -1139,7 +1177,11 @@ if (existingProject) {
     const recentDir = getMostRecentDirectory(cwd);
     if (!recentDir) {
       console.error(
-        chalk.red(`[${currentDateTime(new Date())}] - Error: An unexpected error occured`)
+        chalk.red(
+          `[${currentDateTime(new Date())}] - ${emoji.get(
+            'fire'
+          )} Error: An unexpected error occured`
+        )
       );
       process.exit(1);
     }
@@ -1152,7 +1194,9 @@ if (existingProject) {
   inquirer.prompt(createAppQuestions).then((answers) => {
     if (appTypeMap[answers.appType] === undefined) {
       console.error(
-        chalk.red(`[${currentDateTime(new Date())}] - Error: Invalid app type.`)
+        chalk.red(
+          `[${currentDateTime(new Date())}] - ${emoji.get('x')} Error: Invalid app type.`
+        )
       );
     } else {
       // only get the features that are not already added in the project

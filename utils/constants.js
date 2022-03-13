@@ -28,7 +28,9 @@ const appConstants = {
   YARN_LOCK: 'yarn.lock',
   PACKAGE_LOCK: 'package-lock.json',
   PNPM_LOCK: 'pnpm-lock.yaml',
-  NODE_MODULES: 'node_modules'
+  NODE_MODULES: 'node_modules',
+  HUSKY_RC: '.huskyrc.json',
+  ROOT: 'root'
 };
 
 const commandTypes = {
