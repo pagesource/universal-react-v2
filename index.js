@@ -71,6 +71,7 @@ const essentialsTemplatePath = path.join(commonDirPath, sourceDirs.ESSENTIALS_DI
 const srcTemplatePath = path.join(commonDirPath, sourceDirs.SRC_DIR);
 const sourcePackagesPath = path.join(commonDirPath, appConstants.PACKAGES_DIR);
 const storybookPath = path.join(commonDirPath, sourceDirs.STORYBOOK_DIR);
+const configTemplatePath = path.join(commonDirPath, appConstants.CONFIG_DIR);
 
 let appTemplatePath = ''; // template path of [ssg, ssr, microApp] templates
 let rootDir = ''; // root folder of generated project ./
@@ -298,6 +299,10 @@ const copyBaseDirectory = (appName, appType, newProject) => {
     }
     copyDir(sourcePackagesPath, packagesAppPath, []);
 
+    // creating config folder under apps/<appName>
+    createDir(path.join(microAppPath, appConstants.CONFIG_DIR));
+    copyDir(configTemplatePath, path.join(microAppPath, appConstants.CONFIG_DIR), []);
+
     copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [
       appConstants.PACKAGE_JSON
     ]);
@@ -462,6 +467,7 @@ const addInfoToRootPackageJson = async (
 ) => {
   const commandName = getCommandType(rootDir).command;
   turboRepoPackageFile = require(path.join(rootDir, appConstants.PACKAGE_JSON));
+  const uvPackage = require(path.join(__dirname, appConstants.PACKAGE_JSON));
 
   workspaces.forEach((ws) => {
     if (!turboRepoPackageFile.workspaces.includes(ws)) {
@@ -472,6 +478,7 @@ const addInfoToRootPackageJson = async (
   let mergedJson = mergeJsons(turboRepoPackageFile, {
     name: appConstants.UNIVERSAL_REACT,
     [appConstants.UNIVERSAL_REACT]: {
+      version: `v${uvPackage.version}`,
       apps: [
         {
           appType,
