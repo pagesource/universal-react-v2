@@ -1,5 +1,5 @@
 /* eslint-disable */
-
+import React from 'react';
 import { WithContextProvider } from 'smart-context';
 
 const initialState = {
