@@ -10,6 +10,12 @@
     "lint:fix": {
       "outputs": []
     },
+    "test": {
+      "dependsOn": ["^build"]
+    },
+    "test:watch": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "cache": false
     },
