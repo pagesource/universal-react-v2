@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.11.0
+
+### Minor Changes
+
+- 7bd168f: configured test and test:watch command using turbo repo and fixed failed test cases
+
 ## 0.10.0
 
 ### Minor Changes
