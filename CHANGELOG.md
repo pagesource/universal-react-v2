@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.12.0
+
+### Minor Changes
+
+- e112ef5: Fixed error of running linting command from root level
+
 ## 0.11.0
 
 ### Minor Changes
