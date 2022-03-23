@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.13.0
+
+### Minor Changes
+
+- 2651725: Fixed storybook setup and updated generator-plop version to 1.1.1
+
 ## 0.12.0
 
 ### Minor Changes
