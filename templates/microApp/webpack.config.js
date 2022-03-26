@@ -24,10 +24,35 @@ const APP_NAME = PACKAGE_JSON.name.toLowerCase();
  */
 const MF_CONFIG = {
   name: `${APP_NAME}_remote`,
+  // remotes: this is where we will include items to consume from remote
   remotes: {},
+  // exposes: this is where we will include items to expose
   exposes: {
     './app': './src/index'
-  }
+  },
+  // shared: here we can put the list of modules we would like to share
+  shared: [
+    {
+      react: {
+        eager: true,
+        singleton: true,
+        requiredVersion: false
+      }
+    },
+    {
+      'react-dom': {
+        eager: true,
+        singleton: true,
+        requiredVersion: false
+      }
+    },
+    {
+      'styled-components': {
+        eager: true,
+        singleton: true
+      }
+    }
+  ]
 };
 
 /**
@@ -81,7 +106,8 @@ module.exports = (env, argv) => {
     return instance;
   };
 
-  const addHTMLReplace = () => new HtmlReplaceWebpackPlugin([
+  const addHTMLReplace = () =>
+    new HtmlReplaceWebpackPlugin([
       {
         pattern: '@@app_name',
         replacement: APP_NAME
