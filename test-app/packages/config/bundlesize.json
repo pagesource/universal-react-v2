@@ -1,0 +1,9 @@
+{
+  "files": [
+    {
+      "path": "./build/**/chunks/*.js",
+      "maxSize": "50 kB",
+      "compression": "gzip"
+    }
+  ]
+}

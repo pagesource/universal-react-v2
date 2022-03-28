@@ -1,0 +1,12 @@
+{
+  "name": "config",
+  "version": "0.0.0",
+  "files": [
+    "*",
+    "eslint-preset.js",
+    "endpoint.js",
+    "jest/jest.config.js",
+    "jest/jest.setup.js",
+    "bundlesize.json"
+  ]
+}

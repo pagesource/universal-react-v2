@@ -1,0 +1,14 @@
+{
+  "name": "services",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "*",
+    "index.js"
+  ],
+  "dependencies": {
+    "react-query": "^3.34.14",
+    "react": "*"
+  }
+}
