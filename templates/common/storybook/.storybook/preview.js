@@ -1,8 +1,5 @@
 import React from 'react';
-import { addDecorator, configure, storiesOf } from '@storybook/react';
-import { ThemeProvider } from 'styled-components';
-
-import { theme } from 'themes';
+import { configure, storiesOf } from '@storybook/react';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -13,10 +10,6 @@ export const parameters = {
     }
   }
 };
-
-addDecorator((storyFn, context) => (
-  <ThemeProvider theme={theme}>{storyFn(context)}</ThemeProvider>
-));
 
 const req = require.context('../../', true, /story\.tsx$/);
 

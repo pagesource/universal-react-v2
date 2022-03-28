@@ -9,8 +9,7 @@ module.exports = {
     '@storybook/addon-knobs',
     '@storybook/addon-links',
     'storybook-design-token',
-    '@storybook/addon-viewport',
-    'storybook-addon-styled-component-theme/dist/preset'
+    '@storybook/addon-viewport'
   ],
   framework: '@storybook/react',
   core: {

@@ -7,10 +7,10 @@
 
 // Node_Module Imports
 import React from 'react';
-import styled from 'styled-components';
+import {styled} from '@stitches/react';
 
 // Relative imports
-import styles, { AppContainer } from './Button.style';
+import { AppContainer } from './Button.style';
 import { ButtonProps } from './types';
 
 const Button: React.FunctionComponent<ButtonProps> = ({ className, children }) => (
@@ -20,11 +20,5 @@ const Button: React.FunctionComponent<ButtonProps> = ({ className, children }) =
 );
 
 Button.defaultProps = {};
-
-const StyledButton = styled(Button)`
-  ${styles};
-`;
-
-export default StyledButton;
 
 export { Button };

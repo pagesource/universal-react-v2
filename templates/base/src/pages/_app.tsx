@@ -1,10 +1,8 @@
 // node modules
 import React from 'react';
 import type { AppProps } from 'next/app';
-import { ThemeProvider } from 'styled-components';
 
 // packages
-import { theme } from 'themes';
 import WithReactQuery from 'services';
 
 import GlobalContextProvider from '../stores/globalContext';
@@ -17,11 +15,9 @@ import GlobalContextProvider from '../stores/globalContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={theme}>
       <GlobalContextProvider>
         <Component {...pageProps} />
       </GlobalContextProvider>
-    </ThemeProvider>
   );
 }
 
