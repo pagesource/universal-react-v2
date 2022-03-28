@@ -7,7 +7,6 @@
 
 // Node_Module Imports
 import React from 'react';
-import {styled} from '../../../../stiches.config';
 
 // Relative imports
 import { AppContainer } from './Button.style';
