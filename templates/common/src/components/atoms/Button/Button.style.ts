@@ -1,4 +1,4 @@
-import {styled} from '@stitches/react';
+import {styled} from '../../../../stiches.config';
 
 export const AppContainer = styled('button', {
   fontSize: '1em',
