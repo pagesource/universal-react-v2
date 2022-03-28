@@ -16,7 +16,8 @@
     "themes": "{workspacePrefix}",
     "services": "{workspacePrefix}",
     "ui": "{workspacePrefix}",
-    "smart-context": "^2.1.2"
+    "smart-context": "^2.1.2",
+    "@stitches/react": "^1.2.7"
   },
   "devDependencies": {
     "@types/react": "^17.0.39",
