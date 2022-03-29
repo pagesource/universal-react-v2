@@ -1,5 +1,6 @@
 import { createStitches } from '@stitches/react';
-import { customTheme } from '../../theme/theme';
+import { customTheme } from 'theme';
+import { globalTheme } from 'themes';
 
 export const {
   styled,
@@ -10,4 +11,4 @@ export const {
   theme,
   createTheme,
   config,
-} = createStitches({ ...customTheme });
+} = createStitches({ ...globalTheme, ...customTheme });

@@ -30,7 +30,8 @@ const appConstants = {
   PNPM_LOCK: 'pnpm-lock.yaml',
   NODE_MODULES: 'node_modules',
   HUSKY_RC: '.huskyrc.json',
-  ROOT: 'root'
+  ROOT: 'root',
+  THEME: 'theme'
 };
 
 const commandTypes = {

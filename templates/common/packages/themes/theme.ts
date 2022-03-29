@@ -1,4 +1,4 @@
-export const theme = {
+export const globalTheme = {
   meta: {
     remFactor: 16
   },
