@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.14.0
+
+### Minor Changes
+
+- d466a75: added initial setup of module federation for SSG and SSR arch type apps
+
 ## 0.13.0
 
 ### Minor Changes
