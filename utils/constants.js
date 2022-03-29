@@ -48,7 +48,8 @@ const sourceDirs = {
   SRC_DIR: 'src',
   STORYBOOK_DIR: 'storybook',
   OPTIONAL_FEATURES_DIR: 'optionalFeatures',
-  TEMP_DIR: 'temp'
+  TEMP_DIR: 'temp',
+  THEME: 'theme'
 };
 
 const destinationDirs = {
