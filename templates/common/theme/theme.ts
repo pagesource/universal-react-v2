@@ -1,7 +1,7 @@
 export const customTheme = {
     theme: {
         colors: {
-            white: 'white'
+            fontColor: 'white'
         }
     }
 }

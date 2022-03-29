@@ -19,5 +19,5 @@ const Button: React.FunctionComponent<ButtonProps> = ({ className, children }) =
 );
 
 Button.defaultProps = {};
-
+export default Button;
 export { Button };

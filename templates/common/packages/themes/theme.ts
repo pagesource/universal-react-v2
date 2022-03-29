@@ -90,6 +90,11 @@ export const globalTheme = {
       id: 'O7zm29zclk'
     }
   ],
+  theme: {
+    colors: {
+      fontColor: 'red',
+    },
+  },
   colors: {
     white: [
       'white',

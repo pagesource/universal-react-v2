@@ -304,9 +304,12 @@ const copyBaseDirectory = (appName, appType, newProject) => {
     createDir(path.join(microAppPath, appConstants.CONFIG_DIR));
     copyDir(configTemplatePath, path.join(microAppPath, appConstants.CONFIG_DIR), []);
 
-    // create theme folder under apps/<appName>
-    createDir(path.join(microAppPath, appConstants.THEME));
-    copyDir(themePath, path.join(microAppPath, appConstants.THEME), []);
+    // copy theme folder under apps/<appName>/src
+    copyDir(
+      themePath,
+      path.join(microAppPath, sourceDirs.SRC_DIR, appConstants.THEME),
+      []
+    );
 
     copyDir(srcTemplatePath, path.join(microAppPath, sourceDirs.SRC_DIR), [
       appConstants.PACKAGE_JSON
