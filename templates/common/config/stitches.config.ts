@@ -1,5 +1,5 @@
 import { createStitches } from '@stitches/react';
-import { customTheme } from '../src/theme';
+import { customTheme } from '../src/theme/theme';
 import { globalTheme } from 'themes';
 
 export const {
