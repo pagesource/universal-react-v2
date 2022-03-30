@@ -50,7 +50,6 @@
     "Accelerator"
   ],
   "dependencies": {
-    "@stitches/react": "^1.2.7",
     "axios": "^0.26.0",
     "chalk": "4.1.2",
     "cli-spinner": "^0.2.10",

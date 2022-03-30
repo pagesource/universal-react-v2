@@ -6,6 +6,7 @@ import type { AppProps } from 'next/app';
 import WithReactQuery from 'services';
 
 import GlobalContextProvider from '../stores/globalContext';
+import { globalCss } from '../../../common/config/stitches.config';
 
 // Will be called once for every metric that has to be reported.
 // export function reportWebVitals(metric: any) {
@@ -13,7 +14,14 @@ import GlobalContextProvider from '../stores/globalContext';
 // console.log(metric);
 // }
 
+const globalStyles = globalCss({
+  '*': { margin: 0, padding: 0 },
+});
+
 function MyApp({ Component, pageProps }: AppProps) {
+  
+  globalStyles();
+
   return (
       <GlobalContextProvider>
         <Component {...pageProps} />

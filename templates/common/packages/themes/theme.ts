@@ -32,8 +32,9 @@ export const globalTheme = {
       fontAwesome: "'Font Awesome 5 Free'"
     },
     radii: {
-      1: '12px',
-      2: '16px'
+      1: '3px',
+      2: '12px',
+      3: '16px'
     },
     space: {
       1: '1px',
@@ -70,6 +71,11 @@ export const globalTheme = {
     animations: {
       1: 'fa-spin 2s infinite linear',
     },
-    originURL: 'google.com',
-  }
+  },
+  media: {
+    bp1: '(min-width: 480px)',
+  },
+  utils: {
+    marginX: (value) => ({ marginLeft: value, marginRight: value }),
+  },
 };
