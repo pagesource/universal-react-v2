@@ -6,7 +6,7 @@ import type { AppProps } from 'next/app';
 import WithReactQuery from 'services';
 
 import GlobalContextProvider from '../stores/globalContext';
-import { globalCss } from '../../../common/config/stitches.config';
+import { globalCss } from '../../config/stitches.config';
 
 // Will be called once for every metric that has to be reported.
 // export function reportWebVitals(metric: any) {
