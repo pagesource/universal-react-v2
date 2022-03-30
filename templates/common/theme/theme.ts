@@ -2,7 +2,7 @@
 export const customTheme = {
     theme: {
         colors: {
-            fontColor: '#1c1c1c'
+            fontColor: 'black'
         }
     }
 }
