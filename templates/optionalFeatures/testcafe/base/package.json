@@ -1,9 +1,11 @@
 {
+  "name": "testcafe",
+  "version": "0.1.0",
   "scripts": {
     "clean": "npx rimraf cucumber-json-reports",
-    "test": "gherkin-testcafe",
+    "e2e": "gherkin-testcafe",
     "report": "node utils/generateReport.js",
-    "test:local": "node local"
+    "e2e:local": "node local"
   },
   "dependencies": {
     "@cucumber/cucumber": "^7.3.1",

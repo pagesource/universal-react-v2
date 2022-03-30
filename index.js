@@ -750,7 +750,7 @@ const initializeNewProject = async (
       );
     }
 
-    const workspaces = [`${reservedDir.MODULES}/*`];
+    const workspaces = [`${reservedDir.MODULES}/**/*`];
     let rootPacakgeJson;
     if (newProject) {
       const { root, apps } = await copyOptionalTemplatesNewProject(

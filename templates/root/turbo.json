@@ -16,6 +16,9 @@
     "test:watch": {
       "dependsOn": ["^build"]
     },
+    "e2e": {
+      "dependsOn": ["^build"]
+    },
     "dev": {
       "cache": false
     },
