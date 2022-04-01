@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Button from '../components/atoms/Button';
-import Modal from '../../../common/src/components/molecules/Modal';
+import Modal from '../components/molecules/Modal';
 
 export default function Home() {
   return (

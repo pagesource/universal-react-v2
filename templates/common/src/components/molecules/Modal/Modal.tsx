@@ -20,19 +20,18 @@ const Modal: React.FunctionComponent<ModalProps> = ({ className, children }) => 
             <Text b>Card Title</Text>
           </Card.Header>
           <Divider />
-          <Card.Body css={{ py: "$10" }}>
+          <Card.Body>
             <Text>
-              Some quick example text to build on the card title and make up the
-              bulk of the card's content.
+            This Modal is made up of nextui Card component and custom button component.
             </Text>
           </Card.Body>
           <Divider />
           <Card.Footer>
             <Row justify="flex-end">
-              <Button size="sm" light>
+              <Button>
                 Cancel
               </Button>
-              <Button size="sm">Agree</Button>
+              <Button>Agree</Button>
             </Row>
           </Card.Footer>
         </Card>
