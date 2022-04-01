@@ -9,13 +9,13 @@
 import React from 'react';
 
 // Relative imports
-import { AppContainer } from './Button.style';
+import { CompRoot } from './Button.style';
 import { ButtonProps } from './types';
 
 const Button: React.FunctionComponent<ButtonProps> = ({ className, children }) => (
-  <AppContainer className={className} data-testid="AppContainer">
+  <CompRoot className={className} data-testid="CompRoot">
     {children}
-  </AppContainer>
+  </CompRoot>
 );
 
 Button.defaultProps = {};

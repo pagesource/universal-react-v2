@@ -1,4 +1,4 @@
-export const globalTheme = {
+export const theme = {
   theme: {
     colors: {
       white: 'white',
@@ -66,16 +66,16 @@ export const globalTheme = {
       1: 'all 1s cubic-bezier(0.32, 0.01, 0, 1)',
       2: 'all 0.5s cubic-bezier(0.39, 0.575, 0.565, 1)',
       3: 'all 0.3s cubic-bezier(0.32, 0.01, 0, 1)',
-      4: 'all .25s linear',
+      4: 'all .25s linear'
     },
     animations: {
-      1: 'fa-spin 2s infinite linear',
-    },
+      1: 'fa-spin 2s infinite linear'
+    }
   },
   media: {
-    bp1: '(min-width: 480px)',
+    bp1: '(min-width: 480px)'
   },
   utils: {
-    marginX: (value) => ({ marginLeft: value, marginRight: value }),
-  },
+    marginX: (value) => ({ marginLeft: value, marginRight: value })
+  }
 };
