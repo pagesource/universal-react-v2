@@ -50,7 +50,6 @@
     "Accelerator"
   ],
   "dependencies": {
-    "@nextui-org/react": "^1.0.5-beta.5",
     "axios": "^0.26.0",
     "chalk": "4.1.2",
     "cli-spinner": "^0.2.10",
