@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Button from '../components/atoms/Button';
+import Modal from '../../../common/src/components/molecules/Modal';
 
 export default function Home() {
   return (
@@ -14,7 +15,7 @@ export default function Home() {
         <h1 className="title">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-        <Button>Click Here</Button>
+        <Modal/>
 
         <p className="description">
           Get started by editing <code>pages/index.js</code>

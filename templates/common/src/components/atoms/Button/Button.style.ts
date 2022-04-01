@@ -1,11 +1,12 @@
-import { Button, styled } from '@nextui-org/react';
+import { styled } from '@nextui-org/react';
 
-export const CompRoot = styled(Button, {
+export const CompRoot = styled('button', {
   fontSize: '$3',
   color: '$fontColor',
   margin: '1em',
   padding: '0.25em 1em',
   border: '2px solid black',
   borderRadius: '$1',
-  display: 'block'
+  display: 'block',
+  length: '1'
 });

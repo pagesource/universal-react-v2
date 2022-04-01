@@ -1,4 +1,7 @@
-export const theme = {
+import { createTheme } from "@nextui-org/react";
+
+export const theme = createTheme({
+  type: 'light',
   theme: {
     colors: {
       white: 'white',
@@ -9,14 +12,6 @@ export const theme = {
       yellow: '#ffe63b',
       fontColor: '$gray',
       overlays: 'rgba(255,255,255,0.9)'
-    },
-    meta: {
-      remFactor: 16
-    },
-    measure: {
-      narrow: '20em',
-      default: '28em',
-      wide: '34em'
     },
     lineHeights: {
       solid: 1,
@@ -55,27 +50,16 @@ export const theme = {
       4: '18px',
       5: '20px'
     },
-    borderWidths: { 1: '1px' },
     fontWeights: {
       1: 100,
       2: 200,
       3: 300
     },
-    borderStyles: { 1: 'solid' },
     transitions: {
       1: 'all 1s cubic-bezier(0.32, 0.01, 0, 1)',
       2: 'all 0.5s cubic-bezier(0.39, 0.575, 0.565, 1)',
       3: 'all 0.3s cubic-bezier(0.32, 0.01, 0, 1)',
       4: 'all .25s linear'
-    },
-    animations: {
-      1: 'fa-spin 2s infinite linear'
     }
-  },
-  media: {
-    bp1: '(min-width: 480px)'
-  },
-  utils: {
-    marginX: (value) => ({ marginLeft: value, marginRight: value })
   }
-};
+});
