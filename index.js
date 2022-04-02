@@ -72,7 +72,6 @@ const srcTemplatePath = path.join(commonDirPath, sourceDirs.SRC_DIR);
 const sourcePackagesPath = path.join(commonDirPath, appConstants.PACKAGES_DIR);
 const storybookPath = path.join(commonDirPath, sourceDirs.STORYBOOK_DIR);
 const configTemplatePath = path.join(commonDirPath, appConstants.CONFIG_DIR);
-const themePath = path.join(commonDirPath, appConstants.THEME);
 
 let appTemplatePath = ''; // template path of [ssg, ssr, microApp] templates
 let rootDir = ''; // root folder of generated project ./
