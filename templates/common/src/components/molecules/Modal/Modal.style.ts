@@ -1,3 +1,3 @@
-import { Card, styled } from '@nextui-org/react';
+export const modalCss = { mw: '390px' };
 
-export const CompRoot = styled(Card, {length:'1'});
+export const footerCss = { padding: '10px 0' };

@@ -11,6 +11,6 @@ describe('<Button />', () => {
   });
 
   test('should render correctly', () => {
-    expect(screen.getByTestId('AppContainer'));
+    expect(screen.getByTestId('CompRoot'));
   });
 });
