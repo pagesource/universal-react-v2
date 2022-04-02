@@ -30,8 +30,7 @@ const appConstants = {
   PNPM_LOCK: 'pnpm-lock.yaml',
   NODE_MODULES: 'node_modules',
   HUSKY_RC: '.huskyrc.json',
-  ROOT: 'root',
-  THEME: 'theme'
+  ROOT: 'root'
 };
 
 const commandTypes = {
@@ -49,8 +48,7 @@ const sourceDirs = {
   SRC_DIR: 'src',
   STORYBOOK_DIR: 'storybook',
   OPTIONAL_FEATURES_DIR: 'optionalFeatures',
-  TEMP_DIR: 'temp',
-  THEME: 'theme'
+  TEMP_DIR: 'temp'
 };
 
 const destinationDirs = {
