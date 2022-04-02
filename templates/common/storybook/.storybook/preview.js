@@ -1,5 +1,7 @@
 import React from 'react';
-import { configure, storiesOf } from '@storybook/react';
+import { addDecorator, configure, storiesOf } from '@storybook/react';
+import { NextUIProvider } from '@nextui-org/react';
+import { theme } from 'themes';
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
@@ -10,6 +12,10 @@ export const parameters = {
     }
   }
 };
+
+addDecorator((storyFn, context) => (
+  <NextUIProvider theme={theme}>{storyFn(context)}</NextUIProvider>
+));
 
 const req = require.context('../../', true, /story\.tsx$/);
 
