@@ -22,7 +22,7 @@ const Modal: React.FunctionComponent<ModalProps> = ({ className, children }) => 
     <Divider />
     <Card.Body>
       <Text>
-        This Modal is made up of nextui Card component and custom button component.
+        This Modal is made up of <a href="https://nextui.org/" target="_blank">nextui</a> Card component and custom button component.
       </Text>
     </Card.Body>
     <Divider />
