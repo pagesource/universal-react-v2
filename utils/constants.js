@@ -15,7 +15,7 @@ const reservedDir = {
   MODULES: 'modules'
 };
 
-const ignoreDirs = ['modules', '.vscode'];
+const ignoreDirs = ['modules', '.vscode', 'storybook', 'apps', 'packages'];
 
 const appConstants = {
   UNIVERSAL_REACT: 'universal-react',
