@@ -10,7 +10,7 @@ export const theme = createTheme({
       gray: '#b5b5b5',
       cyan: '#00e6c3',
       yellow: '#ffe63b',
-      fontColor: '$gray',
+      fontColor: '$black',
       overlays: 'rgba(255,255,255,0.9)'
     },
     lineHeights: {
