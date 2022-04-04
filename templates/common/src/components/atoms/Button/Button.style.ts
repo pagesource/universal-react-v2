@@ -1,4 +1,4 @@
-import { styled } from '@stitches/react';
+import { styled } from '@nextui-org/react';
 
 export const CompRoot = styled('button', {
   fontSize: '$3',
@@ -7,5 +7,6 @@ export const CompRoot = styled('button', {
   padding: '0.25em 1em',
   border: '2px solid black',
   borderRadius: '$1',
-  display: 'block'
+  display: 'block',
+  length: '1'
 });
