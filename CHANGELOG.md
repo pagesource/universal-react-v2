@@ -1,5 +1,15 @@
 # create-universal-react
 
+## 0.15.0
+
+### Minor Changes
+
+- 922ca9f: Replacing styled components with styling library stitches. Adding React UI library Nextui.
+
+### Patch Changes
+
+- 922ca9f: Version update of generate plop
+
 ## 0.14.0
 
 ### Minor Changes
