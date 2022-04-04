@@ -13,16 +13,15 @@
     "markdown-to-jsx": "^7.1.3",
     "react": "{reactVersion}",
     "react-dom": "{reactVersion}",
-    "styled-components": "^5.3.1",
     "themes": "{workspacePrefix}",
     "services": "{workspacePrefix}",
     "ui": "{workspacePrefix}",
-    "smart-context": "^2.1.2"
+    "smart-context": "^2.1.2",
+    "@nextui-org/react": "^1.0.5-beta.5"
   },
   "devDependencies": {
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
-    "@types/styled-components": "^5.1.22",
     "@testing-library/react": "12.1.1",
     "@testing-library/react-hooks": "7.0.2",
     "bundlesize": "0.18.1",

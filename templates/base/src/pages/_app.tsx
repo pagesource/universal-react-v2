@@ -1,13 +1,13 @@
 // node modules
 import React from 'react';
 import type { AppProps } from 'next/app';
-import { ThemeProvider } from 'styled-components';
 
 // packages
-import { theme } from 'themes';
 import WithReactQuery from 'services';
 
 import GlobalContextProvider from '../stores/globalContext';
+import { NextUIProvider } from '@nextui-org/react';
+import { theme } from 'themes';
 
 // Will be called once for every metric that has to be reported.
 // export function reportWebVitals(metric: any) {
@@ -17,11 +17,11 @@ import GlobalContextProvider from '../stores/globalContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThemeProvider theme={theme}>
+    <NextUIProvider theme={theme}>
       <GlobalContextProvider>
         <Component {...pageProps} />
       </GlobalContextProvider>
-    </ThemeProvider>
+    </NextUIProvider>
   );
 }
 
