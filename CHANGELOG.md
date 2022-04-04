@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.15.1
+
+### Patch Changes
+
+- d79ec01: separate tsconfig for tests
+
 ## 0.15.0
 
 ### Minor Changes
