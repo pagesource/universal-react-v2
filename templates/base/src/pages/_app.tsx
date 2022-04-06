@@ -5,7 +5,7 @@ import { NextUIProvider } from '@nextui-org/react';
 
 // packages
 import WithReactQuery from 'services';
-
+import { theme } from 'themes';
 import GlobalContextProvider from '../stores/globalContext';
 
 // Will be called once for every metric that has to be reported.
