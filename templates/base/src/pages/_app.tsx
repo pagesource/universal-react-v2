@@ -1,10 +1,10 @@
 // node modules
 import React from 'react';
 import type { AppProps } from 'next/app';
+import { NextUIProvider } from '@nextui-org/react';
 
 // packages
 import WithReactQuery from 'services';
-import { NextUIProvider } from '@nextui-org/react';
 import { theme } from 'themes';
 import GlobalContextProvider from '../stores/globalContext';
 
