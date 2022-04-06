@@ -16,11 +16,11 @@ import GlobalContextProvider from '../stores/globalContext';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-      <NextUIProvider theme={theme}>
-        <GlobalContextProvider>
-          <Component {...pageProps} />
-        </GlobalContextProvider>
-      </NextUIProvider>
+    <NextUIProvider theme={theme}>
+      <GlobalContextProvider>
+        <Component {...pageProps} />
+      </GlobalContextProvider>
+    </NextUIProvider>
   );
 }
 
