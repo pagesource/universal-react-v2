@@ -13,11 +13,11 @@ import CompRoot from './Button.style';
 import { ButtonProps } from './types';
 
 const Button: React.FunctionComponent<ButtonProps> = ({ className, children }) => (
-    <CompRoot className={className} data-testid="CompRoot">
-      {children}
-    </CompRoot>
+  <CompRoot className={className} data-testid="CompRoot">
+    {children}
+  </CompRoot>
 );
 
 Button.defaultProps = {};
-
+export default Button;
 export { Button };
