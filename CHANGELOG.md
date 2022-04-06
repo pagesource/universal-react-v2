@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.15.2
+
+### Patch Changes
+
+- f736f37: typescript config changes
+
 ## 0.15.1
 
 ### Patch Changes
