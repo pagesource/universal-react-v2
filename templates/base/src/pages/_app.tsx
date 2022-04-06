@@ -4,10 +4,9 @@ import type { AppProps } from 'next/app';
 
 // packages
 import WithReactQuery from 'services';
-
-import GlobalContextProvider from '../stores/globalContext';
 import { NextUIProvider } from '@nextui-org/react';
 import { theme } from 'themes';
+import GlobalContextProvider from '../stores/globalContext';
 
 // Will be called once for every metric that has to be reported.
 // export function reportWebVitals(metric: any) {
@@ -17,11 +16,11 @@ import { theme } from 'themes';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <NextUIProvider theme={theme}>
-      <GlobalContextProvider>
-        <Component {...pageProps} />
-      </GlobalContextProvider>
-    </NextUIProvider>
+      <NextUIProvider theme={theme}>
+        <GlobalContextProvider>
+          <Component {...pageProps} />
+        </GlobalContextProvider>
+      </NextUIProvider>
   );
 }
 
