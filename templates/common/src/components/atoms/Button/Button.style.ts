@@ -1,6 +1,6 @@
 import { styled } from '@nextui-org/react';
 
-export const CompRoot = styled('button', {
+const CompRoot = styled('button', {
   fontSize: '$3',
   color: '$fontColor',
   margin: '1em',
@@ -10,3 +10,5 @@ export const CompRoot = styled('button', {
   display: 'block',
   length: '1'
 });
+
+export default CompRoot;

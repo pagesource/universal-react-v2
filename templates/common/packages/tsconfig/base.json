@@ -19,7 +19,7 @@
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
-    "noEmit": false,
+    "noEmit": true,
     "incremental": true,
     "resolveJsonModule": true,
     "noImplicitAny": false,

@@ -1,13 +1,12 @@
 // node modules
 import React from 'react';
 import type { AppProps } from 'next/app';
+import { NextUIProvider } from '@nextui-org/react';
 
 // packages
 import WithReactQuery from 'services';
-
-import GlobalContextProvider from '../stores/globalContext';
-import { NextUIProvider } from '@nextui-org/react';
 import { theme } from 'themes';
+import GlobalContextProvider from '../stores/globalContext';
 
 // Will be called once for every metric that has to be reported.
 // export function reportWebVitals(metric: any) {

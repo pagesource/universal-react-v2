@@ -9,7 +9,7 @@
 import React from 'react';
 
 // Relative imports
-import { CompRoot } from './Button.style';
+import CompRoot from './Button.style';
 import { ButtonProps } from './types';
 
 const Button: React.FunctionComponent<ButtonProps> = ({ className, children }) => (
