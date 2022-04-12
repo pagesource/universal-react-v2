@@ -21,7 +21,8 @@
     "registry": "https://registry.npmjs.org/"
   },
   "engines": {
-    "node": "^14.17.6"
+    "npm": ">=7.0.0",
+    "node": ">=14.0.0"
   },
   "scripts": {
     "lint": "eslint --ignore-path .gitignore **/*.js",
