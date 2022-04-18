@@ -15,6 +15,7 @@ module.exports = {
   core: {
     builder: 'webpack5'
   },
+  stories: ['../../**/*.story.mdx', '../../**/*.story.@(js|jsx|ts|tsx)'],
   webpackFinal: async (config) => {
     config.resolve.plugins = [
       ...(config.resolve.plugins || []),
