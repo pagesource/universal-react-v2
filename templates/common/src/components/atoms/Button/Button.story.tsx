@@ -1,33 +1,33 @@
-import React from "react";
-import { withKnobs, text, optionsKnob } from "@storybook/addon-knobs";
+import React from 'react';
+import { withKnobs, text, optionsKnob } from '@storybook/addon-knobs';
 
-import Button from "./index";
+import Button from './index';
 
 /* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
 export default {
-  title: "Example/Button",
+  title: 'Example/Button',
   component: Button,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
   argTypes: {},
-  decorators: [withKnobs],
+  decorators: [withKnobs]
 };
 
 const Template = (args) => <Button {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {
-  children: text("Label", "Button"),
+  children: text('Label', 'Button')
 };
 
 export const KnobExample = () => (
   <Button
     theme={optionsKnob(
-      "Theme",
-      { Primary: "primary", Secondary: "secondary" },
-      "primary",
-      { display: "select" }
+      'Theme',
+      { Primary: 'primary', Secondary: 'secondary' },
+      'primary',
+      { display: 'select' }
     )}
   >
-    {text("Label", "Button")}
+    {text('Label', 'Button')}
   </Button>
 );
