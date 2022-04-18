@@ -1,5 +1,15 @@
 # create-universal-react
 
+## 0.16.0
+
+### Minor Changes
+
+- da201fc: Changed Storybook Configuration
+
+### Patch Changes
+
+- 016d5de: updated node version required for repo and also updated the noEmit flag to false to run microsapps properly
+
 ## 0.15.2
 
 ### Patch Changes
