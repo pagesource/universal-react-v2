@@ -8,7 +8,6 @@ const CompRoot = styled('button', {
   border: '2px solid black',
   borderRadius: '$1',
   display: 'block',
-  length: '1',
   variants: {
     theme: {
       primary: {
