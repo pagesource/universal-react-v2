@@ -1,12 +1,13 @@
 // node modules
 import React from 'react';
 import type { AppProps } from 'next/app';
-import { NextUIProvider } from '@nextui-org/react';
+import { NextUIProvider, globalCss } from '@nextui-org/react';
 
 // packages
 import WithReactQuery from 'services';
 import { theme } from 'themes';
 import GlobalContextProvider from '../stores/globalContext';
+import globalStyle from '../styles/cssIncludes';
 
 // Will be called once for every metric that has to be reported.
 // export function reportWebVitals(metric: any) {
@@ -14,7 +15,10 @@ import GlobalContextProvider from '../stores/globalContext';
 // console.log(metric);
 // }
 
+const globalStyles = globalCss(globalStyle);
+
 function MyApp({ Component, pageProps }: AppProps) {
+  globalStyles();
   return (
     <>
       {/*@ts-ignore*/}
