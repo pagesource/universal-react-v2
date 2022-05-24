@@ -17,7 +17,7 @@
     "services": "{workspacePrefix}",
     "ui": "{workspacePrefix}",
     "smart-context": "^2.1.2",
-    "@nextui-org/react": "^1.0.5-beta.5"
+    "@nextui-org/react": "^1.0.0-beta.6"
   },
   "devDependencies": {
     "@types/react": "^17.0.39",

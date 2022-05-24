@@ -15,12 +15,14 @@ export default {
 const Template = (args) => <Button {...args} />;
 
 export const Primary = Template.bind({});
+//@ts-ignore
 Primary.args = {
   children: text('Label', 'Button')
 };
 
 export const KnobExample = () => (
   <Button
+    //@ts-ignore
     theme={optionsKnob(
       'Theme',
       { Primary: 'primary', Secondary: 'secondary' },
