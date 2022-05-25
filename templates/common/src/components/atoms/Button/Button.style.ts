@@ -9,7 +9,7 @@ const CompRoot = styled('button', {
   borderRadius: '$1',
   display: 'block',
   variants: {
-    theme: {
+    variation: {
       primary: {
         color: '$fontColor'
       },

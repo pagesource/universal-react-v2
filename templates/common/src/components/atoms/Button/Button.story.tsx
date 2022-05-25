@@ -12,19 +12,17 @@ export default {
   decorators: [withKnobs]
 };
 
-const Template = (args) => <Button {...args} />;
+const Template: any = (args) => <Button {...args} />;
 
 export const Primary = Template.bind({});
-//@ts-ignore
 Primary.args = {
   children: text('Label', 'Button')
 };
 
 export const KnobExample = () => (
   <Button
-    //@ts-ignore
-    theme={optionsKnob(
-      'Theme',
+    variation={optionsKnob(
+      'Variation',
       { Primary: 'primary', Secondary: 'secondary' },
       'primary',
       { display: 'select' }
