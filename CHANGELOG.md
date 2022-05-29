@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.17.0
+
+### Minor Changes
+
+- 39fb6ad: normalize css added
+
 ## 0.16.0
 
 ### Minor Changes
