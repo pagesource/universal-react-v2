@@ -1,6 +1,6 @@
 {
   "name": "create-universal-react",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "description": "A React accelerator to generate SSR, SSG & Micro-App architecture types essential tooling.",
   "license": "MIT",
   "main": "index.js",

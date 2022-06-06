@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.17.1
+
+### Patch Changes
+
+- 0931d16: Updating generate plop package to se latest and set prettier log level to error.
+
 ## 0.17.0
 
 ### Minor Changes
