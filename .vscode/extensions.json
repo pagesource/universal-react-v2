@@ -12,7 +12,6 @@
     "wmaurer.change-case",
     "christian-kohler.path-intellisense",
     "orta.vscode-jest",
-    "shinnn.stylelint",
     "rvest.vs-code-prettier-eslint"
   ]
 }
