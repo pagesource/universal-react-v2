@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.18.1
+
+### Patch Changes
+
+- e9472b0: Fixed the VS code extention list.
+
 ## 0.18.0
 
 ### Minor Changes
