@@ -8,6 +8,7 @@
     "index.js"
   ],
   "dependencies": {
+    "graphql-request": "4.3.0",
     "react-query": "^3.34.14",
     "react": "{reactVersion}"
   }
