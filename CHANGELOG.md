@@ -1,5 +1,11 @@
 # create-universal-react
 
+## 0.18.0
+
+### Minor Changes
+
+- 440efd4: Fixed generate plop errors and adding missing dev dependency for graph ql
+
 ## 0.17.1
 
 ### Patch Changes
