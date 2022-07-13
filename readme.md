@@ -71,6 +71,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <td align="center"><a href="https://github.com/salilkapoor"><img src="https://avatars.githubusercontent.com/u/49902237?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Salil Kapoor</b></sub></a><br /><a href="https://github.com/pagesource/universal-react-v2/commits?author=salilkapoor" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/khus29"><img src="https://avatars.githubusercontent.com/u/13497771?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Khushboo Kumari</b></sub></a><br /><a href="https://github.com/pagesource/universal-react-v2/commits?author=khus29" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/kgauravsh"><img src="https://avatars.githubusercontent.com/u/44981333?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Kumar Gaurav</b></sub></a><br /><a href="https://github.com/pagesource/universal-react-v2/commits?author=kgauravsh" title="Code">💻</a> <a href="https://github.com/pagesource/universal-react-v2/commits?author=kgauravsh" title="Documentation">📖</a></td>
+    <td align="center"><a href="https://github.com/rakeshongithub"><img src="https://avatars.githubusercontent.com/u/6939845?v=4" width="100px;" alt=""/><br /><sub><b>Rakesh Kumar</b></sub></a><br /><a href="https://github.com/pagesource/universal-react-v2/commits?author=rakeshongithub" title="Code">💻</a></td>
   </tr>
 </table>
 
