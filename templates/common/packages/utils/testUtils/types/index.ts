@@ -7,11 +7,6 @@ export declare type AssertMockFunctionParams = {
   argument: any;
 };
 
-export declare type SmartContextRenderParams = {
-  SmartContextProviderRef: React.FunctionComponent<any>;
-  children: React.FunctionComponent<any>;
-};
-
 export declare type ContextRenderParams = {
   ContextProviderRef: React.FunctionComponent<any>;
   Comp: React.FunctionComponent<any>;

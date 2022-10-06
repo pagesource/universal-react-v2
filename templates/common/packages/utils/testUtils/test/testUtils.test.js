@@ -1,15 +1,13 @@
-import { render, fireEvent } from '@testing-library/react';
-import { Context, ContextDemo } from './ContextDemo';
+import { render } from '@testing-library/react';
+import { Context } from './ContextDemo.tsx'
 import {
   assertByTestId,
   assertProperty,
   assertByTextContent,
   renderWithContext,
-  renderWithSmartContext,
   assertMockFunctionArg
-} from '../testUtils';
-import SmartContextDemo from './SmartContextDemo';
-import SmartContextProvider from './SmartContextProviderDemo';
+} from '../testUtils.tsx';
+
 
 describe('assertByTestId', () => {
   const renderCom = render(<h1 data-testid="hello">Hello</h1>);
@@ -39,16 +37,6 @@ describe('asserByTextContent', () => {
   test('assert test content not present', () => {
     const renderedComp = render(<h1>Hello default</h1>);
     assertByTextContent(renderedComp, 'Not Found', false);
-  });
-});
-
-describe('renderWithSmartContext', () => {
-  test('assert context state', () => {
-    const props = {};
-    const Comp = <SmartContextDemo {...props} />;
-    const obj = { SmartContextProviderRef: SmartContextProvider, children: Comp };
-    const renderedComp = renderWithSmartContext(obj);
-    assertByTextContent(renderedComp, 'Smart Context', true);
   });
 });
 
