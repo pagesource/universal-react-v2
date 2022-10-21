@@ -1,8 +1,7 @@
 import { render, RenderResult } from '@testing-library/react';
 import {
   AssertMockFunctionParams,
-  ContextRenderParams,
-  SmartContextRenderParams
+  ContextRenderParams
 } from './types';
 
 export const assertByTestId = (
@@ -29,13 +28,6 @@ export const assertByTextContent = (
 
 export const assertProperty = (obj: Object, key: string, val: any) => {
   return expect(obj).toHaveProperty(key, val);
-};
-
-export const renderWithSmartContext = ({
-  SmartContextProviderRef,
-  children
-}: SmartContextRenderParams) => {
-  return render(<SmartContextProviderRef>{children}</SmartContextProviderRef>);
 };
 
 export const renderWithContext = ({

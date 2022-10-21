@@ -1,7 +1,6 @@
 // node modules
 import React from 'react';
 import type { AppProps } from 'next/app';
-import { NextUIProvider, globalCss } from '@nextui-org/react';
 
 // packages
 import WithReactQuery from 'services';
@@ -15,20 +14,14 @@ import globalStyle from '../styles/cssIncludes';
 // console.log(metric);
 // }
 
-const globalStyles = globalCss(globalStyle);
 
 function MyApp({ Component, pageProps }: AppProps) {
-  globalStyles();
   return (
-    <>
+    <GlobalContextProvider>
       {/*@ts-ignore*/}
-      <NextUIProvider theme={theme}>
-        <GlobalContextProvider>
-          {/*@ts-ignore*/}
-          <Component {...pageProps} />
-        </GlobalContextProvider>
-      </NextUIProvider>
-    </>
+      <Component {...pageProps} />
+    </GlobalContextProvider>
+
   );
 }
 

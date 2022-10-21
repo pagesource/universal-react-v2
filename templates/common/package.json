@@ -15,9 +15,7 @@
     "react-dom": "{reactVersion}",
     "themes": "{workspacePrefix}",
     "services": "{workspacePrefix}",
-    "ui": "{workspacePrefix}",
-    "smart-context": "^2.1.2",
-    "@nextui-org/react": "^1.0.0-beta.6"
+    "ui": "{workspacePrefix}"
   },
   "devDependencies": {
     "@types/react": "^17.0.39",
