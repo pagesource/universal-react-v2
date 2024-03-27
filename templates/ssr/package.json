@@ -3,7 +3,7 @@
     "build": "{commandType} env-var && {commandType} bundle"
   },
   "dependencies": {
-    "express": "4.17.1",
+    "express": "4.19.2",
     "helmet": "4.6.0",
     "next": "{nextVersion}"
   },
